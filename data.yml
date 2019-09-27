@@ -1,0 +1,463 @@
+cards:
+  crisis:
+    name: Crisis
+    ext: png
+    base:
+      - name: Heavy Assault
+      - name: Loss of a Friend
+        path: Loss Friend
+      - name: A Traitor Accused
+      - name: A Desparate Pact
+        path: ADesparatePact
+        ext: jpg
+      - name: Centurion Assault
+        path: Cent Assault
+      - name: Appoint Head of Security
+        path: Head Security
+      - name: Set A Trap
+      - name: Sleep Deprivation
+      - name: Unexplained Deaths
+      - name: Ambushed by the Press
+        path: Ambushed Press
+      - name: Religious Turmoil
+        ext: jpg
+      - name: Rescue Caprica Survivors
+        path: Rescue Cap Survivors
+      - name: Domestic Dispute
+        path: DomesticDispute
+        ext: jpg
+      - name: Detector Sabotate
+      - name: Raptor Malfunction
+      - name: The Black Market
+      - name: Power Failure
+      - name: Civilian Ship Nuked
+        path: Civ Ship Nuked
+      - name: Tactical Strike
+      - name: Hera Rescued
+      - name: Abandon Galactica
+        path: AbandonGalactica
+        ext: jpg
+      - name: Détente
+        path: Detente
+      - name: Surrounded
+      - name: Build Cylon Detector
+      - name: Scar
+      - name: Missing G4 Explosives
+        path: Missing G4
+      - name: Consult the Prisoner
+        path: Consult Prisoner
+      - name: Incitement to Mutiny
+        path: IncitementToMutiny
+        ext: jpg
+      - name: Security Breach
+      - name: Prison Labor
+      - name: Terrorist Investigations
+        path: Terrorist Inv
+      - name: Give in to Despair
+        path: GiveInToDespair
+        ext: jpg
+      - name: Labor Dispute
+      - name: Training Snafu
+      - name: Bomb Threat
+      - name: Sabotage Investigated
+      - name: Terrorist Bomber
+      - name: Question Procedure
+        path: QuestionProcedure
+        ext: jpg
+      - name: Medal of Distinction
+        path: Medal Distinction
+      - name: Blindsided
+        ext: jpg
+      - name: Crash Landing
+      - name: Network Computers
+      - name: Unwelcome Faces
+      - name: Thirty-Three
+        path: Thirty Three
+      - name: Requested Resignation
+        path: Request Resignation
+      - name: Elections Loom
+      - name: Riots
+      - name: Review Camera Footage
+        path: Review Footage
+      - name: The Circle
+      - name: Water Shortage
+        path: Water Short2
+      - name: Haunted by the Past
+        path: Haunted Past
+      - name: Guilty Conscience
+      - name: Scouting for Fuel
+        path: Scouting Fuel
+      - name: Strange Beacon
+      - name: Hidden Identity
+      - name: An Ambitious Operation
+        path: AnAmbitiousOperation
+        ext: jpg
+      - name: Hangar Accident
+      - name: Rescue the Fleet
+        path: Rescue Fleet
+      - name: Crippled Raider
+      - name: Dogfight
+      - name: Threat of Super Nova
+        path: Threat S Nova
+      - name: Assassination Plot
+        path: Assassin Plot
+      - name: Cylon Virus
+      - name: Reprisal
+        ext: jpg
+      - name: Witch Hunt
+      - name: The Passage
+      - name: Training a Rookie
+        path: Training Rookie
+      - name: Unsettling Stories
+      - name: Food Hoarding in the Fleet
+        path: Food Hoarding
+      - name: Declare Martial Law
+        path: Declare Marshal Law
+      - name: Scouting for Water
+        path: Scouting Water
+      - name: Truth and Reconciliation
+        path: Truth Reconcile
+      - name: Galactica Falling Apart
+        path: GalacticaFallingApart
+        ext: jpg
+      - name: Reunite the Fleet
+        path: Reunite Fleet
+      - name: Unidentified Ship
+      - name: Defending a Prisoner
+        path: Defending Prisoner
+      - name: Dishonest Tactics
+        path: DishonestTactics
+        ext: jpg
+      - name: Food Shortage
+      - name: Quorum in Uproar
+        path: QuorumInUproar
+        ext: jpg
+      - name: Hybrid in Panic
+        path: HybridInPanic
+        ext: jpg
+      - name: Insubordinate Crew
+        path: InsubordinateCrew
+        ext: jpg
+      - name: Dangerous Plots
+        path: DangerousPlots
+        ext: jpg
+      - name: Hornet's Nest
+        path: HornetsNest
+        ext: jpg
+      - name: Mysterious Guide
+      - name: In The Ring
+      - name: Rescue Mission
+        path: Rescue Mission2
+      - name: Weapon Malfunction
+        path: Weapon Malf
+      - name: Return to Duty
+        path: Return Duty
+      - name: Unfair Dias
+      - name: An Offer of Peace
+        path: An Offer Peace
+      - name: Tracked by Radiation
+        path: Tracked Radiation
+      - name: Rescue Mission
+      - name: Raiding Party
+      - name: Water Sabotaged
+      - name: Code Blue
+      - name: Mysterious Message
+      - name: Standoff with Pegasus
+        path: Standoff Pegasus
+      - name: Colonial Day
+      - name: Resistance
+      - name: Pressure the Supply Ships
+        path: Pressure Supply
+      - name: Rebuild Trust
+        path: RebuildTrust
+        ext: jpg
+      - name: A Verdict of Guilty
+        path: A Verdict Guilty
+      - name: Send Survey Team
+        path: Send Survey
+      - name: Mandatory Testing
+      - name: Lockdown
+        ext: jpg
+      - name: Water Shortage
+        path: Water Short3
+      - name: Besieged
+      - name: Jump Computer Failure
+        path: Jump Comp Fail
+      - name: The Guardians
+      - name: Cylon Genocide
+      - name: Temple of the Five
+        path: Temple Five
+      - name: Controversial Manuscript
+      - name: Raiders Inbound
+      - name: Rallying Support
+        path: RallyingSupport
+        ext: jpg
+      - name: Earth in Ruins
+        path: EarthInRuins
+        ext: jpg
+      - name: Cylon Tracking Device
+        path: Tracking Device
+      - name: Joe's Bar
+        path: Joes Bar
+      - name: Unexpected Reunion
+      - name: Trial by Fire
+        path: TrialByFire
+        ext: jpg
+      - name: Airlock Leak
+      - name: Secret Meetings
+        path: SecretMeetings
+        ext: jpg
+      - name: Widespread Starvation
+        path: Widespread Starve
+      - name: Boarding Parties
+      - name: Keep Tabs on Visitor
+        path: Keep Tabs
+      - name: Admiral Grilled
+      - name: Informing the Public
+        path: Informing Public
+      - name: Hidden Explosives
+      - name: Guilt by Collusion
+        path: Guilty Collusion
+      - name: Forced Water Mining
+        path: Forced Water
+      - name: Analyze Enemy Fighter
+        path: Analyze Fighter
+      - name: Consult the Hybrid
+        path: ConsultTheHybrid
+        ext: jpg
+      - name: Jammed Assault
+      - name: Reactor Critical
+        path: ReactorCritical
+        ext: jpg
+      - name: Fulfiller of Prophecy
+        path: Fulfiller Prophecy
+      - name: Cylon Accusation
+      - name: Requisition for Demetrius
+        path: RequisitionForDemetrius
+        ext: jpg
+      - name: Legendary Discovery
+        path: Leg Discovery
+      - name: Event Horizon
+        path: EventHorizon
+        ext: jpg
+      - name: Starvation in Dogsville
+        path: StarvationInDogsville
+        ext: jpg
+      - name: Divisive Behavior
+      - name: Familiar Face
+      - name: Cylon Screenings
+      - name: Review Galactica's Log
+        path: Review Logs
+      - name: Cylon Swarm
+      - name: Enemy of my Enemy
+        path: EnemyOfMyEnemy
+        ext: jpg
+      - name: Water Shortage
+        path: Water Short
+      - name: One Last Cocktail
+        path: OneLastCocktail
+        ext: jpg
+      - name: Medical Breakthrough
+      - name: Suspicious Election Results
+        path: Suspicious Election
+      - name: Low Supplies
+      - name: Prisoner Revolt
+      - name: Riots
+        path: Riots2
+      - name: Ambush
+      - name: Interrogation
+      - name: The Olympic Carrier
+        path: The Olympic
+  destination:
+    name: Destination
+    alias: dest
+    path: Dest
+    ext: png
+    base:
+      - name: Dying Star
+      - name: Barren Planet
+        path: Baren Planet
+      - name: Cylon Ambush
+      - name: Binary Star
+      - name: Gas Giant
+      - name: Desolate Moon
+      - name: Gas Cloud
+      - name: Remote Planet
+      - name: Lion's Head Nebula
+        path: Lions Head
+      - name: Asteroid Field
+      - name: Derelict Basestar
+        path: Derelict BS
+      - name: Cylon Raiders
+      - name: A Civilian Convoy
+        path: Civ Convoy
+      - name: Deep Space
+      - name: Icy Moon
+      - name: Ragnar Anchorage
+      - name: Misjump
+      - name: Algae Planet
+      - name: Tylium Planet
+      - name: Mining Asteroid
+      - name: Radioactive Cloud
+        path: Rad Cloud
+      - name: Cylon Refinery
+  char:
+    name: Chars
+    ext: png
+    base:
+      - name: Tory Foster
+        path: Tori Foster
+      - name: Laura Roslin
+      - name: Cavil
+      - name: Helena Cain
+      - name: Caprica Six
+        path: Six
+      - name: Felix Gaeta
+      - name: Romo Lampkin
+        path: RomoLampkin
+      - name: Billy Keikeya
+      - name: Tom Zarek
+      - name: Tom
+      - name: Sharon Athena Agathon
+        path: Athena
+      - name: Kara Starbuck Thrace
+        path: Kara Thrace
+      - name: Starbuck
+        path: Kara Thrace
+      - name: Lee Apollo Adama
+        path: Apollo
+      - name: Louis Hoshi
+        path: LouisHoshi
+      - name: Margaret Racetrack Edmondson
+        path: Racetrack
+      - name: Louanne Kat Katraine
+        path: Louanna%20Katraine
+      - name: D'Anna Biers
+        path: DAnnaBiers
+      - name: Chief Galen Tyrol
+        path: Galen Tyrol
+      - name: Chief
+        path: Galen Tyrol
+      - name: Simon O'Neill
+        path: Simon
+      - name: Aaron Doral
+        path: Doral
+      - name: Gaius Baltar
+        path: Baltar
+      - name: Karl Helo Agathon
+        path: Helo
+      - name: Brendan Hot Dog Costanza
+        path: HotDog
+      - name: Anastasia Dee Dualla
+        path: Dee
+      - name: Callandra Cally Tyrol
+        path: Cally Tyrol
+      - name: Ellen Tigh
+      - name: Sherman Doc Cottle
+        path: DocCottle
+      - name: Samuel T. Anders
+        path: Samuel T Anders
+      - name: Leoben Conoy
+      - name: Kendra Shaw
+        path: Kendra shaw
+      - name: Saul Tigh
+      - name: William Adama
+        path: Bill Adama
+      - name: Sharon Boomer Valerii
+        path: Sharon Valerii
+      - name: Boomer
+        path: Sharon Valerii
+    expansion:
+      - name: Karl Helo Agathon
+        path: Karl
+      - name: Lee Adama
+        path: Lee
+      - name: Gaius Baltar
+        path: Gaius
+  skill:
+    name: Skill
+    ext: png
+    base:
+      - name: Consolidate Power
+        value: 1
+        path: Pol Con Power 1
+      - name: Investigative Committee
+        value: 3
+        path: Pol Inv Committee 3
+      - name: Executive Order
+        value: 1
+        path: Led XO 1
+      - name: Declare Emergency
+        value: 3
+        path: Led Dec Emergency 3
+      - name: Launch Scout
+        value: 1
+        path: Tac Launch Scout 1
+      - name: Strategic Planning
+        value: 3
+        path: Tac Strat 3
+      - name: Evasive Maneuvers
+        value: 1
+        path: Pil Evasive 1
+      - name: Maximum Firepower
+        value: 3
+        path: Pil Maximum 3
+      - name: Repair
+        value: 1
+        path: Eng Repair 1
+      - name: Scientific Research
+        value: 3
+        path: Eng Sci Research 3
+  quorum:
+    name: Quorum
+    ext: png
+    base:
+      - name: Authorization of Brutal Force
+        path: Authorize Brute Force
+      - name: Assign Chief of Staff
+        path: Assign Staff
+      - name: Assign Mission Specialist
+        path: Assign Miss Specialist
+      - name: Encourage Mutiny
+      - name: Establish Dogsville
+      - name: Accept Prophecy
+      - name: Presidential Pardon
+        path: Pres Pardon
+      - name: Assign Arbitrator
+      - name: Enact Production Quotas
+        path: Enact Prod Quotas
+      - name: Inspirational Speech
+        path: Inspire Speech
+      - name: Assign Vice President
+        path: Assign V Pres
+      - name: Food Rationing
+      - name: Consult the Oracle
+        path: Consult Oracle
+      - name: Presidential Order
+        path: Presidential order
+      - name: Execute Prisoner
+      - name: Unsavory Connections
+      - name: Arrest Order
+      - name: Probation
+      - name: Release Cylon Mugshots
+        path: Release Mugshots
+      - name: Resources for Galactica
+        path: Resources Galactica
+      - name: Eulogy
+      - name: Civilian Self Defense
+        path: Civ Self Defense
+      - name: Resignation
+  loyalty:
+    name: BSG Loyalty
+    ext: png
+    base:
+      - name: Can Send a Character to the Brig
+        path: Brig
+      - name: Can Damage Galactica
+        path: Damage Gal
+      - name: Can Reduce Morale by 1
+        path: Morale
+      - name: Can Send a Character to Sickbay
+        path: Sickbay
+      - name: You Are a Sympathizer
+        path: Sympathizer
