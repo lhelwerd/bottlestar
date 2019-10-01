@@ -1,3 +1,4 @@
+import logging
 import yaml
 
 class Cards:
@@ -9,12 +10,24 @@ class Cards:
         self.lookup = {}
         for card_type, cards in self.cards.items():
             for index, card in enumerate(cards['base']):
-                # TODO: Notify about duplicates
                 name = card['name'].lower()
-                self.lookup[name] = (card_type, index)
-                self.lookup[name.replace(' ', '')] = (card_type, index)
+                self._add(name, card_type, index)
+                self._add(name.replace(' ', ''), card_type, index)
                 if 'path' in card:
-                    self.lookup[card['path'].lower()] = (card_type, index)
+                    self._add(card['path'].lower(), card_type, index)
+
+    def _add(self, lookup, card_type, index):
+        if lookup in self.lookup and self.lookup[lookup][1] != index and \
+            not self.cards[card_type]['base'][index].get('alias', False):
+            cur_type, cur_index = self.lookup[lookup]
+            logging.debug('Duplicate lookup: %s => %d. %s (%s) =/= %d. %s (%s)',
+                          lookup, index,
+                          self.cards[card_type]['base'][index]['name'],
+                          card_type, cur_index,
+                          self.cards[cur_type]['base'][cur_index]['name'],
+                          cur_type)
+
+        self.lookup[lookup] = (card_type, index)
 
     def find(self, search, card_type=''):
         if card_type != '' and card_type not in self.cards:

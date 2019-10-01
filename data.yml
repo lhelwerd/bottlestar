@@ -76,11 +76,12 @@ cards:
       - name: Requested Resignation
         path: Request Resignation
       - name: Elections Loom
-      - name: Riots
+      - name: Riots (B/*)
+        path: Riots
       - name: Review Camera Footage
         path: Review Footage
       - name: The Circle
-      - name: Water Shortage
+      - name: Water Shortage (R/*)
         path: Water Short2
       - name: Haunted by the Past
         path: Haunted Past
@@ -146,7 +147,7 @@ cards:
         ext: jpg
       - name: Mysterious Guide
       - name: In The Ring
-      - name: Rescue Mission
+      - name: Rescue Mission (B/*)
         path: Rescue Mission2
       - name: Weapon Malfunction
         path: Weapon Malf
@@ -157,7 +158,8 @@ cards:
         path: An Offer Peace
       - name: Tracked by Radiation
         path: Tracked Radiation
-      - name: Rescue Mission
+      - name: Rescue Mission (R/*)
+        path: Rescue Mission
       - name: Raiding Party
       - name: Water Sabotaged
       - name: Code Blue
@@ -178,7 +180,7 @@ cards:
       - name: Mandatory Testing
       - name: Lockdown
         ext: jpg
-      - name: Water Shortage
+      - name: Water Shortage (B/-)
         path: Water Short3
       - name: Besieged
       - name: Jump Computer Failure
@@ -252,7 +254,7 @@ cards:
       - name: Enemy of my Enemy
         path: EnemyOfMyEnemy
         ext: jpg
-      - name: Water Shortage
+      - name: Water Shortage (B/*)
         path: Water Short
       - name: One Last Cocktail
         path: OneLastCocktail
@@ -262,7 +264,7 @@ cards:
         path: Suspicious Election
       - name: Low Supplies
       - name: Prisoner Revolt
-      - name: Riots
+      - name: Riots (L/-)
         path: Riots2
       - name: Ambush
       - name: Interrogation
@@ -324,6 +326,7 @@ cards:
         path: Kara Thrace
       - name: Starbuck
         path: Kara Thrace
+        alias: true
       - name: Lee Apollo Adama
         path: Apollo
       - name: Louis Hoshi
@@ -338,6 +341,7 @@ cards:
         path: Galen Tyrol
       - name: Chief
         path: Galen Tyrol
+        alias: true
       - name: Simon O'Neill
         path: Simon
       - name: Aaron Doral
@@ -367,6 +371,7 @@ cards:
         path: Sharon Valerii
       - name: Boomer
         path: Sharon Valerii
+        alias: true
     expansion:
       - name: Karl Helo Agathon
         path: Karl

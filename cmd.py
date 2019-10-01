@@ -1,22 +1,32 @@
-import sys
+import argparse
+import logging
 import yaml
 from bsg.card import Cards
 
+def parse_args():
+    parser = argparse.ArgumentParser(description='Command-line bot reply')
+    log_options = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
+    parser.add_argument('--log', default='INFO', choices=log_options,
+                        help='log level')
+    parser.add_argument('command', help='command')
+    parser.add_argument('arguments', nargs='*', help='arguments')
+    args = parser.parse_args()
+    return args
+
 def main():
+    args = parse_args()
+    logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',
+                        level=getattr(logging, args.log, None))
+
     with open("config.yml") as config_file:
         config = yaml.safe_load(config_file)
 
-    arguments = sys.argv[1:]
-    if len(arguments) == 0:
-        print("Usage: python cmd.py <command> [arguments...]", file=sys.stderr)
-        sys.exit(1)
+    command = args.command
+    arguments = args.arguments
 
-    command = arguments.pop(0)
     if command == "bot":
         print("Hello, command line user!")
         return
-
-    print(command, arguments)
 
     cards = Cards(config['cards_url'])
     print(cards.find(' '.join(arguments), '' if command == "card" else command))

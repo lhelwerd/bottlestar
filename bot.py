@@ -2,6 +2,8 @@ import logging
 import discord
 import yaml
 
+AT = '@'
+
 with open("config.yml") as config_file:
     config = yaml.safe_load(config_file)
 
@@ -9,7 +11,11 @@ client = discord.Client()
 
 @client.event
 async def on_ready():
-    print(f'We have logged in as {client.user}')
+    logging.info('We have logged in as %s', client.user)
+    for guild in client.guilds:
+        logging.info('Server: %s', guild.name)
+        for channel in guild.channels:
+            logging.info('Channel: %s', channel.name)
 
 @client.event
 async def on_message(message):
@@ -20,7 +26,7 @@ async def on_message(message):
     command = arguments.pop(0)[1:]
 
     if command == "bot":
-        await message.channel.send(f'Hello @{message.author}!')
+        await message.channel.send(f'Hello {AT}{message.author}!')
 
     cards = Cards(config['cards_url'])
     result = cards.find(' '.join(arguments),
