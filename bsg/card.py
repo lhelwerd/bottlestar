@@ -35,4 +35,4 @@ class Cards:
         type_path = self.cards[actual_type].get('path', type_name)
         ext = card.get('ext', self.cards[actual_type]['ext'])
         path = card.get('path', card['name']).replace(' ', '_')
-        return f'{url}/{type_path}/{type_path}_{path}.{ext}'
+        return f'{self.url}/{type_path}/{type_path}_{path}.{ext}'
