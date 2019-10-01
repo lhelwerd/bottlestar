@@ -4,7 +4,7 @@ from bsg.card import Cards
 
 def main():
     with open("config.yml") as config_file:
-        config = yaml.load(config_file)
+        config = yaml.safe_load(config_file)
 
     arguments = sys.argv[1:]
     if len(arguments) == 0:

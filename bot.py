@@ -3,7 +3,7 @@ import discord
 import yaml
 
 with open("config.yml") as config_file:
-    config = yaml.load(config_file)
+    config = yaml.safe_load(config_file)
 
 client = discord.Client()
 

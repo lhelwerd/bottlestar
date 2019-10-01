@@ -4,7 +4,7 @@ class Cards:
     def __init__(self, url):
         self.url = url
         with open("data.yml") as data:
-            self.cards = yaml.load(data)['cards']
+            self.cards = yaml.safe_load(data)['cards']
 
         self.lookup = {}
         for card_type, cards in self.cards.items():
