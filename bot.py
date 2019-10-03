@@ -10,6 +10,27 @@ with open("config.yml") as config_file:
 
 client = discord.Client()
 
+COLORS = [
+    ('Leadership', ':green_apple:'),
+    ('Tactics', ':octopus:'),
+    ('Politics', ':prince:'),
+    ('Piloting', ':airplane_small:'),
+    ('Engineering', ':large_blue_diamond:')
+]
+
+def replace_roles(message, guild=None):
+    for skill_type, emoji in COLORS:
+        message = message.replace(skill_type, skill_type + emoji)
+
+    if guild is None:
+        return message
+
+    for role in roles:
+        if role.mentionable:
+            message = message.replace(role.name, role.mention)
+
+    return message
+
 @client.event
 async def on_ready():
     logging.info('We have logged in as %s', client.user)
@@ -17,6 +38,9 @@ async def on_ready():
         logging.info('Server: %s', guild.name)
         for channel in guild.channels:
             logging.info('Channel: %s', channel.name)
+        for role in guild.roles:
+            if role.mentionable:
+                logging.info('Role: %s', role.name)
 
 @client.event
 async def on_message(message):
@@ -30,7 +54,7 @@ async def on_message(message):
         await message.channel.send(f'Hello {message.author.mention}!')
     if command == "latest":
         rss = RSS(config['rss_url'])
-        await message.channel.send(rss.parse())
+        await message.channel.send(replace_roles(rss.parse(), message.guild))
 
     cards = Cards(config['cards_url'])
     result = cards.find(' '.join(arguments),
