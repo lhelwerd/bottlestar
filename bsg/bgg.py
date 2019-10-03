@@ -4,6 +4,7 @@ import requests
 
 class RSS:
     ACTIONS_SPLIT = re.compile(r'Quoted Article: \d+</font>')
+
     def __init__(self, url):
         self.url = url
         
@@ -15,9 +16,13 @@ class RSS:
         soup = BeautifulSoup(response.text, "lxml")
         for item in soup.find_all('item'):
             contents = item.find('description').text
+            contents = contents.replace("\r", "\n").replace("]]>", "")
             parts = self.ACTIONS_SPLIT.split(contents, maxsplit=1)
             if len(parts) > 1:
-                text = parts[1].split('[hr]')[0]
+                actions = parts[1].split("<br/>[hr]\n")[0]
+                desc_soup = BeautifulSoup(actions, "lxml")
+                desc_soup.find("div", {"class": "quote"}).extract()
+                text = ''.join(t for t in desc_soup.find_all(text=True)).strip()
                 if text != '':
                     return text
         else:

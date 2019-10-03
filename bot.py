@@ -2,9 +2,8 @@ import argparse
 import logging
 import discord
 import yaml
+from bsg.bgg import RSS
 from bsg.card import Cards
-
-AT = '@'
 
 with open("config.yml") as config_file:
     config = yaml.safe_load(config_file)
@@ -28,7 +27,10 @@ async def on_message(message):
     command = arguments.pop(0)[1:]
 
     if command == "bot":
-        await message.channel.send(f'Hello {AT}{message.author}!')
+        await message.channel.send(f'Hello {message.author.mention}!')
+    if command == "latest":
+        rss = RSS(config['rss_url'])
+        await message.channel.send(rss.parse())
 
     cards = Cards(config['cards_url'])
     result = cards.find(' '.join(arguments),

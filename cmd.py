@@ -1,6 +1,7 @@
 import argparse
 import logging
 import yaml
+from bsg.bgg import RSS
 from bsg.card import Cards
 
 def parse_args():
@@ -26,6 +27,10 @@ def main():
 
     if command == "bot":
         print("Hello, command line user!")
+        return
+    if command == "latest":
+        rss = RSS(config['rss_url'])
+        print(rss.parse())
         return
 
     cards = Cards(config['cards_url'])
