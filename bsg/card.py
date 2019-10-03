@@ -11,23 +11,27 @@ class Cards:
         for card_type, cards in self.cards.items():
             for index, card in enumerate(cards['base']):
                 name = card['name'].lower()
-                self._add(name, card_type, index)
-                self._add(name.replace(' ', ''), card_type, index)
+                self._add(name, card_type, index, 0)
+                self._add(name.replace(' ', ''), card_type, index, 1)
+                for word_count, part in enumerate(name.split(' ')):
+                    self._add(part, card_type, index, 2 + word_count)
                 if 'path' in card:
-                    self._add(card['path'].lower(), card_type, index)
+                    self._add(card['path'].lower(), card_type, index, 1)
 
-    def _add(self, lookup, card_type, index):
+    def _add(self, lookup, card_type, index, priority):
         if lookup in self.lookup and self.lookup[lookup][1] != index and \
-            not self.cards[card_type]['base'][index].get('alias', False):
-            cur_type, cur_index = self.lookup[lookup]
+            not self.cards[card_type]['base'][index].get('alias', False) and \
+            priority > self.lookup[lookup][2]:
+            cur_type, cur_index, cur_priority = self.lookup[lookup]
             logging.debug('Duplicate lookup: %s => %d. %s (%s) =/= %d. %s (%s)',
-                          lookup, index,
+                          lookup, priority,
                           self.cards[card_type]['base'][index]['name'],
-                          card_type, cur_index,
+                          card_type, cur_priority,
                           self.cards[cur_type]['base'][cur_index]['name'],
                           cur_type)
+            return
 
-        self.lookup[lookup] = (card_type, index)
+        self.lookup[lookup] = (card_type, index, priority)
 
     def find(self, search, card_type=''):
         if card_type != '' and card_type not in self.cards:
@@ -35,7 +39,7 @@ class Cards:
 
         for option in [search.lower(), search.lower().replace(' ', '')]:
             if option in self.lookup:
-                actual_type, index = self.lookup[option]
+                actual_type, index = self.lookup[option][:2]
                 break
         else:
             return 'No card found'
