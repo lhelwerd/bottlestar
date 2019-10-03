@@ -1,4 +1,7 @@
+from email.utils import formatdate
+import logging
 import re
+from time import mktime
 from bs4 import BeautifulSoup
 import requests
 
@@ -8,8 +11,14 @@ class RSS:
     def __init__(self, url):
         self.url = url
         
-    def parse(self):
-        response = requests.get(self.url)
+    def parse(self, if_modified_since=None, one=False):
+        headers = {}
+        if if_modified_since is not None:
+            value = formatdate(mktime(if_modified_since.timetuple()),
+                               localtime=False, usegmt=True)
+            headers['if-modified-since'] = value
+
+        response = requests.get(self.url, headers=headers)
         if response.status_code == 304:
             return
 
@@ -31,5 +40,7 @@ class RSS:
                 text = ''.join(t for t in desc_soup.find_all(text=True)).strip().replace('[hr]', '')
                 if text != '':
                     yield text
+                elif one:
+                    return
         else:
             return

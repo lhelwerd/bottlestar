@@ -1,15 +1,53 @@
 import argparse
+import asyncio
+from datetime import datetime
 import logging
 import discord
 import yaml
 from bsg.bgg import RSS
 from bsg.card import Cards
 
+def parse_args():
+    parser = argparse.ArgumentParser(description='Command-line bot reply')
+    log_options = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
+    parser.add_argument('--log', default='INFO', choices=log_options,
+                        help='log level')
+    args = parser.parse_args()
+    return args
+
+if __name__ == "__main__":
+    args = parse_args()
+    logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',
+                        level=getattr(logging, args.log, None))
+
 with open("config.yml") as config_file:
     config = yaml.safe_load(config_file)
 
 client = discord.Client()
 cards = Cards(config['cards_url'])
+rss = RSS(config['rss_url'])
+
+async def check_for_updates(client, server_id, channel_id):
+    if server_id is None or channel_id is None:
+        logging.warning('No server ID or channel ID provided')
+        return
+
+    previous_check = datetime.now()
+    timeout = 60 * 5
+    while True:
+        result = rss.parse(previous_check, one=True)
+        try:
+            message = next(result)
+            logging.info('We have a new message in the RSS, posting')
+            guild = client.get_guild(server_id)
+            channel = guild.get_channel(channel_id)
+            await channel.send(replace_roles(next(message), guild))
+        except StopIteration:
+            logging.info("No new message")
+            pass
+
+        previous_check = datetime.now()
+        await asyncio.sleep(timeout)
 
 def replace_roles(message, guild=None):
     message = cards.replace_cards(message)
@@ -27,12 +65,15 @@ def replace_roles(message, guild=None):
 async def on_ready():
     logging.info('We have logged in as %s', client.user)
     for guild in client.guilds:
-        logging.info('Server: %s', guild.name)
+        logging.info('Server: %s #%d', guild.name, guild.id)
         for channel in guild.channels:
-            logging.info('Channel: %s', channel.name)
+            logging.info('Channel: %s #%d', channel.name, channel.id)
         for role in guild.roles:
             if role.mentionable:
                 logging.info('Role: %s', role.name)
+
+    client.loop.create_task(check_for_updates(client, config.get('server_id'),
+                                              config.get('channel_id')))
 
 @client.event
 async def on_message(message):
@@ -45,7 +86,6 @@ async def on_message(message):
     if command == "bot":
         await message.channel.send(f'Hello {message.author.mention}!')
     if command == "latest":
-        rss = RSS(config['rss_url'])
         try:
             await message.channel.send(replace_roles(next(rss.parse()),
                                                      message.guild))
@@ -57,20 +97,5 @@ async def on_message(message):
     if result is not None:
         await message.channel.send(result)
 
-def parse_args():
-    parser = argparse.ArgumentParser(description='Command-line bot reply')
-    log_options = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
-    parser.add_argument('--log', default='INFO', choices=log_options,
-                        help='log level')
-    args = parser.parse_args()
-    return args
-
-def main():
-    args = parse_args()
-    logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',
-                        level=getattr(logging, args.log, None))
-
-    client.run(config['token'])
-
 if __name__ == "__main__":
-    main()
+    client.run(config['token'])
