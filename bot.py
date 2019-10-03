@@ -1,6 +1,8 @@
+import argparse
 import logging
 import discord
 import yaml
+from bsg.card import Cards
 
 AT = '@'
 
@@ -34,8 +36,19 @@ async def on_message(message):
     if result is not None:
         await message.channel.send(result)
 
+def parse_args():
+    parser = argparse.ArgumentParser(description='Command-line bot reply')
+    log_options = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
+    parser.add_argument('--log', default='INFO', choices=log_options,
+                        help='log level')
+    args = parser.parse_args()
+    return args
 
 def main():
+    args = parse_args()
+    logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',
+                        level=getattr(logging, args.log, None))
+
     client.run(config['token'])
 
 if __name__ == "__main__":
