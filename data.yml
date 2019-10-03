@@ -270,6 +270,30 @@ cards:
       - name: Interrogation
       - name: The Olympic Carrier
         path: The Olympic
+  s_crisis:
+    name: Super Crisis
+    path: S_Crisis
+    ext: png
+    base:
+      - name: Bomb on Colonial 1
+        path: Bomb Colonial 1
+      - name: Cylon Intruders
+        path: Cylon Intrude
+      - name: Demand Peace Manifesto
+        path: Demand Peace
+      - name: Fire All Missiles
+      - name: Fleet Mobilization
+        path: Fleet Mobile
+      - name: Footage Transmitted
+        path: Footage
+      - name: Human Prisoner
+        path: Human Prisoners
+      - name: Inbound Nukes
+      - name: Lured into a Trap
+        path: Lured Trap
+      - name: Massive Assault
+      - name: Psychological Warfare
+        path: Psy Warfare
   destination:
     name: Destination
     alias: dest
