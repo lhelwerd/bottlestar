@@ -28,9 +28,19 @@ def main():
     if command == "bot":
         print("Hello, command line user!")
         return
-    if command == "latest":
+    if command == "latest" or command == "all":
         rss = RSS(config['rss_url'])
-        print(rss.parse())
+        result = rss.parse()
+        try:
+            ok = True
+            while ok:
+                print(next(result))
+                if command == "all":
+                    print('\n' + '=' * 80 + '\n')
+                else:
+                    ok = False
+        except StopIteration:
+            print('No latest message found!')
         return
 
     cards = Cards(config['cards_url'])

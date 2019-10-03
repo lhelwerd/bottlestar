@@ -25,7 +25,7 @@ def replace_roles(message, guild=None):
     if guild is None:
         return message
 
-    for role in roles:
+    for role in guild.roles:
         if role.mentionable:
             message = message.replace(role.name, role.mention)
 
@@ -54,7 +54,11 @@ async def on_message(message):
         await message.channel.send(f'Hello {message.author.mention}!')
     if command == "latest":
         rss = RSS(config['rss_url'])
-        await message.channel.send(replace_roles(rss.parse(), message.guild))
+        try:
+            await message.channel.send(replace_roles(next(rss.parse()),
+                                                     message.guild))
+        except StopIteration:
+            await message.channel.send('No post found!')
 
     cards = Cards(config['cards_url'])
     result = cards.find(' '.join(arguments),

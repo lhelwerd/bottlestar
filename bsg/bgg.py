@@ -11,7 +11,7 @@ class RSS:
     def parse(self):
         response = requests.get(self.url)
         if response.status_code == 304:
-            return None
+            return
 
         soup = BeautifulSoup(response.text, "lxml")
         for item in soup.find_all('item'):
@@ -21,9 +21,15 @@ class RSS:
             if len(parts) > 1:
                 actions = parts[1].split("<br/>[hr]\n")[0]
                 desc_soup = BeautifulSoup(actions, "lxml")
-                desc_soup.find("div", {"class": "quote"}).extract()
-                text = ''.join(t for t in desc_soup.find_all(text=True)).strip()
+                for quote in desc_soup.find_all("div", {"class": "quote"}):
+                    quote_title = quote.find("div", {"class": "quotetitle"})
+                    if 'BYC: Game State' in quote_title.text:
+                        quote.extract()
+                    else:
+                        quote_title.extract()
+
+                text = ''.join(t for t in desc_soup.find_all(text=True)).strip().replace('[hr]', '')
                 if text != '':
-                    return text
+                    yield text
         else:
-            return None
+            return
