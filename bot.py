@@ -9,18 +9,10 @@ with open("config.yml") as config_file:
     config = yaml.safe_load(config_file)
 
 client = discord.Client()
-
-COLORS = [
-    ('Leadership', ':green_apple:'),
-    ('Tactics', ':octopus:'),
-    ('Politics', ':prince:'),
-    ('Piloting', ':airplane_small:'),
-    ('Engineering', ':large_blue_diamond:')
-]
+cards = Cards(config['cards_url'])
 
 def replace_roles(message, guild=None):
-    for skill_type, emoji in COLORS:
-        message = message.replace(skill_type, skill_type + emoji)
+    message = cards.replace_cards(message)
 
     if guild is None:
         return message
@@ -60,7 +52,6 @@ async def on_message(message):
         except StopIteration:
             await message.channel.send('No post found!')
 
-    cards = Cards(config['cards_url'])
     result = cards.find(' '.join(arguments),
                         '' if command == "card" else command)
     if result is not None:

@@ -24,6 +24,7 @@ def main():
 
     command = args.command
     arguments = args.arguments
+    cards = Cards(config['cards_url'])
 
     if command == "bot":
         print("Hello, command line user!")
@@ -34,7 +35,7 @@ def main():
         try:
             ok = True
             while ok:
-                print(next(result))
+                print(cards.replace_cards(next(result)))
                 if command == "all":
                     print('\n' + '=' * 80 + '\n')
                 else:
@@ -43,7 +44,6 @@ def main():
             print('No latest message found!')
         return
 
-    cards = Cards(config['cards_url'])
     print(cards.find(' '.join(arguments), '' if command == "card" else command))
 
 if __name__ == "__main__":
