@@ -408,35 +408,45 @@ cards:
     ext: png
     base:
       - name: Consolidate Power
-        value: 1
-        path: Pol Con Power 1
+        value: [1, 2]
+        skill: Politics
+        path: Con Power
       - name: Investigative Committee
-        value: 3
-        path: Pol Inv Committee 3
+        value: [3, 4, 5]
+        skill: Politics
+        path: Inv Committee
       - name: Executive Order
-        value: 1
-        path: Led XO 1
+        value: [1, 2]
+        skill: Leadership
+        path: XO
       - name: Declare Emergency
-        value: 3
-        path: Led Dec Emergency 3
+        value: [3, 4, 5]
+        skill: Leadership
+        path: Dec Emergency
       - name: Launch Scout
-        value: 1
-        path: Tac Launch Scout 1
+        value: [1, 2]
+        skill: Tactics
+        path: Launch Scout
       - name: Strategic Planning
-        value: 3
-        path: Tac Strat 3
+        value: [3, 4, 5]
+        skill: Tactics
+        path: Strat
       - name: Evasive Maneuvers
-        value: 1
-        path: Pil Evasive 1
+        value: [1, 2]
+        skill: Piloting
+        path: Evasive
       - name: Maximum Firepower
-        value: 3
-        path: Pil Maximum 3
+        value: [3, 4, 5]
+        skill: Piloting
+        path: Maximum
       - name: Repair
-        value: 1
-        path: Eng Repair 1
+        value: [1, 2]
+        skill: Engineering
+        path: Repair
       - name: Scientific Research
-        value: 3
-        path: Eng Sci Research 3
+        value: [3, 4, 5]
+        skill: Engineering
+        path: Sci Research
   quorum:
     name: Quorum
     ext: png
@@ -490,3 +500,19 @@ cards:
         path: Sickbay
       - name: You Are a Sympathizer
         path: Sympathizer
+skills:
+  Leadership:
+    path: Led
+    emoji: green_apple
+  Tactics:
+    path: Tac
+    emoji: octopus
+  Politics:
+    path: Pol
+    emoji: prince
+  Piloting:
+    path: Pil
+    emoji: airplane_small
+  Engineering:
+    path: Eng
+    emoji: large_blue_diamond

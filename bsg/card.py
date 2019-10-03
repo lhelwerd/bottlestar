@@ -5,8 +5,10 @@ import yaml
 class Cards:
     def __init__(self, url):
         self.url = url
-        with open("data.yml") as data:
-            self.cards = yaml.safe_load(data)['cards']
+        with open("data.yml") as data_file:
+            data = yaml.safe_load(data_file)
+            self.cards = data['cards']
+            self.skills = data['skills']
 
         self.lookup = {}
         self.card_types = {}
@@ -14,20 +16,25 @@ class Cards:
 
         self._load()
 
-        self.skill_colors = [
-            (self.build_skill_regex('Leadership'), ':green_apple:'),
-            (self.build_skill_regex('Tactics'), ':octopus:'),
-            (self.build_skill_regex('Politics'), ':prince:'),
-            (self.build_skill_regex('Piloting'), ':airplane_small:'),
-            (self.build_skill_regex('Engineering'), ':large_blue_diamond:')
-        ]
+        self.skill_colors = dict([
+            (skill_type, self._build_skill_regex(skill_type))
+            for skill_type in self.skills.keys()
+        ])
+        self.card_regex = dict([
+            (card_type, re.compile('(' + self._build_regex(cards) + ')'))
+            for card_type, cards in self.card_types.items()
+        ])
 
-    def build_skill_regex(self, skill_type):
-        skill_cards = '|'.join(self.skill_types.get(skill_type, set()))
+    @staticmethod
+    def _build_regex(options):
+        return '|'.join(re.escape(card) for card in options)
+
+    def _build_skill_regex(self, skill_type):
+        skill_cards = self._build_regex(self.skill_types.get(skill_type, set()))
         if skill_cards == '':
-            return re.compile(f'({skill_type})')
+            return re.compile(fr'\b({skill_type})\b')
 
-        return re.compile(f'({skill_type}|{skill_cards})')
+        return re.compile(fr'\b({skill_type}|{skill_cards})\b')
 
     def _load(self):
         for card_type, cards in self.cards.items():
@@ -80,10 +87,22 @@ class Cards:
         type_path = self.cards[actual_type].get('path', type_name)
         ext = card.get('ext', self.cards[actual_type]['ext'])
         path = card.get('path', card['name']).replace(' ', '_')
+        if 'skill' in card:
+            skill = self.skills.get(card['skill'], {})
+            skill_path = skill.get('path', card['skill'])
+            path = f"{skill_path}_{path}"
+        if 'value' in card:
+            path = f"{path}_{card['value'][0]}"
+
         return f'{self.url}/{type_path}/{type_path}_{path}.{ext}'
 
     def replace_cards(self, message):
-        for skill_regex, emoji in self.skill_colors:
-            message = skill_regex.sub(r'\1' + emoji, message)
+        for skill_type, skill_regex in self.skill_colors.items():
+            emoji = self.skills[skill_type]['emoji']
+            message = skill_regex.sub(fr"\1:{emoji}:", message)
+        for card_type, card_regex in self.card_regex.items():
+            if card_type not in ('skill', 'char'):
+                replacement = fr"\1 ({self.cards[card_type]['name']})"
+                message = card_regex.sub(replacement, message)
 
         return message
