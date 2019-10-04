@@ -35,7 +35,7 @@ def main():
         try:
             ok = True
             while ok:
-                print(cards.replace_cards(next(result)))
+                print(cards.replace_cards(next(result), display='unicode'))
                 if command == "all":
                     print('\n' + '=' * 80 + '\n')
                 else:

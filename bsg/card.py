@@ -96,10 +96,10 @@ class Cards:
 
         return f'{self.url}/{type_path}/{type_path}_{path}.{ext}'
 
-    def replace_cards(self, message):
+    def replace_cards(self, message, display='discord'):
         for skill_type, skill_regex in self.skill_colors.items():
-            emoji = self.skills[skill_type]['emoji']
-            message = skill_regex.sub(fr"\1:{emoji}:", message)
+            emoji = self.skills[skill_type][display]
+            message = skill_regex.sub(fr"\1{emoji}", message)
         for card_type, card_regex in self.card_regex.items():
             if card_type not in ('skill', 'char'):
                 replacement = fr"\1 ({self.cards[card_type]['name']})"

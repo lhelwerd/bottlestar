@@ -503,16 +503,21 @@ cards:
 skills:
   Leadership:
     path: Led
-    emoji: green_apple
+    discord: ":green_apple:"
+    unicode: "\U0001F34F"
   Tactics:
     path: Tac
-    emoji: octopus
+    discord: ":octopus:"
+    unicode: "\U0001F419"
   Politics:
     path: Pol
-    emoji: prince
+    discord: ":prince:"
+    unicode: "\U0001F934"
   Piloting:
     path: Pil
-    emoji: airplane_small
+    discord: ":airplane_small:"
+    unicode: "\U0001F6E9️"
   Engineering:
     path: Eng
-    emoji: large_blue_diamond
+    discord: ":large_blue_diamond:"
+    unicode: "\U0001F537"
