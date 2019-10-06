@@ -1,5 +1,7 @@
 import argparse
+from datetime import datetime
 import logging
+import dateutil.parser
 import yaml
 from bsg.bgg import RSS
 from bsg.card import Cards
@@ -29,9 +31,19 @@ def main():
     if command == "bot":
         print("Hello, command line user!")
         return
-    if command == "latest" or command == "all":
+    if command == "latest" or command == "all" or command == "update":
         rss = RSS(config['rss_url'])
-        result = rss.parse()
+        if command == "update":
+            one = True
+            if arguments:
+                if_modified_since = dateutil.parser.parse(" ".join(arguments))
+            else:
+                if_modified_since = datetime.now()
+        else:
+            one = False
+            if_modified_since = None
+
+        result = rss.parse(if_modified_since=if_modified_since, one=one)
         try:
             ok = True
             while ok:
