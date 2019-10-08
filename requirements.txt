@@ -3,3 +3,4 @@ lxml
 discord.py
 PyYAML
 requests
+python-dateutil
