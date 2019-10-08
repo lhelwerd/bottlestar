@@ -7,9 +7,28 @@ import requests
 
 class RSS:
     ACTIONS_SPLIT = re.compile(r'Quoted Article: \d+</font>')
+    IMAGES = {
+        "3807729": "-3=",
+        "3807730": "-2=",
+        "3807731": "-1=",
+        "3807732": "+1=",
+        "3807733": "+2=",
+        "3807734": "+3=",
+        "3807735": "+4=",
+        "3807736": "+5=",
+        "3789064": "1",
+        "3789070": "2",
+        "3789073": "3",
+        "3789077": "4",
+        "3789080": "5",
+        "3789081": "6",
+        "3789096": "7",
+        "3789084": "8"
+    }
 
-    def __init__(self, url):
+    def __init__(self, url, image_url=None):
         self.url = url
+        self.image_url = image_url
         
     def parse(self, if_modified_since=None, one=False):
         headers = {}
@@ -24,7 +43,15 @@ class RSS:
 
         soup = BeautifulSoup(response.text, "lxml")
         for item in soup.find_all('item'):
-            contents = item.find('description').text
+            description = item.find('description')
+
+            if self.image_url is not None:
+                for image_id, replacement in self.IMAGES.items():
+                    url = self.image_url + image_id
+                    for link in description.find_all('a', {"href": url}):
+                        link.replace_with(replacement)
+
+            contents = description.text
             contents = contents.replace("\r", "\n").replace("]]>", "")
             parts = self.ACTIONS_SPLIT.split(contents, maxsplit=1)
             if len(parts) > 1:
@@ -42,5 +69,7 @@ class RSS:
                     yield text
                 elif one:
                     return
+                else:
+                    logging.info('No contents in the latest message, skipping')
         else:
             return
