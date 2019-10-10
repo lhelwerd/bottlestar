@@ -32,7 +32,7 @@ def main():
         print("Hello, command line user!")
         return
     if command == "latest" or command == "all" or command == "update":
-        rss = RSS(config['rss_url'], config['image_url'])
+        rss = RSS(config['rss_url'], config['image_url'], config['session_id'])
         if command == "update":
             one = True
             if arguments:

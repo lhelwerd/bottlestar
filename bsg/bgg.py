@@ -26,18 +26,26 @@ class RSS:
         "3789084": "8"
     }
 
-    def __init__(self, url, image_url=None):
+    def __init__(self, url, image_url=None, session_id=None):
         self.url = url
         self.image_url = image_url
-        
-    def parse(self, if_modified_since=None, one=False):
+        self.session_id = session_id
+
+    def _request(self, if_modified_since=None):
         headers = {}
+        cookies = {}
         if if_modified_since is not None:
             value = formatdate(mktime(if_modified_since.timetuple()),
                                localtime=False, usegmt=True)
             headers['if-modified-since'] = value
 
-        response = requests.get(self.url, headers=headers)
+        if self.session_id is not None:
+            cookies['SessionID'] = self.session_id
+
+        return requests.get(self.url, headers=headers, cookies=cookies)
+
+    def parse(self, if_modified_since=None, one=False):
+        response = self._request(if_modified_since)
         if response.status_code == 304:
             return
 

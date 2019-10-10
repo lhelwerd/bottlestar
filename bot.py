@@ -25,7 +25,7 @@ with open("config.yml") as config_file:
 
 client = discord.Client()
 cards = Cards(config['cards_url'])
-rss = RSS(config['rss_url'], config['image_url'])
+rss = RSS(config['rss_url'], config['image_url'], config['session_id'])
 
 async def check_for_updates(client, server_id, channel_id):
     if server_id is None or channel_id is None:
