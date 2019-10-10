@@ -347,9 +347,9 @@ cards:
       - name: Sharon Athena Agathon
         path: Athena
       - name: Kara Starbuck Thrace
-        path: Kara Thrace
-      - name: Starbuck
-        path: Kara Thrace
+        path: Starbuck
+      - name: Kara Thrace
+        path: Starbuck
         alias: true
       - name: Lee Apollo Adama
         path: Apollo
@@ -362,9 +362,9 @@ cards:
       - name: D'Anna Biers
         path: DAnnaBiers
       - name: Chief Galen Tyrol
-        path: Galen Tyrol
-      - name: Chief
-        path: Galen Tyrol
+        path: Chief
+      - name: Galen Tyrol
+        path: Chief
         alias: true
       - name: Simon O'Neill
         path: Simon
