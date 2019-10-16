@@ -86,18 +86,22 @@ class Cards:
             return 'No card found'
 
         card = self.cards[actual_type][deck][index]
-        type_name = self.cards[actual_type]['name']
         if card_type != '' and actual_type != card_type:
+            type_name = self.cards[actual_type]['name']
             return f"You selected the wrong card type: {card['name']} is actually a {type_name} card"
 
-        type_path = self.cards[actual_type].get('path', type_name)
-        ext = card.get('ext', self.cards[actual_type]['ext'])
+        return self.get_url(card, actual_type)
+
+    def get_url(self, card, card_type):
+        type_name = self.cards[card_type]['name']
+        type_path = self.cards[card_type].get('path', type_name)
+        ext = card.get('ext', self.cards[card_type]['ext'])
         path = card.get('path', card['name']).replace(' ', '_')
         if 'skill' in card:
             skill = self.skills.get(card['skill'], {})
             skill_path = skill.get('path', card['skill'])
             path = f"{skill_path}_{path}"
-        if 'value' in card:
+        if 'value' in card and not isinstance(card['value'], int):
             path = f"{path}_{card['value'][0]}"
 
         return f'{self.url}/{type_path}/{type_path}_{path}.{ext}'

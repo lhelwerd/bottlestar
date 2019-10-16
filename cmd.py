@@ -3,8 +3,10 @@ from datetime import datetime
 import logging
 import dateutil.parser
 import yaml
+from elasticsearch_dsl.connections import connections
 from bsg.bgg import RSS
 from bsg.card import Cards
+from bsg.search import Card
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Command-line bot reply')
@@ -55,6 +57,19 @@ def main():
                     ok = False
         except StopIteration:
             print('No latest message found!')
+        return
+
+    if command == "search":
+        # Define a default Elasticsearch client
+        connections.create_connection(alias='main',
+                                      hosts=[config['elasticsearch_host']])
+
+        response, count = Card.search_freetext(' '.join(arguments))
+        print(f'{count} hits (at most 10 are shown):')
+        for hit in response:
+            url = cards.get_url(hit.to_dict(), hit.card_type)
+            print(f'{hit.name}: {url} (score: {hit.meta.score:.3f})')
+
         return
 
     print(cards.find(' '.join(arguments), '' if command == "card" else command))

@@ -4,8 +4,10 @@ from datetime import datetime
 import logging
 import discord
 import yaml
+from elasticsearch_dsl.connections import connections
 from bsg.bgg import RSS
 from bsg.card import Cards
+from bsg.search import Card
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Command-line bot reply')
@@ -26,6 +28,8 @@ with open("config.yml") as config_file:
 client = discord.Client()
 cards = Cards(config['cards_url'])
 rss = RSS(config['rss_url'], config['image_url'], config.get('session_id'))
+connections.create_connection(alias='main',
+                              hosts=[config['elasticsearch_host']])
 
 async def check_for_updates(client, server_id, channel_id):
     if server_id is None or channel_id is None:
@@ -91,6 +95,18 @@ async def on_message(message):
                                                      message.guild))
         except StopIteration:
             await message.channel.send('No post found!')
+    if command == "search" and 'elasticsearch_host' in config:
+        response, count = Card.search_freetext(' '.join(arguments))
+        if count == 0:
+            await message.channel.send('No card found')
+        else:
+            for hit in response:
+                url = cards.get_url(hit.to_dict(), hit.card_type)
+                await message.channel.send(f'{url} (score: {hit.meta.score:.3f}, {count} hits)')
+                break
+
+        return
+
 
     result = cards.find(' '.join(arguments),
                         '' if command == "card" else command)
