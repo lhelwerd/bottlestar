@@ -3,6 +3,8 @@ import re
 import yaml
 
 class Cards:
+    DECKS = ('base', 'pegasus', 'exodus', 'daybreak')
+
     def __init__(self, url):
         self.url = url
         with open("data.yml") as data_file:
@@ -38,35 +40,39 @@ class Cards:
 
     def _load(self):
         for card_type, cards in self.cards.items():
-            for index, card in enumerate(cards['base']):
-                self.card_types.setdefault(card_type, set())
-                self.card_types[card_type].add(card['name'])
-                if 'skill' in card:
-                    self.skill_types.setdefault(card['skill'], set())
-                    self.skill_types[card['skill']].add(card['name'])
+            for deck in self.DECKS:
+                for index, card in enumerate(cards.get(deck, [])):
+                    self._add_card(card_type, deck, index, card)
 
-                name = card['name'].lower()
-                self._add(name, card_type, index, 0)
-                self._add(name.replace(' ', ''), card_type, index, 1)
-                for word_count, part in enumerate(name.split(' ')):
-                    self._add(part, card_type, index, 2 + word_count)
-                if 'path' in card:
-                    self._add(card['path'].lower(), card_type, index, 1)
+    def _add_card(self, card_type, deck, index, card):
+        self.card_types.setdefault(card_type, set())
+        self.card_types[card_type].add(card['name'])
+        if 'skill' in card:
+            self.skill_types.setdefault(card['skill'], set())
+            self.skill_types[card['skill']].add(card['name'])
 
-    def _add(self, lookup, card_type, index, priority):
+        name = card['name'].lower()
+        self._add(name, card_type, deck, index, 0)
+        self._add(name.replace(' ', ''), card_type, deck, index, 1)
+        for word_count, part in enumerate(name.split(' ')):
+            self._add(part, card_type, deck, index, 2 + word_count)
+        if 'path' in card:
+            self._add(card['path'].lower(), card_type, deck, index, 1)
+
+    def _add(self, lookup, card_type, deck, index, priority):
         if lookup in self.lookup and self.lookup[lookup][1] != index and \
-            not self.cards[card_type]['base'][index].get('alias', False) and \
+            not self.cards[card_type][deck][index].get('alias', False) and \
             priority > self.lookup[lookup][2]:
-            cur_type, cur_index, cur_priority = self.lookup[lookup]
+            cur_type, cur_deck, cur_index, cur_priority = self.lookup[lookup]
             logging.debug('Duplicate lookup: %s => %d. %s (%s) =/= %d. %s (%s)',
                           lookup, priority,
-                          self.cards[card_type]['base'][index]['name'],
+                          self.cards[card_type][deck][index]['name'],
                           card_type, cur_priority,
-                          self.cards[cur_type]['base'][cur_index]['name'],
+                          self.cards[cur_type][cur_deck][cur_index]['name'],
                           cur_type)
             return
 
-        self.lookup[lookup] = (card_type, index, priority)
+        self.lookup[lookup] = (card_type, deck, index, priority)
 
     def find(self, search, card_type=''):
         if card_type != '' and card_type not in self.cards:
@@ -74,12 +80,12 @@ class Cards:
 
         for option in [search.lower(), search.lower().replace(' ', '')]:
             if option in self.lookup:
-                actual_type, index = self.lookup[option][:2]
+                actual_type, deck, index = self.lookup[option][:3]
                 break
         else:
             return 'No card found'
 
-        card = self.cards[actual_type]['base'][index]
+        card = self.cards[actual_type][deck][index]
         type_name = self.cards[actual_type]['name']
         if card_type != '' and actual_type != card_type:
             return f"You selected the wrong card type: {card['name']} is actually a {type_name} card"
