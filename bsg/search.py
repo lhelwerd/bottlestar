@@ -3,12 +3,13 @@ from elasticsearch_dsl import Document, Boolean, Integer, Keyword, normalizer, Q
 lowercase = normalizer('lower', filter=['lowercase'])
 
 class Card(Document):
-    SEARCH_FIELDS = ['name', 'text', 'card_type', 'deck', 'cylon', 'skills']
+    SEARCH_FIELDS = ['name', 'text', 'deck', 'expansion', 'cylon', 'skills']
 
     name = Text(analyzer='snowball', fields={'raw': Keyword()})
     path = Text(analyzer='snowball', fields={'raw': Keyword()})
-    card_type = Keyword()
     deck = Keyword()
+    expansion = Keyword()
+    ext = Keyword()
     value = Integer()
     destination = Integer()
     skills = Keyword(normalizer=lowercase)

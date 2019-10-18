@@ -90,13 +90,17 @@ class Cards:
             type_name = self.cards[actual_type]['name']
             return f"You selected the wrong card type: {card['name']} is actually a {type_name} card"
 
-        return self.get_url(card, actual_type)
+        return self.get_url(card, actual_type, deck)
 
-    def get_url(self, card, card_type):
+    def get_url(self, card, card_type, deck):
         type_name = self.cards[card_type]['name']
-        type_path = self.cards[card_type].get('path', type_name)
+        type_path = self.cards[card_type].get('path', type_name).replace(' ', '_')
         ext = card.get('ext', self.cards[card_type]['ext'])
-        path = card.get('path', card['name']).replace(' ', '_')
+        if isinstance(ext, dict):
+            ext = ext.get(deck, ext['default'])
+        replace = self.cards[card_type].get('replace', {'default': '_'})
+        replacement = replace.get(deck, replace['default'])
+        path = card.get('path', card['name']).replace(' ', replacement)
         if 'skill' in card:
             skill = self.skills.get(card['skill'], {})
             skill_path = skill.get('path', card['skill'])

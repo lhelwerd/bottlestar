@@ -101,7 +101,7 @@ async def on_message(message):
             await message.channel.send('No card found')
         else:
             for hit in response:
-                url = cards.get_url(hit.to_dict(), hit.card_type)
+                url = cards.get_url(hit.to_dict(), hit.deck, hit.expansion)
                 await message.channel.send(f'{url} (score: {hit.meta.score:.3f}, {count} hits)')
                 break
 

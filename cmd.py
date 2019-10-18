@@ -67,7 +67,7 @@ def main():
         response, count = Card.search_freetext(' '.join(arguments))
         print(f'{count} hits (at most 10 are shown):')
         for hit in response:
-            url = cards.get_url(hit.to_dict(), hit.card_type)
+            url = cards.get_url(hit.to_dict(), hit.deck, hit.expansion)
             print(f'{hit.name}: {url} (score: {hit.meta.score:.3f})')
 
         return
