@@ -67,10 +67,11 @@ class RSS:
                 desc_soup = BeautifulSoup(actions, "lxml")
                 for quote in desc_soup.find_all("div", {"class": "quote"}):
                     quote_title = quote.find("div", {"class": "quotetitle"})
-                    if 'BYC: Game State' in quote_title.text:
-                        quote.extract()
-                    else:
-                        quote_title.extract()
+                    if quote_title is not None:
+                        if 'BYC: Game State' in quote_title.text:
+                            quote.extract()
+                        else:
+                            quote_title.extract()
 
                 text = ''.join(t for t in desc_soup.find_all(text=True)).strip().replace('[hr]', '')
                 if text != '':
