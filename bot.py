@@ -95,23 +95,22 @@ async def on_message(message):
                                                      message.guild))
         except StopIteration:
             await message.channel.send('No post found!')
-    if command == "search" and 'elasticsearch_host' in config:
-        response, count = Card.search_freetext(' '.join(arguments))
-        if count == 0:
-            await message.channel.send('No card found')
-        else:
-            for hit in response:
-                url = cards.get_url(hit.to_dict(), hit.deck, hit.expansion)
-                await message.channel.send(f'{url} (score: {hit.meta.score:.3f}, {count} hits)')
-                break
 
+    if command in ('card', 'search', ''):
+        deck = ''
+    elif command not in cards.decks:
         return
+    else:
+        deck = command
 
-
-    result = cards.find(' '.join(arguments),
-                        '' if command == "card" else command)
-    if result is not None:
-        await message.channel.send(result)
+    response, count = Card.search_freetext(' '.join(arguments), deck=deck)
+    if count == 0:
+        await message.channel.send('No card found')
+    else:
+        for hit in response:
+            url = cards.get_url(hit.to_dict())
+            await message.channel.send(f'{url} (score: {hit.meta.score:.3f}, {count} hits)')
+            break
 
 if __name__ == "__main__":
     client.run(config['token'])

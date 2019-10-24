@@ -25,7 +25,7 @@ def main():
     Card.init()
 
     meta = {}
-    with open("data-documented.yml", "r") as data_file:
+    with open("data.yml", "r") as data_file:
         for data in yaml.safe_load_all(data_file):
             if data.get('meta'):
                 meta = data
@@ -38,15 +38,18 @@ def main():
             deck_name = meta['decks'][deck]['name']
             jump = meta['decks'][deck].get('jump')
             path = data.get('path', meta['decks'][deck].get('path', deck_name))
-            replace = data.get('replace', '_')
+            replace = data.get('replace', meta['decks'][deck].get('replace', '_'))
             ext = data.get('ext', meta['decks'][deck]['ext'])
             for card in data['cards']:
+                card_path = card.get('path', card['name'])
+                if 'value' in card and not isinstance(card['value'], int):
+                    card_path = f"{card_path} {card['value'][0]}"
                 skills = card.get('skills',
                                   [card['skill']] if 'skill' in card else [])
                 text = str(card.get('text', {}))
                 doc = Card(name=card['name'],
                            prefix=path,
-                           path=card.get('path', card['name']).replace(' ', replace),
+                           path=card_path.replace(' ', replace),
                            deck=deck,
                            expansion=expansion,
                            ext=card.get('ext', ext),

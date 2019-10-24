@@ -26,6 +26,10 @@ def main():
     with open("config.yml") as config_file:
         config = yaml.safe_load(config_file)
 
+    # Define a default Elasticsearch client
+    connections.create_connection(alias='main',
+                                  hosts=[config['elasticsearch_host']])
+
     command = args.command
     arguments = args.arguments
     cards = Cards(config['cards_url'])
@@ -58,21 +62,22 @@ def main():
         except StopIteration:
             print('No latest message found!')
         return
-
-    if command == "search":
-        # Define a default Elasticsearch client
-        connections.create_connection(alias='main',
-                                      hosts=[config['elasticsearch_host']])
-
-        response, count = Card.search_freetext(' '.join(arguments))
-        print(f'{count} hits (at most 10 are shown):')
-        for hit in response:
-            url = cards.get_url(hit.to_dict(), hit.deck, hit.expansion)
-            print(f'{hit.name}: {url} (score: {hit.meta.score:.3f})')
-
+    if command == "replace":
+        print(cards.replace_cards(' '.join(arguments), display='unicode'))
         return
 
-    print(cards.find(' '.join(arguments), '' if command == "card" else command))
+    if command in ('card', 'search'):
+        deck = ''
+    elif command not in cards.decks:
+        return
+    else:
+        deck = command
+
+    response, count = Card.search_freetext(' '.join(arguments), deck=deck)
+    print(f'{count} hits (at most 10 are shown):')
+    for hit in response:
+        url = cards.get_url(hit.to_dict())
+        print(f'{hit.name}: {url} (score: {hit.meta.score:.3f})')
 
 if __name__ == "__main__":
     main()

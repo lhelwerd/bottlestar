@@ -1,508 +1,72 @@
-cards:
+---
+meta: True
+expansions:
+  - base
+  - pegasus
+  - exodus
+  - daybreak
+  - unofficial
+decks:
   crisis:
     name: Crisis
     ext: png
-    base:
-      - name: Heavy Assault
-      - name: Loss of a Friend
-        path: Loss Friend
-      - name: A Traitor Accused
-      - name: A Desparate Pact
-        path: ADesparatePact
-        ext: jpg
-      - name: Centurion Assault
-        path: Cent Assault
-      - name: Appoint Head of Security
-        path: Head Security
-      - name: Set A Trap
-      - name: Sleep Deprivation
-      - name: Unexplained Deaths
-      - name: Ambushed by the Press
-        path: Ambushed Press
-      - name: Religious Turmoil
-        ext: jpg
-      - name: Rescue Caprica Survivors
-        path: Rescue Cap Survivors
-      - name: Domestic Dispute
-        path: DomesticDispute
-        ext: jpg
-      - name: Detector Sabotate
-      - name: Raptor Malfunction
-      - name: The Black Market
-      - name: Power Failure
-      - name: Civilian Ship Nuked
-        path: Civ Ship Nuked
-      - name: Tactical Strike
-      - name: Hera Rescued
-      - name: Abandon Galactica
-        path: AbandonGalactica
-        ext: jpg
-      - name: Détente
-        path: Detente
-      - name: Surrounded
-      - name: Build Cylon Detector
-      - name: Scar
-      - name: Missing G4 Explosives
-        path: Missing G4
-      - name: Consult the Prisoner
-        path: Consult Prisoner
-      - name: Incitement to Mutiny
-        path: IncitementToMutiny
-        ext: jpg
-      - name: Security Breach
-      - name: Prison Labor
-      - name: Terrorist Investigations
-        path: Terrorist Inv
-      - name: Give in to Despair
-        path: GiveInToDespair
-        ext: jpg
-      - name: Labor Dispute
-      - name: Training Snafu
-      - name: Bomb Threat
-      - name: Sabotage Investigated
-      - name: Terrorist Bomber
-      - name: Question Procedure
-        path: QuestionProcedure
-        ext: jpg
-      - name: Medal of Distinction
-        path: Medal Distinction
-      - name: Blindsided
-        ext: jpg
-      - name: Crash Landing
-      - name: Network Computers
-      - name: Unwelcome Faces
-      - name: Thirty-Three
-        path: Thirty Three
-      - name: Requested Resignation
-        path: Request Resignation
-      - name: Elections Loom
-      - name: Riots (B/*)
-        path: Riots
-      - name: Review Camera Footage
-        path: Review Footage
-      - name: The Circle
-      - name: Water Shortage (R/*)
-        path: Water Short2
-      - name: Haunted by the Past
-        path: Haunted Past
-      - name: Guilty Conscience
-      - name: Scouting for Fuel
-        path: Scouting Fuel
-      - name: Strange Beacon
-      - name: Hidden Identity
-      - name: An Ambitious Operation
-        path: AnAmbitiousOperation
-        ext: jpg
-      - name: Hangar Accident
-      - name: Rescue the Fleet
-        path: Rescue Fleet
-      - name: Crippled Raider
-      - name: Dogfight
-      - name: Threat of Super Nova
-        path: Threat S Nova
-      - name: Assassination Plot
-        path: Assassin Plot
-      - name: Cylon Virus
-      - name: Reprisal
-        ext: jpg
-      - name: Witch Hunt
-      - name: The Passage
-      - name: Training a Rookie
-        path: Training Rookie
-      - name: Unsettling Stories
-      - name: Food Hoarding in the Fleet
-        path: Food Hoarding
-      - name: Declare Martial Law
-        path: Declare Marshal Law
-      - name: Scouting for Water
-        path: Scouting Water
-      - name: Truth and Reconciliation
-        path: Truth Reconcile
-      - name: Galactica Falling Apart
-        path: GalacticaFallingApart
-        ext: jpg
-      - name: Reunite the Fleet
-        path: Reunite Fleet
-      - name: Unidentified Ship
-      - name: Defending a Prisoner
-        path: Defending Prisoner
-      - name: Dishonest Tactics
-        path: DishonestTactics
-        ext: jpg
-      - name: Food Shortage
-      - name: Quorum in Uproar
-        path: QuorumInUproar
-        ext: jpg
-      - name: Hybrid in Panic
-        path: HybridInPanic
-        ext: jpg
-      - name: Insubordinate Crew
-        path: InsubordinateCrew
-        ext: jpg
-      - name: Dangerous Plots
-        path: DangerousPlots
-        ext: jpg
-      - name: Hornet's Nest
-        path: HornetsNest
-        ext: jpg
-      - name: Mysterious Guide
-      - name: In The Ring
-      - name: Rescue Mission (B/*)
-        path: Rescue Mission2
-      - name: Weapon Malfunction
-        path: Weapon Malf
-      - name: Return to Duty
-        path: Return Duty
-      - name: Unfair Dias
-      - name: An Offer of Peace
-        path: An Offer Peace
-      - name: Tracked by Radiation
-        path: Tracked Radiation
-      - name: Rescue Mission (R/*)
-        path: Rescue Mission
-      - name: Raiding Party
-      - name: Water Sabotaged
-      - name: Code Blue
-      - name: Mysterious Message
-      - name: Standoff with Pegasus
-        path: Standoff Pegasus
-      - name: Colonial Day
-      - name: Resistance
-      - name: Pressure the Supply Ships
-        path: Pressure Supply
-      - name: Rebuild Trust
-        path: RebuildTrust
-        ext: jpg
-      - name: A Verdict of Guilty
-        path: A Verdict Guilty
-      - name: Send Survey Team
-        path: Send Survey
-      - name: Mandatory Testing
-      - name: Lockdown
-        ext: jpg
-      - name: Water Shortage (B/-)
-        path: Water Short3
-      - name: Besieged
-      - name: Jump Computer Failure
-        path: Jump Comp Fail
-      - name: The Guardians
-      - name: Cylon Genocide
-      - name: Temple of the Five
-        path: Temple Five
-      - name: Controversial Manuscript
-      - name: Raiders Inbound
-      - name: Rallying Support
-        path: RallyingSupport
-        ext: jpg
-      - name: Earth in Ruins
-        path: EarthInRuins
-        ext: jpg
-      - name: Cylon Tracking Device
-        path: Tracking Device
-      - name: Joe's Bar
-        path: Joes Bar
-      - name: Unexpected Reunion
-      - name: Trial by Fire
-        path: TrialByFire
-        ext: jpg
-      - name: Airlock Leak
-      - name: Secret Meetings
-        path: SecretMeetings
-        ext: jpg
-      - name: Widespread Starvation
-        path: Widespread Starve
-      - name: Boarding Parties
-      - name: Keep Tabs on Visitor
-        path: Keep Tabs
-      - name: Admiral Grilled
-      - name: Informing the Public
-        path: Informing Public
-      - name: Hidden Explosives
-      - name: Guilt by Collusion
-        path: Guilty Collusion
-      - name: Forced Water Mining
-        path: Forced Water
-      - name: Analyze Enemy Fighter
-        path: Analyze Fighter
-      - name: Consult the Hybrid
-        path: ConsultTheHybrid
-        ext: jpg
-      - name: Jammed Assault
-      - name: Reactor Critical
-        path: ReactorCritical
-        ext: jpg
-      - name: Fulfiller of Prophecy
-        path: Fulfiller Prophecy
-      - name: Cylon Accusation
-      - name: Requisition for Demetrius
-        path: RequisitionForDemetrius
-        ext: jpg
-      - name: Legendary Discovery
-        path: Leg Discovery
-      - name: Event Horizon
-        path: EventHorizon
-        ext: jpg
-      - name: Starvation in Dogsville
-        path: StarvationInDogsville
-        ext: jpg
-      - name: Divisive Behavior
-      - name: Familiar Face
-      - name: Cylon Screenings
-      - name: Review Galactica's Log
-        path: Review Logs
-      - name: Cylon Swarm
-      - name: Enemy of my Enemy
-        path: EnemyOfMyEnemy
-        ext: jpg
-      - name: Water Shortage (B/*)
-        path: Water Short
-      - name: One Last Cocktail
-        path: OneLastCocktail
-        ext: jpg
-      - name: Medical Breakthrough
-      - name: Suspicious Election Results
-        path: Suspicious Election
-      - name: Low Supplies
-      - name: Prisoner Revolt
-      - name: Riots (L/-)
-        path: Riots2
-      - name: Ambush
-      - name: Interrogation
-      - name: The Olympic Carrier
-        path: The Olympic
+    jump: False
   s_crisis:
     name: Super Crisis
     path: S_Crisis
     ext: png
-    base:
-      - name: Bomb on Colonial 1
-        path: Bomb Colonial 1
-      - name: Cylon Intruders
-        path: Cylon Intrude
-      - name: Demand Peace Manifesto
-        path: Demand Peace
-      - name: Fire All Missiles
-      - name: Fleet Mobilization
-        path: Fleet Mobile
-      - name: Footage Transmitted
-        path: Footage
-      - name: Human Prisoner
-        path: Human Prisoners
-      - name: Inbound Nukes
-      - name: Lured into a Trap
-        path: Lured Trap
-      - name: Massive Assault
-      - name: Psychological Warfare
-        path: Psy Warfare
   destination:
-    name: Destination
     alias: dest
+    name: Destination
     path: Dest
     ext: png
-    base:
-      - name: Dying Star
-      - name: Barren Planet
-        path: Baren Planet
-      - name: Cylon Ambush
-      - name: Binary Star
-      - name: Gas Giant
-      - name: Desolate Moon
-      - name: Gas Cloud
-      - name: Remote Planet
-      - name: Lion's Head Nebula
-        path: Lions Head
-      - name: Asteroid Field
-      - name: Derelict Basestar
-        path: Derelict BS
-      - name: Cylon Raiders
-      - name: A Civilian Convoy
-        path: Civ Convoy
-      - name: Deep Space
-      - name: Icy Moon
-      - name: Ragnar Anchorage
-      - name: Misjump
-      - name: Algae Planet
-      - name: Tylium Planet
-      - name: Mining Asteroid
-      - name: Radioactive Cloud
-        path: Rad Cloud
-      - name: Cylon Refinery
   char:
+    alias: character
     name: Chars
     ext: png
-    base:
-      - name: Tory Foster
-        path: Tori Foster
-      - name: Laura Roslin
-      - name: Cavil
-      - name: Helena Cain
-      - name: Caprica Six
-        path: Six
-      - name: Felix Gaeta
-      - name: Romo Lampkin
-        path: RomoLampkin
-      - name: Billy Keikeya
-      - name: Tom Zarek
-      - name: Tom
-      - name: Sharon Athena Agathon
-        path: Athena
-      - name: Kara Starbuck Thrace
-        path: Starbuck
-      - name: Kara Thrace
-        path: Starbuck
-        alias: true
-      - name: Lee Apollo Adama
-        path: Apollo
-      - name: Louis Hoshi
-        path: LouisHoshi
-      - name: Margaret Racetrack Edmondson
-        path: Racetrack
-      - name: Louanne Kat Katraine
-        path: Louanna%20Katraine
-      - name: D'Anna Biers
-        path: DAnnaBiers
-      - name: Chief Galen Tyrol
-        path: Chief
-      - name: Galen Tyrol
-        path: Chief
-        alias: true
-      - name: Simon O'Neill
-        path: Simon
-      - name: Aaron Doral
-        path: Doral
-      - name: Gaius Baltar
-        path: Baltar
-      - name: Karl Helo Agathon
-        path: Helo
-      - name: Brendan Hot Dog Costanza
-        path: HotDog
-      - name: Anastasia Dee Dualla
-        path: Dee
-      - name: Callandra Cally Tyrol
-        path: Cally Tyrol
-      - name: Ellen Tigh
-      - name: Sherman Doc Cottle
-        path: DocCottle
-      - name: Samuel T. Anders
-        path: Samuel T Anders
-      - name: Leoben Conoy
-      - name: Kendra Shaw
-        path: Kendra shaw
-      - name: Saul Tigh
-      - name: William Adama
-        path: Bill Adama
-      - name: Sharon Boomer Valerii
-        path: Sharon Valerii
-      - name: Boomer
-        path: Sharon Valerii
-        alias: true
-    expansion:
-      - name: Karl Helo Agathon
-        path: Karl
-      - name: Lee Adama
-        path: Lee
-      - name: Gaius Baltar
-        path: Gaius
-  skill:
-    name: Skill
+    denote: False
+  loyalty:
+    name: Loyalty
     ext: png
-    base:
-      - name: Consolidate Power
-        value: [1, 2]
-        skill: Politics
-        path: Con Power
-      - name: Investigative Committee
-        value: [3, 4, 5]
-        skill: Politics
-        path: Inv Committee
-      - name: Executive Order
-        value: [1, 2]
-        skill: Leadership
-        path: XO
-      - name: Declare Emergency
-        value: [3, 4, 5]
-        skill: Leadership
-        path: Dec Emergency
-      - name: Launch Scout
-        value: [1, 2]
-        skill: Tactics
-        path: Launch Scout
-      - name: Strategic Planning
-        value: [3, 4, 5]
-        skill: Tactics
-        path: Strat
-      - name: Evasive Maneuvers
-        value: [1, 2]
-        skill: Piloting
-        path: Evasive
-      - name: Maximum Firepower
-        value: [3, 4, 5]
-        skill: Piloting
-        path: Maximum
-      - name: Repair
-        value: [1, 2]
-        skill: Engineering
-        path: Repair
-      - name: Scientific Research
-        value: [3, 4, 5]
-        skill: Engineering
-        path: Sci Research
   quorum:
     name: Quorum
     ext: png
-    base:
-      - name: Authorization of Brutal Force
-        path: Authorize Brute Force
-      - name: Assign Chief of Staff
-        path: Assign Staff
-      - name: Assign Mission Specialist
-        path: Assign Miss Specialist
-      - name: Encourage Mutiny
-      - name: Establish Dogsville
-      - name: Accept Prophecy
-      - name: Presidential Pardon
-        path: Pres Pardon
-      - name: Assign Arbitrator
-      - name: Enact Production Quotas
-        path: Enact Prod Quotas
-      - name: Inspirational Speech
-        path: Inspire Speech
-      - name: Assign Vice President
-        path: Assign V Pres
-      - name: Food Rationing
-      - name: Consult the Oracle
-        path: Consult Oracle
-      - name: Presidential Order
-        path: Presidential order
-      - name: Execute Prisoner
-      - name: Unsavory Connections
-      - name: Arrest Order
-      - name: Probation
-      - name: Release Cylon Mugshots
-        path: Release Mugshots
-      - name: Resources for Galactica
-        path: Resources Galactica
-      - name: Eulogy
-      - name: Civilian Self Defense
-        path: Civ Self Defense
-      - name: Resignation
-  loyalty:
-    name: BSG Loyalty
+  skill:
+    name: Skill
     ext: png
-    base:
-      - name: Can Send a Character to the Brig
-        path: Brig
-      - name: Can Damage Galactica
-        path: Damage Gal
-      - name: Can Reduce Morale by 1
-        path: Morale
-      - name: Can Send a Character to Sickbay
-        path: Sickbay
-      - name: You Are a Sympathizer
-        path: Sympathizer
+    reckless: False
+    ability: False
+    denote: False
+  motive:
+    name: Motive
+    path: Motives
+    ext: jpg
+  ally:
+    name: Ally
+    ext: png
+    denote: False
+  crossroads:
+    name: Crossroads
+    ext: png
+  mission:
+    name: Mission
+    path: Missions
+    ext: jpg
+    replace: ''
+  mutiny:
+    name: Mutiny
+    ext: jpg
+    replace: ''
+  nc_crisis:
+    name: New Caprica Crisis
+    path: NC_Crisis
+    ext: gif
+    jump: False
 skills:
   Leadership:
-    path: Led
+    path:
+      default: Led
+      daybreak: Lea
     discord: ":green_apple:"
     unicode: "\U0001F34F"
   Tactics:
@@ -521,3 +85,1505 @@ skills:
     path: Eng
     discord: ":large_blue_diamond:"
     unicode: "\U0001F537"
+  Treachery:
+    path: Tre
+    discord: ":poop:"
+    unicode: "\U0001F4A9"
+---
+expansion: base
+deck: crisis
+cards:
+  - name: A Traitor Accused
+    value: 8
+    skills: [Politics, Leadership]
+    cylon: Raiders
+    jump: True
+  - name: Admiral Grilled
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: Raiders
+    jump: True
+  - name: Ambush
+  - name: Analyze Enemy Fighter
+    path: Analyze Fighter
+    value: 7
+    skills: [Tactics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Besieged
+  - name: Boarding Parties
+  - name: Bomb Threat
+    value: 13
+    skills: [Politics, Leadership, Tactics]
+  - name: Build Cylon Detector
+  - name: Colonial Day
+    value: 10
+    skills: [Politics, Tactics]
+    cylon: Basestars fire
+    jump: True
+  - name: Crash Landing
+    value: 6
+    skills: [Tactics, Piloting]
+    cylon: Heavy Raiders
+  - name: Crippled Raider
+    value: 10
+    skills: [Tactics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Cylon Accusation
+    value: 10
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+  - name: Cylon Screenings
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: Raiders
+  - name: Cylon Swarm
+  - name: Cylon Virus
+    value: 13
+    skills: [Tactics, Engineering]
+    cylon: Basestars launch Raiders
+  - name: Declare Martial Law
+    path: Declare Marshal Law
+    cylon: Basestars fire
+  - name: Detector Sabotage
+    value: 8
+    skills: [Leadership, Tactics]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Elections Loom
+    value: 8
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Food Shortage
+    cylon: Raiders
+    jump: True
+  - name: Forced Water Mining
+    path: Forced Water
+    value: 17
+    skills: [Politics, Leadership, Tactics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Fulfiller of Prophecy
+    path: Fulfiller Prophecy
+    value: 6
+    skills: [Politics, Leadership]
+    cylon: Basestars fire
+  - name: Guilt by Collusion
+    path: Guilty Collusion
+    value: 9
+    skills: [Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Hangar Accident
+    value: 10
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Heavy Assault
+  - name: Informing the Public
+    path: Informing Public
+    value: 7
+    skills: [Politics, Leadership]
+    cylon: Raiders
+    jump: True
+  - name: Jammed Assault
+  - name: Jump Computer Failure
+    path: Jump Comp Fail
+    value: 7
+    skills: [Tactics, Engineering]
+    cylon: Basestars launch Raiders
+  - name: Keep Tabs on Visitor
+    path: Keep Tabs
+    value: 12
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Legendary Discovery
+    path: Leg Discovery
+    value: 14
+    skills: [Tactics, Piloting]
+    cylon: Basestars launch Raiders
+    distance: 1
+  - name: Loss of a Friend
+    path: Loss Friend
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Low Supplies
+    value: 7
+    skills: [Politics, Leadership]
+    cylon: Raiders
+  - name: Mandatory Testing
+    value: 13
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Missing G4 Explosives
+    path: Missing G4
+    value: 7
+    skills: [Leadership, Tactics]
+    cylon: Raiders
+  - name: Network Computers
+    value: 11
+    skills: [Politics, Tactics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Prison Labor
+    value: 10
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+  - name: Prisoner Revolt
+    value: 11
+    skills: [Politics, Leadership, Tactics]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Raiding Party
+  - name: Requested Resignation
+    path: Request Resignation
+    cylon: Basestars fire
+  - name: Rescue Caprica Survivors
+    path: Rescue Cap Survivors
+    cylon: Raiders
+    jump: True
+  - name: Rescue the Fleet
+    path: Rescue Fleet
+    cylon: Raiders
+    jump: True
+  - name: Rescue Mission (R/*)
+    path: Rescue Mission
+    cylon: Raiders
+    jump: True
+  - name: Rescue Mission (B/*)
+    path: Rescue Mission2
+    cylon: Basestars fire
+    jump: True
+  - name: Resistance
+    value: 12
+    skills: [Politics, Leadership, Tactics]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Riots (B/*)
+    path: Riots
+    cylon: Basestars fire
+    jump: True
+  - name: Riots (L/-)
+    path: Riots2
+    cylon: Basestars launch Raiders
+    jump: True
+  - name: Scouting for Fuel
+    path: Scouting Fuel
+    value: 12
+    skills: [Tactics, Piloting]
+    cylon: Raiders
+    jump: True
+  - name: Scouting for Water
+    path: Scouting Water
+    value: 9
+    skills: [Tactics, Piloting]
+    cylon: Raiders
+    jump: True
+  - name: Security Breach
+    value: 6
+    skills: [Leadership, Tactics]
+    cylon: Basestars launch Raiders
+  - name: Send Survey Team
+    path: Send Survey
+    value: 15
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Sleep Deprivation
+    cylon: Basestars fire
+    jump: True
+  - name: Surrounded
+  - name: Tactical Strike
+  - name: Terrorist Bomber
+    value: 9
+    skills: [Leadership, Tactics]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Terrorist Investigations
+    path: Terrorist Inv
+    value: 12
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: The Olympic Carrier
+    path: The Olympic
+    value: 11
+    skills: [Politics, Leadership, Piloting]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Thirty-Three
+    path: Thirty Three
+  - name: Cylon Tracking Device
+    path: Tracking Device
+    value: 10
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Raiders
+  - name: Unexpected Reunion
+    value: 8
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+  - name: Unidentified Ship
+    value: 10
+    skills: [Tactics, Piloting]
+    cylon: Basestars launch Raiders
+  - name: Water Sabotaged
+    value: 13
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Water Shortage (B/*)
+    path: Water Short
+    cylon: Basestars fire
+    jump: True
+  - name: Water Shortage (R/*)
+    path: Water Short2
+    cylon: Raiders
+    jump: True
+  - name: Water Shortage (B/-)
+    path: Water Short3
+    cylon: Basestars fire
+  - name: Weapon Malfunction
+    path: Weapon Malf
+    value: 11
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Basestars launch Raiders
+  - name: Witch Hunt
+    value: 10
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+---
+expansion: pegasus
+deck: crisis
+cards:
+  - name: A Verdict of Guilty
+    path: A Verdict Guilty
+    cylon: Basestars fire
+    jump: True
+  - name: An Offer of Peace
+    path: An Offer Peace
+    value: 12
+    skills: [Politics, Leadership]
+    cylon: Basestars launch Raiders
+  - name: Assassination Plot
+    path: Assassin Plot
+    cylon: Basestars fire
+    jump: True
+  - name: Civilian Ship Nuked
+    path: Civ Ship Nuked
+    cylon: Raiders
+    jump: True
+  - name: Code Blue
+    value: 13
+    skills: [Politics, Leadership, Tactics]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Defending a Prisoner
+    path: Defending Prisoner
+    value: 11
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Dogfight
+  - name: Food Hoarding in the Fleet
+    path: Food Hoarding
+    cylon: Raiders
+    jump: True
+  - name: Medical Breakthrough
+    value: 12
+    skills: [Politics, Leadership, Engineering]
+    cylon: Heavy Raiders
+  - name: Pressure the Supply Ships
+    path: Pressure Supply
+    cylon: Raiders
+    jump: True
+  - name: Reunite the Fleet
+    path: Reunite Fleet
+    value: 10
+    skills: [Politics, Leadership]
+    cylon: Raiders
+  - name: Review Galactica's Log
+    path: Review Logs
+    value: 14
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Sabotage Investigated
+    value: 9
+    skills: [Tactics, Engineering]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Scar
+  - name: Standoff with Pegasus
+    path: Standoff Pegasus
+    value: 22
+    skills: [Politics, Leadership, Tactics, Piloting]
+    cylon: Basestars launch Raiders
+  - name: Suspicious Election Results
+    path: Suspicious Election
+    cylon: Raiders
+  - name: The Black Market
+    value: 13
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: The Guardians
+  - name: Training Snafu
+    value: 8
+    skills: [Leadership, Piloting]
+    cylon: Basestars fire
+    jump: True
+  - name: Unsettling Stories
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: Raiders
+    jump: True
+---
+deck: crisis
+expansion: exodus
+cards:
+  - name: Airlock Leak
+    value: 6
+    skills: [Tactics, Engineering]
+    cylon: Heavy Raiders
+  - name: Ambushed by the Press
+    path: Ambushed Press
+    cylon: Raiders
+    jump: True
+  - name: Centurion Assault
+    path: Cent Assault
+    value: 9
+    skills: [Tactics, Piloting]
+    cylon: Basestars launch Raiders
+  - name: Consult the Prisoner
+    path: Consult Prisoner
+    value: 13
+    skills: [Politics, Tactics, Engineering]
+    cylon: Basestars fire
+    jump: True
+  - name: Controversial Manuscript
+    cylon: Raiders
+    jump: True
+  - name: Cylon Genocide
+    value: 21
+    skills: [Politics, Leadership, Tactics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Détente
+    path: Detente
+    cylon: Basestars launch Raiders
+  - name: Divisive Behavior
+    value: 10
+    skills: [Politics, Leadership, Tactical]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Familiar Face
+    value: 12
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Guilty Conscience
+    value: 7
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Haunted by the Past
+    path: Haunted Past
+    value: 12
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Appoint Head of Security
+    path: Head Security
+    cylon: Basestars launch Raiders
+  - name: Hera Rescued
+    value: 10
+    skills: [Politics, Leadership]
+    cylon: Raiders
+    jump: True
+  - name: Hidden Explosives
+    cylon: Raiders
+    jump: True
+  - name: Hidden Identity
+    value: 12
+    skills: [Politics, Leadership, Tactics]
+    cylon: Basestars launch Raiders
+  - name: In The Ring
+    value: 12
+    skills: [Politics, Leadership, Tactics]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Interrogation
+    cylon: Basestars fire
+  - name: Joe's Bar
+    path: Joes Bar
+    value: 12
+    skills: [Politics, Leadership, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Labor Dispute
+    cylon: Basestars fire
+  - name: Medal of Distinction
+    path: Medal Distinction
+    cylon: Basestars fire
+    jump: True
+  - name: Mysterious Guide
+    value: 11
+    skills: [Politics, Leadership]
+    cylon: Raiders
+  - name: Mysterious Message
+    value: 9
+    skills: [Politics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Power Failure
+    value: 14
+    skills: [Leadership, Tactics, Engineering]
+    cylon: Heavy Raiders
+  - name: Raiders Inbound
+    cylon: Heavy Raiders
+  - name: Raptor Malfunction
+    value: 12
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Return to Duty
+    path: Return Duty
+    cylon: Raiders
+  - name: Review Camera Footage
+    path: Review Footage
+    cylon: Basestars fire
+  - name: Set A Trap
+    value: 10
+    skills: [Leadership, Tactics]
+    cylon: Raiders
+  - name: Strange Beacon
+    value: 13
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Raiders
+  - name: Temple of the Five
+    path: Temple Five
+    value: 9
+    skills: [Tactics, Engineering]
+    cylon: Basestars launch Raiders
+  - name: The Circle
+    cylon: Raiders
+    jump: True
+  - name: The Passage
+    value: 14
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Threat of Super Nova
+    path: Threat S Nova
+    value: 10
+    skills: [Leadership, Piloting, Engineering]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Tracked by Radiation
+    path: Tracked Radiation
+    cylon: Basestars fire
+  - name: Training a Rookie
+    path: Training Rookie
+    cylon: Basestars launch Raiders
+  - name: Truth and Reconciliation
+    path: Truth Reconcile
+    cylon: Basestars fire
+    jump: True
+  - name: Unexplained Deaths
+    value: 8
+    skills: [Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Unfair Bias
+    value: 12
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Unwelcome Faces
+    cylon: Raiders
+    jump: True
+  - name: Widespread Starvation
+    path: Widespread Starve
+    cylon: Raiders
+    jump: True
+---
+expansion: daybreak
+deck: crisis
+ext: jpg
+replace: ''
+cards:
+  - name: Abandon Galactica
+    cylon: Basestars fire
+    jump: True
+  - name: A Desparate Pact
+    value: 15
+    skills: [Politics, Leadership, Piloting]
+    cylon: Raiders
+  - name: An Ambitious Operation
+    cylon: Raiders
+    jump: True
+  - name: Blindsided
+  - name: Consult The Hybrid
+    value: 10
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Dangerous Plots
+    cylon: Basestars fire
+    jump: True
+  - name: Dishonest Tactics
+    cylon: Raiders
+    jump: True
+  - name: Domestic Dispute
+    value: 9
+    skills: [Politics, Tactics]
+    cylon: Raiders
+  - name: Earth In Ruins
+    value: 9
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Enemy Of My Enemy
+    value: 13
+    skills: [Politics, Leadership, Piloting]
+    cylon: Raiders
+    jump: True
+  - name: Event Horizon
+  - name: Galactica Falling Apart
+    value: 8
+    skills: [Leadership, Piloting, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Give In To Despair
+    value: 14
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Hornet's Nest
+    path: Hornets Nest
+  - name: Hybrid In Panic
+    value: 12
+    skills: [Tactics, Engineering]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Incitement To Mutiny
+    value: 13
+    skills: [Politics, Leadership, Tactics]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Insubordinate Crew
+    value: 12
+    skills: [Leadership, Tactics]
+    cylon: Raiders
+  - name: Lockdown
+  - name: One Last Cocktail
+    value: 7
+    skills: [Tactics, Engineering]
+    cylon: Basestars fire
+    jump: True
+  - name: Question Procedure
+    cylon: Basestars fire
+    jump: True
+  - name: Quorum In Uproar
+    value: 8
+    skills: [Leadership, Tactics]
+    cylon: Basestars launch Raiders
+  - name: Rallying Support
+    value: 8
+    skills: [Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Reactor Critical
+    value: 7
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Basestars launch Raiders
+  - name: Rebuild Trust
+    value: 9
+    skills: [Leadership, Politics]
+    cylon: Raiders
+  - name: Religious Turmoil
+    path: Religious_Turmoil
+    value: 7
+    skills: [Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Reprisal
+  - name: Requisition For Demetrius
+    cylon: Basestars fire
+  - name: Secret Meetings
+    value: 9
+    skills: [Politics, Tactics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Starvation In Dogsville
+    cylon: Raiders
+    jump: True
+  - name: Trial By Fire
+---
+expansion: base
+deck: s_crisis
+cards:
+  - name: Bomb on Colonial 1
+    path: Bomb Colonial 1
+    value: 15
+    skills: [Tactics, Piloting, Engineering]
+  - name: Cylon Intruders
+    path: Cylon Intrude
+    value: 18
+    skills: [Leadership, Tactics]
+  - name: Fleet Mobilization
+    path: Fleet Mobile
+    value: 24
+    skills: [Leadership, Tactics, Piloting, Engineering]
+  - name: Inbound Nukes
+    value: 15
+    skills: [Leadership, Tactics]
+  - name: Massive Assault
+---
+expansion: pegasus
+deck: s_crisis
+cards:
+  - name: Demand Peace Manifesto
+    path: Demand Peace
+  - name: Footage Transmitted
+    path: Footage
+    value: 17
+    skills: [Politics, Leadership, Tactics]
+  - name: Lured into a Trap
+    path: Lured Trap
+  - name: Psychological Warfare
+    path: Psy Warfare
+  - name: The Farm
+    value: 15
+    skills: [Tactics, Engineering]
+---
+expansion: exodus
+deck: s_crisis
+cards:
+  - name: Fire All Missiles
+    value: 22
+    skills: [Tactics, Piloting]
+  - name: Human Prisoner
+    path: Human Prisoners
+    value: 18
+    skills: [Leadership, Tactics]
+---
+expansion: base
+deck: destination
+cards:
+  - name: Asteroid Field
+    destination: 3
+  - name: Barren Planet
+    path: Baren Planet
+    destination: 2
+  - name: Cylon Ambush
+    destination: 3
+  - name: Cylon Refinery
+    destination: 2
+  - name: Deep Space
+    destination: 2
+  - name: Desolate Moon
+    destination: 3
+  - name: Icy Moon
+    destination: 1
+  - name: Ragnar Anchorage
+    destination: 1
+  - name: Remote Planet
+    destination: 2
+  - name: Tylium Planet
+    destination: 1
+---
+expansion: pegasus
+deck: destination
+cards:
+  - name: Binary Star
+    destination: 2
+  - name: A Civilian Convoy
+    path: Civ Convoy
+    destination: 3
+  - name: Gas Cloud
+    destination: 1
+  - name: Mining Asteroid
+    destination: 2
+  - name: Misjump
+    destination: 0
+---
+expansion: exodus
+deck: destination
+cards:
+  - name: Algae Planet
+    destination: 1
+  - name: Cylon Raiders
+    destination: 3
+  - name: Derelict Basestar
+    path: Derelict BS
+    destination: 2
+  - name: Dying Star
+    destination: 2
+  - name: Gas Giant
+    destination: 1
+  - name: Lion's Head Nebula
+    path: Lions Head
+    destination: 3
+  - name: Radioactive Cloud
+    path: Rad Cloud
+    destination: 2
+---
+expansion: base
+deck: char
+cards:
+  - name: William Adama
+    path: Adama
+    class: Military Leader
+  - name: Lee Apollo Adama
+    path: Apollo
+    class: Pilot
+  - name: Gaius Baltar
+    path: Baltar
+    class: Political Leader
+  - name: Sharon Boomer Valerii
+    path: Boomer
+    class: Pilot
+  - name: Chief Galen Tyrol
+    path: Chief
+    class: Support
+  - name: Karl Helo Agathon
+    path: Helo
+    class: Military Leader
+  - name: Laura Roslin
+    path: Roslin
+    class: Political Leader
+  - name: Kara Starbuck Thrace
+    path: Starbuck
+    class: Pilot
+  - name: Saul Tigh
+    path: Tigh
+    class: Military Leader
+  - name: Tom Zarek
+    path: Zarek
+    class: Political Leader
+---
+expansion: pegasus
+deck: char
+cards:
+  - name: Helena Cain
+    path: Cain
+    class: Military Leader
+  - name: Anastasia Dee Dualla
+    path: Dee
+    class: Support
+  - name: Ellen Tigh
+    path: Ellen
+    class: Political Leader
+  - name: Louanne Kat Katraine
+    path: Kat
+    class: Pilot
+---
+expansion: exodus
+deck: char
+cards:
+  - name: Samuel T. Anders
+    path: Anders
+    class: Pilot
+  - name: Callandra Cally Tyrol
+    path: Cally
+    class: Support
+  - name: Felix Gaeta
+    path: Gaeta
+    class: Military Leader
+  - name: Tory Foster
+    path: Tory
+    class: Political Leader
+---
+expansion: base
+deck: char
+cards:
+  - name: Sharon Athena Agathon
+    path: Athena
+    class: Cylon Leader
+  - name: Cavil
+    class: Cylon Leader
+  - name: Sherman Doc Cottle
+    path: Cottle
+    class: Support
+  - name: D'Anna Biers
+    path: DAnna
+    class: Cylon Leader
+  - name: Aaron Doral
+    path: Doral
+    class: Cylon Leader
+  - name: Gaius Baltar
+    path: Gaius
+    class: Support
+  - name: Louis Hoshi
+    path: Hoshi
+    class: Military Leader
+  - name: Brendan Hot Dog Costanza
+    path: HotDog
+    class: Pilot
+  - name: Karl Helo Agathon
+    path: Karl
+    class: Pilot
+  - name: Lee Adama
+    path: Lee
+    class: Political Leader
+  - name: Leoben Conoy
+    path: Leoben
+    class: Cylon Leader
+  - name: Romo Lampkin
+    path: Romo
+    class: Political Leader
+  - name: Simon O'Neill
+    path: Simon
+    class: Cylon Leader
+  - name: Caprica Six
+    path: Six
+    class: Cylon Leader
+  - name: Tom Zarek
+    path: Tom
+    class: Military Leader
+---
+expansion: unofficial
+deck: char
+cards:
+  - name: Billy Keikeya
+    path: Billy
+    class: Political Leader
+  - name: Margaret Racetrack Edmondson
+    path: Racetrack
+    class: Pilot
+  - name: Kendra Shaw
+    path: Kendra shaw
+    class: Military Leader
+---
+expansion: base
+deck: skill
+cards:
+  - name: Consolidate Power
+    value: [1, 2]
+    skill: Politics
+    path: Con Power
+  - name: Investigative Committee
+    value: [3, 4, 5]
+    skill: Politics
+    path: Inv Committee
+  - name: Executive Order
+    value: [1, 2]
+    skill: Leadership
+    path: XO
+  - name: Declare Emergency
+    value: [3, 4, 5]
+    skill: Leadership
+    path: Dec Emergency
+  - name: Launch Scout
+    value: [1, 2]
+    skill: Tactics
+    path: Launch Scout
+  - name: Strategic Planning
+    value: [3, 4, 5]
+    skill: Tactics
+    path: Strat
+  - name: Evasive Maneuvers
+    value: [1, 2]
+    skill: Piloting
+    path: Evasive
+  - name: Maximum Firepower
+    value: [3, 4, 5]
+    skill: Piloting
+    path: Maximum
+  - name: Repair
+    value: [1, 2]
+    skill: Engineering
+    path: Repair
+  - name: Scientific Research
+    value: [3, 4, 5]
+    skill: Engineering
+    path: Sci Research
+---
+expansion: pegasus
+deck: skill
+cards:
+  - name: Support the People
+    path: Support
+    value: [1, 2]
+    reckless: True
+  - name: Preventative Policy
+    path: Prev Policy
+    value: [3, 4, 5]
+    skill: Politics
+  - name: Major Victory
+    path: Maj Vic
+    value: [1, 2]
+    skill: Leadership
+  - name: At Any Cost
+    path: Cost
+    value: [3, 4, 5]
+    skill: Leadership
+    reckless: True
+  - name: Guts and Initiative
+    path: Guts
+    value: [1, 2]
+    skill: Tactics
+    reckless: True
+  - name: Critical Situation
+    path: Crit Sit
+    value: [3, 4, 5]
+    skill: Tactics
+  - name: Full Throttle
+    value: [1, 2]
+    skill: Piloting
+  - name: Run Interference
+    value: [3, 4, 5]
+    skill: Piloting
+  - name: Calculations
+    value: [3, 4, 5]
+    skill: Engineering
+  - name: Jury Rigged
+    value: [1, 2]
+    skill: Engineering
+    reckless: True
+  - name: Broadcast Location
+    path: Broadcast
+    value: [1]
+    skill: Treachery
+    ability: True
+    reckless: True
+  - name: By Your Command
+    value: [1]
+    skill: Treachery
+    ability: True
+    reckless: True
+  - name: "God's Plan"
+    path: Gods Plan
+    value: [2]
+    skill: Treachery
+  - name: Special Destiny
+    value: [2]
+    skill: Treachery
+    ability: True
+    reckless: True
+  - name: Human Weakness
+    path: Human Weak
+    value: [3]
+    skill: Treachery
+  - name: Sabotage
+    value: [3]
+    skill: Treachery
+---
+expansion: exodus
+deck: skill
+cards:
+  - name: Red Tape
+    value: [0]
+    skill: Politics
+    ability: True
+  - name: Political Prowess
+    path: Pol Prowess
+    value: [6]
+    skill: Politics
+  - name: Iron Will
+    value: [0]
+    skill: Leadership
+    ability: True
+  - name: State of Emergency
+    path: State Emergency
+    value: [6]
+    skill: Leadership
+  - name: Trust Instincts
+    value: [0]
+    skill: Tactics
+    ability: True
+  - name: Scout for Fuel
+    path: Scout Fuel
+    value: [6]
+    skill: Tactics
+  - name: Protect the Fleet
+    path: Protect Fleet
+    value: [0]
+    skill: Piloting
+    ability: True
+  - name: Best of the Best
+    path: Best Best
+    value: [6]
+    skill: Piloting
+  - name: Build Nuke
+    value: [6]
+    skill: Engineering
+  - name: Establish Network
+    value: [0]
+    skill: Engineering
+    ability: True
+---
+expansion: daybreak
+deck: skill
+replace: ''
+cards:
+  - name: Force Their Hand
+    value: 0
+    skill: Politics
+    ability: True
+  - name: Negotiation
+    value: 5
+    skill: Politics
+  - name: Popular Influence
+    value: [3, 4]
+    skill: Politics
+  - name: All Hands On Deck
+    value: 0
+    skill: Leadership
+  - name: Change Of Plans
+    value: 5
+    skill: Leadership
+  - name: Restore Order
+    value: [3, 4]
+    skill: Leadership
+  - name: Quick Thinking
+    value: 0
+    skill: Tactics
+    ability: True
+  - name: A Second Chance
+    value: 5
+    skill: Tactics
+  - name: Unorthodox Plan
+    value: [3, 4]
+    skill: Tactics
+  - name: Dogfight
+    value: 0
+    skill: Piloting
+    ability: True
+  - name: Launch Reserves
+    value: 5
+    skill: Piloting
+  - name: Combat Veteran
+    value: [3, 4]
+    skill: Piloting
+  - name: Install Upgrades
+    value: 0
+    skill: Engineering
+    ability: True
+  - name: Test The Limits
+    value: 5
+    skill: Engineering
+  - name: Raptor Specialist
+    value: [3, 4]
+    skill: Engineering
+  - name: Bait
+    value: 0
+    skill: Treachery
+    ability: True
+  - name: Dradis Contact
+    value: 0
+    skill: Treachery
+    ability: True
+  - name: A Better Machine
+    value: 3
+    skill: Treachery
+    ability: True
+  - name: Personal Vices
+    value: 3
+    skill: Treachery
+    ability: True
+  - name: Violent Outbursts
+    value: 4
+    skill: Treachery
+    ability: True
+  - name: Exploit A Weakness
+    value: 5
+    skill: Treachery
+    ability: True
+---
+expansion: base
+deck: quorum
+cards:
+  - name: Accept Prophecy
+  - name: Arrest Order
+  - name: Assign Arbitrator
+  - name: Assign Mission Specialist
+    path: Assign Miss Specialist
+  - name: Assign Vice President
+    path: Assign V Pres
+  - name: Authorization of Brutal Force
+    path: Authorize Brute Force
+  - name: Encourage Mutiny
+  - name: Food Rationing
+  - name: Inspirational Speech
+    path: Inspire Speech
+  - name: Presidential Pardon
+    path: Pres Pardon
+  - name: Release Cylon Mugshots
+    path: Release Mugshots
+---
+expansion: pegasus
+deck: quorum
+cards:
+  - name: Assign Chief of Staff
+    path: Assign Staff
+  - name: Civilian Self Defense
+    path: Civ Self Defense
+  - name: Consult the Oracle
+    path: Consult Oracle
+  - name: Enact Production Quotas
+    path: Enact Prod Quotas
+  - name: Eulogy
+  - name: Execute Prisoner
+  - name: Presidential Order
+    path: Presidential order
+  - name: Probation
+  - name: Resources for Galactica
+    path: Resources Galactica
+  - name: Unsavory Connections
+---
+expansion: exodus
+deck: quorum
+cards:
+  - name: Establish Dogsville
+  - name: Resignation
+---
+expansion: base
+deck: loyalty
+path: BSG Loyalty
+cards:
+  - name: Can Send a Character to the Brig
+    path: Brig
+  - name: Can Damage Galactica
+    path: Damage Gal
+  - name: Can Reduce Morale by 1
+    path: Morale
+  - name: Can Send a Character to Sickbay
+    path: Sickbay
+  - name: You Are a Sympathizer
+    path: Sympathizer
+---
+expansion: pegasus
+deck: loyalty
+path: BSP Loyalty
+cards:
+  - name: Can Make Players Draw Treachery Cards
+    path: Cylon
+---
+expansion: exodus
+deck: loyalty
+path: BSE Loyalty
+cards:
+  - name: Can Place a Centurion Token on the Boarding Party Track
+    path: Cylon 1
+  - name: Can Decrease the Jump Preparation Track by 2
+    path: Cylon 2
+  - name: 'The Final Five: Whoever Examines this Card is Executed'
+    path: FinalFive1
+  - name: 'The Final Five: If this Card is Examined, Cylon Ships are Activated'
+    path: FinalFive2
+  - name: 'The Final Five: If this Card is Examined, Galactica is Damaged Twice'
+    path: FinalFive3
+  - name: 'The Final Five: If this Card is Examined, you are Executed'
+    path: FinalFive4
+  - name: 'The Final Five: Whoever Examines this Card is Sent to the "Brig"'
+    path: FinalFive5
+  - name: 'Personal Goal: Acquire Power: 2 or more Title Cards at the Same Time'
+    path: PG Aquire Power
+  - name: 'Personal Goal: Devastation: Admiral has no Remaining Nuke Tokens'
+    path: PG Devastation
+  - name: 'Personal Goal: Political Intrigue: The President is in the "Brig"'
+    path: PG Pol Intrigue
+  - name: 'Personal Goal: Sacrifice: 6 Vipers Damaged or Destroyed'
+    path: PG Sacrifice
+  - name: 'Personal Goal: Selft-Destruction: In the "Brig" or "Sickbay"'
+    path: PG Self Destruct
+  - name: 'Personal Goal: Selfish: Discard Skill Cards Equal to 20 Strength'
+    path: PG Selfish
+  - name: 'Personal Goal: Stand and Fight: 10 or More Raiders'
+    path: PG Stand Fight
+  - name: 'Personal Goal: Use Caution: The Fleet has Made a 1-Distance Jump'
+    path: PG Use Caution
+---
+expansion: daybreak
+deck: motive
+path: BSD Motives
+replace: ''
+cards:
+  - name: 'A False Sense Of Security'
+    allegiance: Cylon
+  - name: A Justified Reponse
+    allegiance: Cylon
+  - name: End The Chase
+    allegiance: Human
+  - name: Fight With Honor
+    allegiance: Cylon
+  - name: Harvest Their Resources
+    allegiance: Cylon
+  - name: Improve Efficiency
+    allegiance: Human
+  - name: Keep Them Docile
+    allegiance: Human
+  - name: Learn To Cherish
+    allegiance: Human
+  - name: Make An Ally
+    allegiance: Human
+  - name: No Unnecessary Force
+    allegiance: Cylon
+  - name: Pressure Their Leaders
+    allegiance: Human
+  - name: Remove The Threat
+    allegiance: Human
+  - name: Savor Their Demise
+    allegiance: Cylon
+  - name: Subjects For Study
+    allegiance: Cylon
+---
+expansion: exodus
+deck: ally
+cards:
+  - name: Aaron Doral
+  - name: Aaron Kelly
+  - name: Alex Crashdown Quartararo
+    setup: Armory
+  - name: Anastasia Dee Dualla
+    path: Anastasia Dualla
+  - name: Billy Keikeya
+  - name: Brendan Hot Dog Costanza
+  - name: Brother Cavil
+  - name: Callandra Cally Tyrol
+  - name: Caprica Six
+  - name: Chief Galen Tyrol
+  - name: "D'Anna Biers"
+    path: DAnna Biers
+  - name: Diana Hardball Seelix
+    path: Diana Seelix
+  - name: Dr. Sherman Cottle
+    path: Doc Cottle
+  - name: Ellen Tigh
+  - name: Felix Gaeta
+  - name: Gaius Baltar
+  - name: Helena Cain
+  - name: Kara Starbuck Thrace
+    path: Kara Thrace
+  - name: Karl Helo Agathon
+  - name: Kendra Shaw
+  - name: Laura Roslin
+  - name: Lee Apollo Adama
+  - name: Leoben Conoy
+  - name: Louanne Kat Katraine
+    path: Louanne Katraine
+  - name: Louis Hoshi
+  - name: Margaret Racetrack Edmondson
+    path: Margaret Edmondson
+  - name: Priestess Elosha
+  - name: Romo Lampkin
+  - name: Samuel T. Anders
+    path: Samuel T Anders
+  - name: Saul Tigh
+  - name: Sharom Boomer Valerii
+  - name: "Simon O'Neill"
+    path: Simon Oneill
+  - name: Tom Zarek
+  - name: Tory Foster
+    path: Tori Foster
+  - name: William Adama
+---
+deck: crossroads
+expansion: exodus
+path: BSE Crossroads
+cards:
+  - name: Disturbing Vision
+  - name: Miraculous Return
+  - name: Perjury
+  - name: Scanned
+  - name: Strange Music
+  - name: Testimony
+  - name: The Opera House
+---
+expansion: daybreak
+deck: mission
+cards:
+  - name: Attack On The Colony
+    value: 14
+    skills: [Tactics, Piloting]
+  - name: Cylon Civil War
+    value: 21
+    skills: [Politics, Leadership, Tactics]
+  - name: Destroy The Hub
+    value: 14
+    skills: [Leadership, Tactics, Piloting]
+  - name: Digging Up The Past
+    value: 14
+    skills: [Politics, Leadership]
+    distance: 1
+  - name: Needs Of The People
+    value: 18
+    skills: [Politics, Leadership, Engineering]
+  - name: Rescue Hera
+    value: 20
+    skills: [Politics, Tactics, Piloting]
+  - name: The Red Stripes
+    value: 16
+    skills: [Tactics, Piloting, Engineering]
+  - name: The Search For Home
+    value: 25
+    skills: [Politics, Leadership, Tactics, Engineering]
+    distance: 2
+---
+deck: mutiny
+expansion: daybreak
+cards:
+  - name: Armed Resistance
+  - name: Assume Command
+  - name: Bait And Switch
+  - name: Betrayal Of Trust
+  - name: Blackmail
+  - name: Clipped Wings
+  - name: Controversial Speech
+  - name: Feed The People
+  - name: Impeachment
+  - name: Make A Deal
+  - name: Necessary Risk
+  - name: Panic
+  - name: Peaceful Resistance
+  - name: Ruined Reputation
+  - name: Scavenging For Parts
+  - name: Selfish Act
+  - name: Send A Message
+  - name: Set The Agenda
+  - name: The Strong Survive
+  - name: Unauthorized Usage
+  - name: Violent Protest
+  - name: Weapons Armed
+---
+expansion: pegasus
+deck: nc_crisis
+path: ''
+cards:
+  - name: A Cylon Ally
+    cylon: [Raiders, Occupation Forces]
+    jump: True
+  - name: Arrests at Night
+    value: 10
+    skills: [Leadership, Tactics]
+    cylon: Basestars launch Raiders
+    jump: True
+  - name: Attack on the Power Plant
+    cylon: Basestars launch Raiders
+    jump: True
+  - name: Betrayed from Within
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: Raiders
+    jump: True
+  - name: Brutal Treatment
+    value: 9
+    skills: [Politics, Tactics]
+    cylon: [Basestars fire, Occupation Forces]
+    jump: True
+  - name: Centurion Ambush
+    value: 7
+    skills: [Tactics, Piloting]
+    cylon: Raiders
+    jump: True
+  - name: Contact Informant
+    value: 9
+    skills: [Politics, Tactics]
+    cylon: [Raiders, Occupation Forces]
+    jump: True
+  - name: Contact Raptor
+    value: 7
+    skills: [Politics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Decode Cylon Maps
+    value: 8
+    skills: [Tactics, Engineering]
+    cylon: [Heavy Raiders, Occupation Forces]
+  - name: Demanded Surrender
+    cylon: [Basestars fire, Occupation Forces]
+  - name: Dissent Among Cylons
+    value: 12
+    skills: [Politics, Leadership]
+    cylon: Basestars launch Raiders
+    jump: True
+  - name: Establish Sanitation
+    cylon: Raiders
+    jump: True
+  - name: Execution List
+    cylon: [Heavy Raiders, Occupation Forces]
+    jump: True
+  - name: Held for Questioning
+    value: 10
+    skills: [Politics, Leadership, Tactics]
+    cylon: [Heavy Raiders, Occupation Forces]
+    jump: True
+  - name: Hiding Underground
+    value: 9
+    skills: [Leadership, Tactics]
+    cylon: Raiders, Occupation Forces
+    jump: True
+  - name: Intra-Atmos Entry
+    path: Intra Atmos Entry
+    value: 15
+    skills: [Leadership, Tactics, Piloting, Engineering]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Keeping Hera Hidden
+    cylon: [Raiders, Occupation Forces]
+    jump: True
+  - name: Labor Union Strike
+    value: 13
+    skills: [Politics, Tactics]
+    cylon: [Raiders, Occupation Forces]
+    jump: True
+  - name: Marine Reinforcements
+    cylon: Raiders
+  - name: Meet Liason Officer
+    value: 10
+    skills: [Politics, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: NCP Graduation
+    cylon: Heavy Raiders
+    jump: True
+  - name: NCP Recruitment
+    value: 8
+    skills: [Politics, Leadership]
+    cylon: Raiders
+  - name: Organize the Pilots
+    value: 9
+    skills: [Politics, Piloting]
+    cylon: Basestars fire
+  - name: Playing with Emotions
+    value: 7
+    skills: [Politics, Tactics]
+    cylon: Basestars launch Raiders
+    jump: True
+  - name: Prepare for a Fight
+    value: 8
+    skills: [Leadership, Tactics, Engineering]
+    cylon: [Raiders, Occupation Forces]
+    jump: True
+  - name: Prepare the Civilians
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: Raiders
+    jump: True
+  - name: Recover Launch Keys
+    value: 10
+    skills: [Leadership, Tactics, Engineering]
+    cylon: Basestars fire
+  - name: Rescue Detainees
+    value: 9
+    skills: [Leadership, Tactics]
+    cylon: [Heavy Raiders, Occupation Forces]
+    jump: True
+  - name: Resistance Bombings
+    value: 12
+    skills: [Leadership, Tactics, Engineering]
+    cylon: [Basestars fire, Occupation Forces]
+  - name: Second Thoughts
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: [Basestars fire, Occupation Forces]
+    jump: True
