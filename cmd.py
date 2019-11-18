@@ -5,6 +5,7 @@ import dateutil.parser
 import yaml
 from elasticsearch_dsl.connections import connections
 from bsg.bgg import RSS
+from bsg.byc import ByYourCommand, Dialog
 from bsg.card import Cards
 from bsg.search import Card
 
@@ -32,11 +33,50 @@ def main():
 
     command = args.command
     arguments = args.arguments
-    cards = Cards(config['cards_url'])
 
     if command == "bot":
         print("Hello, command line user!")
         return
+    if command == "byc":
+        user = "command line user"
+        byc = ByYourCommand(0, config['script_url'])
+        choice = ""
+        run = True
+        dialog = None
+        choices = []
+        while choice != "exit":
+            if choice != "":
+                if choice in dialog.options:
+                    choices.append(dialog.options[choice] + 1)
+                elif dialog.input:
+                    choices.append(choice)
+                elif choice.isnumeric() and 0 < int(choice) <= len(dialog.buttons):
+                    choices.append(int(choice))
+                else:
+                    print("Option not known")
+                    run = False
+            elif choices:
+                run = False
+
+            if run:
+                dialog = byc.run_page(user, choices)
+
+            if not isinstance(dialog, Dialog):
+                print(dialog)
+                choice = "exit"
+            else:
+                print(dialog.msg)
+                if dialog.input:
+                    print(', '.join(dialog.buttons))
+                else:
+                    print(' '.join(f"{idx+1}: {text}" for (idx, text) in enumerate(dialog.buttons)))
+                print(f"More options: {dialog.options}")
+                choice = input()
+                run = True
+
+        return
+
+    cards = Cards(config['cards_url'])
     if command == "latest" or command == "all" or command == "update":
         rss = RSS(config['rss_url'], config['image_url'],
                   config.get('session_id'))
