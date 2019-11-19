@@ -1,0 +1,22 @@
+body {
+    font-family: proxima-nova, Arial, sans-serif; /* Montserrat */
+    font-style: normal;
+    font-weight: 100;
+    font-size: 15px;
+    line-height: 1.428571429;
+    background: #FFFFFF;
+    color: #000000;
+}
+.fl {
+    float: left;
+    margin: 10px 10px 10px 0;
+}
+.fr {
+    float: right;
+    margin: 10px 0 10px 10px;
+}
+.clear { clear: both; }
+.img {
+    max-width: 100%;
+    display: inline-block;
+}

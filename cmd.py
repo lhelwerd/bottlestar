@@ -1,9 +1,11 @@
 import argparse
 from datetime import datetime
 import logging
+from pathlib import Path
 import dateutil.parser
 import yaml
 from elasticsearch_dsl.connections import connections
+from bsg.bbcode import BBCode
 from bsg.bgg import RSS
 from bsg.byc import ByYourCommand, Dialog
 from bsg.card import Cards
@@ -33,13 +35,29 @@ def main():
 
     command = args.command
     arguments = args.arguments
+    cards = Cards(config['cards_url'])
 
     if command == "bot":
         print("Hello, command line user!")
         return
     if command == "byc":
-        user = "command line user"
+        game_state = ""
+        game_state_path = Path("game/game-0.txt")
+        if len(arguments) >= 1:
+            game_state_path = Path(arguments[0])
+            try:
+                with game_state_path.open('r') as game_state_file:
+                    game_state = game_state_file.read()
+            except IOError:
+                logging.exception("Could not read game state, starting new")
+
+        if len(arguments) >= 2:
+            user = arguments[1]
+        else:
+            user = "command line user"
+
         byc = ByYourCommand(0, config['script_url'])
+        bbcode = BBCode(cards)
         choice = ""
         run = True
         dialog = None
@@ -59,10 +77,18 @@ def main():
                 run = False
 
             if run:
-                dialog = byc.run_page(user, choices)
+                dialog = byc.run_page(user, choices, game_state)
 
             if not isinstance(dialog, Dialog):
-                print(dialog)
+                game_state = dialog
+                print(bbcode.process_bbcode(game_state))
+                with game_state_path.open('w') as game_state_file:
+                    game_state_file.write(game_state)
+
+                if bbcode.game_state != "":
+                    print(bbcode.game_state)
+                    byc.save_game_state_screenshot(bbcode.game_state)
+
                 choice = "exit"
             else:
                 print(dialog.msg)
@@ -75,8 +101,11 @@ def main():
                 run = True
 
         return
+    if command == "bbcode":
+        bbcode = BBCode(cards)
+        print(bbcode.process_bbcode(' '.join(arguments)))
+        return
 
-    cards = Cards(config['cards_url'])
     if command == "latest" or command == "all" or command == "update":
         rss = RSS(config['rss_url'], config['image_url'],
                   config.get('session_id'))

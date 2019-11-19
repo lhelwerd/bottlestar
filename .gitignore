@@ -4,3 +4,4 @@ config.yml
 *.js
 *.json
 *.html
+*.txt

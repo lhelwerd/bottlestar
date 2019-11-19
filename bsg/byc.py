@@ -3,11 +3,8 @@ Standalone interpreter of the BYC script that runs it in a sandbox and stores
 game states.
 """
 
-# Modules:
-# Selenium for executing the JavaScript in a realistic browser sandbox
-# Some marshal/pickle/json/other storage format for storing game states
-# across restarts
 from base64 import urlsafe_b64encode
+import logging
 from pathlib import Path
 import re
 from urllib.parse import quote
@@ -21,9 +18,15 @@ from selenium.webdriver.support.expected_conditions import \
 from selenium.webdriver.support.wait import WebDriverWait
 
 class Dialog:
+    """
+    Parser for HTML dialogs made by the BYC script.
+    """
+
     BUTTON_ATTRIBUTES = ("class", "innerText")
 
     def __init__(self, dialog):
+        # TODO: Parse HTML within elements to display colors and so on?
+        # Reuse the Cards object?
         self.element = dialog
         self.msg = dialog.find_element_by_class_name("msg").get_attribute("innerHTML").replace("<br>", "\n")
         self.buttons = []
@@ -39,14 +42,20 @@ class Dialog:
             for attribute in self.BUTTON_ATTRIBUTES:
                 self.options[button.get_attribute(attribute)] = index
 
+    # TODO: Language changes (BYC, Discord, CMD)
+    # press Cancel      | use !cancel                         | enter "cancel"
+    # quote this post   | talk to the bot in #byc-GAMEID-USER | ???
+
 class ByYourCommand:
     """
     By Your Command game.
     """
 
     SCRIPT_PATH = Path("byc.js")
+    STYLE_PATH = Path("game_state.css")
 
     def __init__(self, game_id, script_url):
+        self.driver = None
         self.game_id = game_id
         self.script_url = script_url
         self.load()
@@ -57,85 +66,125 @@ class ByYourCommand:
             self.driver = None
 
     def load(self):
+        """
+        Load the script, web driver and other parsers for the BYC game.
+        """
+
         # Load script
         if not self.SCRIPT_PATH.exists():
-            script = self.load_script()
+            script = self._load_script()
             with self.SCRIPT_PATH.open('w') as script_file:
                 script_file.write(script)
 
         # Setup Selenium web driver
-        self.load_driver()
+        self._load_driver()
 
-    def load_driver(self):
+    def _load_driver(self):
+        # Create the Selenium web driver (no screen necesarry, file access)
         options = Options()
         options.headless = True
         options.add_argument("allow-file-access-from-files")
         self.driver = webdriver.Chrome(chrome_options=options)
 
-    def run_page(self, user, state):
+    def run_page(self, user, choices, game_state):
+        """
+        Perform action(s) for a user through script dialogs to bring the game
+        to a certain state.
+        """
+
+        # TODO: Think about how to handle cross-play and "undos" that the group 
+        # wants to do
+        # TODO: Do we need to satisfy the script with a Quoted Article and thus 
+        # an article ID?
+
         try:
-            current_user = self.driver.find_element_by_tag_name("a")
+            current_user = self.driver.find_element_by_tag_name("h1")
             if current_user.get_attribute("innerText") != user:
                 raise ValueError("Context switched")
 
-            state = state[-1:]
+            choices = choices[-1:]
         except (NoSuchElementException, ValueError):
-            page_path = Path(f"page-{urlsafe_b64encode(user.encode()).decode()}.html")
+            page = f"game/page-{self.game_id}-{urlsafe_b64encode(user.encode()).decode()}.html"
+            page_path = Path(page)
             script_url = self.SCRIPT_PATH.resolve().as_uri()
             with page_path.open('w') as page_file:
-                page_file.write(f'''<html><head><title>BYC</title></head>
+                # TODO: Include current game state BBCode in textarea
+                page_file.write(f'''<!DOCTYPE html>
+                <html>
+                    <head><title>BYC</title></head>
                     <body>
-                        <a href="/collection/user/{user}">{user}</a>
-                        <textarea></textarea>
+                        <h1>{user}</h1>
+                        <a href="/collection/user/{user}">Collection</a>
+                        <textarea>{game_state}</textarea>
                         <script src="{script_url}"></script>
                     </body>
                 </html>''')
 
             self.driver.get(page_path.resolve().as_uri())
 
-        #print(self.driver.page_source)
-        #print(self.driver.find_element_by_tag_name("script").get_attribute("innerText"))
-
         try:
-            dialog = Dialog(self.wait_for_dialog())
+            dialog = Dialog(self._wait_for_dialog())
         except TimeoutException:
-            return self.driver.find_element_by_tag_name("textarea").get_attribute("value")
+            return self._get_game_state(user)
 
-        # TODO: If the dialog has only one option (OK), then just click it and 
-        # yield the message?
-        for choice in state:
-            print(choice)
+        for choice in choices:
+            logging.info("Handling choice: %s", choice)
             if dialog.input and not isinstance(choice, int):
                 dialog.input.send_keys(choice)
                 button = dialog.element.find_element_by_class_name("ok")
             else:
-                button = dialog.element.find_element_by_css_selector(f"button:nth-child({choice})")
-                print(button.get_attribute("innerText"))
+                selector = f"button:nth-child({choice})"
+                button = dialog.element.find_element_by_css_selector(selector)
 
+            logging.info("Pressed: %s", button.get_attribute("innerText"))
             button.click()
 
             try:
-                self.wait_for_dialog(wait=invisibility_of_element(dialog.element))
+                wait = invisibility_of_element(dialog.element)
+                self._wait_for_dialog(wait=wait)
             except TimeoutException:
                 raise RuntimeError("Dialog did not disappear")
 
             try:
-                dialog = Dialog(self.wait_for_dialog())
+                dialog = Dialog(self._wait_for_dialog())
             except TimeoutException:
-                return self.driver.find_element_by_tag_name("textarea").get_attribute("value")
+                return self._get_game_state(user)
 
-        # Read alerts
-        print(dialog.element.get_attribute("innerHTML"))
-
-        print(self.driver.get_log("browser"))
+        logging.info("Dialog: %s", dialog.element.get_attribute("innerHTML"))
+        logging.info("Browser log: %r", self.driver.get_log("browser"))
         return dialog
 
-    def wait_for_dialog(self, wait=None):
+    def _get_game_state(self, user):
+        textarea = self.driver.find_element_by_tag_name("textarea")
+        return f'[q="{user}"]{textarea.get_attribute("value")}[/q]'
+
+    def save_game_state_screenshot(self, html):
+        """
+        Using HTML parsed from a BYC Game State quote, create a screenshot
+        that displays the current game state.
+        """
+
+        page_path = Path(f"game/game-state-{self.game_id}.html")
+        style_url = self.STYLE_PATH.resolve().as_uri()
+        with page_path.open('w') as page_file:
+            page_file.write(f'''<!DOCTYPE html>
+            <html>
+                <head>
+                    <title>BYC: Game State</title>
+                    <link rel="stylesheet" type="text/css" href="{style_url}">
+                </head>
+                <body>{html}</body>
+            </html>''')
+
+        self.driver.get(page_path.resolve().as_uri())
+        self.driver.save_screenshot(f"game/game-state-{self.game_id}.png")
+
+    def _wait_for_dialog(self, wait=None):
         if wait is None:
             wait = visibility_of_element_located((By.CLASS_NAME, "dialog"))
-        return WebDriverWait(self.driver, 5).until(wait)
+        return WebDriverWait(self.driver, 2).until(wait)
 
-    def load_script(self):
+    def _load_script(self):
         # Regular expressions that put together the source code from the page.
         qre = []
         for tag in ["A", "B", "C", "D", "E", "F"]:
