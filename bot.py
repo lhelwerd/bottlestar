@@ -5,7 +5,7 @@ import logging
 import discord
 import yaml
 from elasticsearch_dsl.connections import connections
-from bsg.bgg import RSS
+from bsg.rss import RSS
 from bsg.card import Cards
 from bsg.search import Card
 

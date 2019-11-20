@@ -8,7 +8,7 @@ import dateutil.parser
 import yaml
 from elasticsearch_dsl.connections import connections
 from bsg.bbcode import BBCodeMarkdown
-from bsg.bgg import RSS
+from bsg.rss import RSS
 from bsg.byc import ByYourCommand, Dialog
 from bsg.card import Cards
 from bsg.image import Images
