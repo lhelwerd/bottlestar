@@ -19,6 +19,10 @@ def parse_args():
     log_options = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
     parser.add_argument('--log', default='INFO', choices=log_options,
                         help='log level')
+    parser.add_argument('--user', default='command line user',
+                        help='user to log in as')
+    parser.add_argument('--display', choices=('unicode', 'discord'),
+                        default='unicode', help='format emoji')
     parser.add_argument('command', help='command')
     parser.add_argument('arguments', nargs='*', help='arguments')
     args = parser.parse_args()
@@ -42,8 +46,10 @@ def main():
     images = Images(config['image_api_url'])
 
     if command == "bot":
-        print("Hello, command line user!")
+        at = "@"
+        print("Hello, {at}{args.user}!")
         return
+
     if command == "byc":
         game_state = ""
         game_state_path = Path("game/game-0.txt")
@@ -58,7 +64,7 @@ def main():
         if len(arguments) >= 2:
             user = arguments[1]
         else:
-            user = "command line user"
+            user = args.user
 
         if user == "seed":
             match = re.search(r"New seed: (\S+)\[/color\]\[/size]", game_state)
@@ -98,26 +104,23 @@ def main():
 
             if not isinstance(dialog, Dialog):
                 game_state = dialog
-                print(cards.replace_cards(bbcode.process_bbcode(game_state),
-                                          'unicode'))
+                game_state_markdown = bbcode.process_bbcode(game_state)
+                print(cards.replace_cards(game_state_markdown, args.display))
                 with game_state_path.open('w') as game_state_file:
                     game_state_file.write(game_state)
 
                 if bbcode.game_state != "":
-                    print(bbcode.game_state)
                     byc.save_game_state_screenshot(bbcode.game_state)
 
                 choice = "exit"
             else:
-                print(dialog.msg)
+                print(cards.replace_cards(dialog.msg, args.display))
                 if dialog.input:
                     print(', '.join(dialog.buttons))
                 else:
                     print(' '.join(f"{idx+1}: {text}" for (idx, text) in enumerate(dialog.buttons)))
                 print(f"More options: {dialog.options}")
                 if len(dialog.buttons) == 1 and not dialog.input:
-                    # This should not be done in production, where the player
-                    # *should* have the option to undo.
                     print("Only one option is available, continuing.")
                     choice = "1"
                 else:
@@ -127,8 +130,8 @@ def main():
         return
     if command == "bbcode":
         bbcode = BBCodeMarkdown(images)
-        print(cards.replace_cards(bbcode.process_bbcode(' '.join(arguments)),
-                                  'unicode'))
+        text = bbcode.process_bbcode(' '.join(arguments))
+        print(cards.replace_cards(text, args.display))
         return
 
     if command == "latest" or command == "all" or command == "update":
@@ -148,7 +151,7 @@ def main():
         try:
             ok = True
             while ok:
-                print(cards.replace_cards(next(result), display='unicode'))
+                print(cards.replace_cards(next(result), display=args.display))
                 if command == "all":
                     print('\n' + '=' * 80 + '\n')
                 else:
@@ -157,7 +160,8 @@ def main():
             print('No latest message found!')
         return
     if command == "replace":
-        print(cards.replace_cards(' '.join(arguments), display='unicode'))
+        print(cards.replace_cards(' '.join(arguments),
+              display=args.display))
         return
 
     if command in ('card', 'search'):

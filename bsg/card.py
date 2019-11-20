@@ -51,8 +51,9 @@ class Cards:
 
     def _build_skill_regex(self, skill_type):
         search = Card.search(using='main').filter("term", deck="skill") \
-            .filter("term", skill=skill_type)
+            .filter("term", skills=skill_type.lower())
         skill_cards = self._build_regex(card.name for card in search.scan())
+        logging.info('%s %s', skill_type, skill_cards)
         if skill_cards == '':
             return re.compile(fr'\b({skill_type})\b')
 

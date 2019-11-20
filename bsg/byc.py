@@ -8,6 +8,7 @@ import logging
 from pathlib import Path
 import re
 from urllib.parse import quote
+from markdownify import markdownify
 import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -22,13 +23,12 @@ class Dialog:
     Parser for HTML dialogs made by the BYC script.
     """
 
-    BUTTON_ATTRIBUTES = ("class", "innerText")
-
     def __init__(self, dialog):
-        # TODO: Parse HTML within elements to display colors and so on?
-        # Reuse the Cards object?
         self.element = dialog
-        self.msg = dialog.find_element_by_class_name("msg").get_attribute("innerHTML").replace("<br>", "\n")
+
+        msg = dialog.find_element_by_class_name("msg").get_attribute("innerHTML")
+        self.msg = markdownify(msg, convert=['b', 'i', 'br', 'strong', 'em'])
+
         self.buttons = []
         try:
             self.input = dialog.find_element_by_css_selector("input[type=text]")
