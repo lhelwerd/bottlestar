@@ -69,7 +69,7 @@ def main():
             return
 
         byc = ByYourCommand(0, config['script_url'])
-        bbcode = BBCodeMarkdown(cards, images)
+        bbcode = BBCodeMarkdown(images)
 
         if user == "images":
             byc.check_images(images)
@@ -98,7 +98,8 @@ def main():
 
             if not isinstance(dialog, Dialog):
                 game_state = dialog
-                print(bbcode.process_bbcode(game_state))
+                print(cards.replace_cards(bbcode.process_bbcode(game_state),
+                                          'unicode'))
                 with game_state_path.open('w') as game_state_file:
                     game_state_file.write(game_state)
 
@@ -125,8 +126,9 @@ def main():
 
         return
     if command == "bbcode":
-        bbcode = BBCode(cards)
-        print(bbcode.process_bbcode(' '.join(arguments)))
+        bbcode = BBCodeMarkdown(images)
+        print(cards.replace_cards(bbcode.process_bbcode(' '.join(arguments)),
+                                  'unicode'))
         return
 
     if command == "latest" or command == "all" or command == "update":

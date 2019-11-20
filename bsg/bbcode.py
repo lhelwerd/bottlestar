@@ -7,8 +7,7 @@ class BBCode:
     A BBCode parser that outputs text in a certain format.
     """
 
-    def __init__(self, cards, images):
-        self.cards = cards
+    def __init__(self, images):
         self.images = images
         self.game_state = ""
         self._load_parser()
@@ -22,13 +21,13 @@ class BBCode:
     def _parse_imageid(self, tag_name, value, options, parent, context):
         return options.get(tag_name, '').split(' ')[0]
 
-    def process_bbcode(self, text, display='discord'):
+    def process_bbcode(self, text):
         """
         Process a string of BBCode text to a Markdown-like format usable in
         for example Discord.
         """
 
-        return self.cards.replace_cards(self.parser.format(text), display)
+        return self.parser.format(text)
 
 class BBCodeMarkdown(BBCode):
     """
@@ -58,7 +57,7 @@ class BBCodeMarkdown(BBCode):
     def _parse_quote(self, tag_name, value, options, parent, context):
         quote_user = options.get(tag_name, '')
         if "BYC: Game State" in quote_user:
-            parser = BBCodeHTML(self.cards, self.images)
+            parser = BBCodeHTML(self.images)
             self.game_state += parser.process_bbcode(value)
             return ''
 
