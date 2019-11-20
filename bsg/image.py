@@ -2,6 +2,7 @@ from glob import glob
 from pathlib import Path
 import requests
 from requests.exceptions import ConnectionError as ConnectError, HTTPError, Timeout
+import yaml
 
 class Images:
     """
@@ -11,16 +12,24 @@ class Images:
     def __init__(self, api_url):
         self.api_url = api_url
         self.session = requests.Session()
+        with open("images.yml") as images_file:
+            self.images = yaml.safe_load(images_file)
 
-    def retrieve(self, image_id):
+    def retrieve(self, image_id, download=True):
         """
         Retrieve an image by its ID. If an image is already locally available
         then the path is returned. Otherwise, it is downloaded using the API
         to retrieve the URL and extension for the imae.
         """
 
+        if image_id in self.images:
+            return self.images[image_id]
+
         for image_path in glob(f"images/{image_id}.*"):
             return Path(image_path)
+
+        if not download:
+            return None
 
         request = self.session.get(f"{self.api_url}{image_id}")
         print(request.headers)

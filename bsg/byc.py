@@ -205,3 +205,43 @@ class ByYourCommand:
             totaljs += match.group(0)[startchar:endchar]
 
         return totaljs.replace("&gt;", ">").replace("&amp;", "&")
+
+    def check_images(self, images):
+        ok_functions = {
+            "textGameState", "characterImage", "locationImage",
+            "locationImage2", "nametag", "locationtag", "allyImage",
+            "damageImage", "spacer", "vspacer", "heavyImage", "scarImage",
+            "IIImage", "VIIImage", "ARImage", "pursuitImage", "jumpImage",
+            "pegasusImage", "colonialOneImage", "demetriusImage",
+            "rebelBasestarImage", "basestarBridgeImage", "newCapricaImage",
+            "cylonImage", "CFBImage", "boardImage"
+        }
+        seen = set()
+        function_regex = re.compile(r"function (\w+)\([^)]*\) {")
+        image_regex = re.compile(r"imageO\((\d+)\)|\[ima\" \+ bl \+ \"geid=(\d+)\D")
+        with self.SCRIPT_PATH.open('r') as script_file:
+            for script in script_file:
+                for match in image_regex.finditer(script):
+                    for group in match.groups()[1:]:
+                        if group is not None:
+                            image_id = group
+                            break
+
+                    if image_id in seen:
+                        continue
+                    seen.add(image_id)
+
+                    pos = match.start()
+                    start = script.rfind("function ", 0, pos)
+                    function = "(unknown)"
+                    if start != -1:
+                        match = function_regex.match(script, start, pos)
+                        if match:
+                            function = match.group(1)
+                        else:
+                            function = "(no match)"
+
+                    image = images.retrieve(image_id, download=False)
+                    if image is None and function not in ok_functions:
+                        logging.info("Unknown image ID %s in function %s (%d:%d)",
+                                     image_id, function, start, pos)

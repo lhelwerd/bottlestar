@@ -1,4 +1,5 @@
 import logging
+from pathlib import PurePath
 from bbcode import Parser
 
 class BBCode:
@@ -47,6 +48,10 @@ class BBCodeMarkdown(BBCode):
         # so that we can also replace the banners?
         image_id = super()._parse_imageid(tag_name, value, options, parent,
                                           context)
+        text = self.retrieve(image_id, download=False)
+        if not isinstance(text, PurePath):
+            return text
+
         logging.info('Found unknown image: %s', image_id)
         return ''
 
@@ -114,10 +119,12 @@ class BBCodeHTML(BBCode):
         # inside the textGameReport function) - will need to be able to start 
         # a download from multiple sources
         path = self.images.retrieve(image_id)
+        if isinstance(path, PurePath):
+            return f'<div class="img"><img src="{path.resolve().as_uri()}"></div>'
         if path is None:
             return f'<div class="img">{image_id}</div>'
 
-        return f'<div class="img"><img src="{path.resolve().as_uri()}"></div>'
+        return path
 
     def _parse_size(self, tag_name, value, options, parent, context):
         size = round(float(options.get(tag_name, 10)) * 1.4, 1)

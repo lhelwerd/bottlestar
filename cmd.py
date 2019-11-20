@@ -70,6 +70,11 @@ def main():
         byc = ByYourCommand(0, config['script_url'])
         images = Images(config['image_api_url'])
         bbcode = BBCodeMarkdown(cards, images)
+
+        if user == "images":
+            byc.check_images(images)
+            return
+
         choice = ""
         run = True
         dialog = None
