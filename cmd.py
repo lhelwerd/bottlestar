@@ -1,14 +1,17 @@
 import argparse
+import base64
 from datetime import datetime
 import logging
 from pathlib import Path
+import re
 import dateutil.parser
 import yaml
 from elasticsearch_dsl.connections import connections
-from bsg.bbcode import BBCode
+from bsg.bbcode import BBCodeMarkdown
 from bsg.bgg import RSS
 from bsg.byc import ByYourCommand, Dialog
 from bsg.card import Cards
+from bsg.image import Images
 from bsg.search import Card
 
 def parse_args():
@@ -56,8 +59,17 @@ def main():
         else:
             user = "command line user"
 
+        if user == "seed":
+            match = re.search(r"New seed: (\S+)\[/color\]\[/size]", game_state)
+            if match:
+                seed = match.group(1)
+                print(seed)
+                print(base64.b64decode(seed.replace("-", "")))
+            return
+
         byc = ByYourCommand(0, config['script_url'])
-        bbcode = BBCode(cards)
+        images = Images(config['image_api_url'])
+        bbcode = BBCodeMarkdown(cards, images)
         choice = ""
         run = True
         dialog = None

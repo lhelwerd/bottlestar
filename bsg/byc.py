@@ -176,6 +176,7 @@ class ByYourCommand:
                 <body>{html}</body>
             </html>''')
 
+        # TODO: Adjust window size to fit
         self.driver.get(page_path.resolve().as_uri())
         self.driver.save_screenshot(f"game/game-state-{self.game_id}.png")
 
