@@ -7,6 +7,7 @@ import yaml
 from elasticsearch_dsl.connections import connections
 from bsg.rss import RSS
 from bsg.card import Cards
+from bsg.image import Images
 from bsg.search import Card
 
 def parse_args():
@@ -27,7 +28,9 @@ with open("config.yml") as config_file:
 
 client = discord.Client()
 cards = Cards(config['cards_url'])
-rss = RSS(config['rss_url'], config['image_url'], config.get('session_id'))
+images = Images(config['image_api_url'])
+rss = RSS(config['rss_url'], images, config['image_url'],
+          config.get('session_id'))
 connections.create_connection(alias='main',
                               hosts=[config['elasticsearch_host']])
 

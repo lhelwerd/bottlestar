@@ -48,9 +48,9 @@ class BBCodeMarkdown(BBCode):
         # so that we can also replace the banners?
         image_id = super()._parse_imageid(tag_name, value, options, parent,
                                           context)
-        text = self.retrieve(image_id, download=False)
+        text = self.images.retrieve(image_id, download=False)
         if not isinstance(text, PurePath):
-            return text
+            return f"{text}\n"
 
         logging.info('Found unknown image: %s', image_id)
         return ''

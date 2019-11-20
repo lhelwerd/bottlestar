@@ -39,6 +39,7 @@ def main():
     command = args.command
     arguments = args.arguments
     cards = Cards(config['cards_url'])
+    images = Images(config['image_api_url'])
 
     if command == "bot":
         print("Hello, command line user!")
@@ -68,7 +69,6 @@ def main():
             return
 
         byc = ByYourCommand(0, config['script_url'])
-        images = Images(config['image_api_url'])
         bbcode = BBCodeMarkdown(cards, images)
 
         if user == "images":
@@ -114,7 +114,13 @@ def main():
                 else:
                     print(' '.join(f"{idx+1}: {text}" for (idx, text) in enumerate(dialog.buttons)))
                 print(f"More options: {dialog.options}")
-                choice = input()
+                if len(dialog.buttons) == 1 and not dialog.input:
+                    # This should not be done in production, where the player
+                    # *should* have the option to undo.
+                    print("Only one option is available, continuing.")
+                    choice = "1"
+                else:
+                    choice = input()
                 run = True
 
         return
@@ -124,7 +130,7 @@ def main():
         return
 
     if command == "latest" or command == "all" or command == "update":
-        rss = RSS(config['rss_url'], config['image_url'],
+        rss = RSS(config['rss_url'], images, config['image_url'],
                   config.get('session_id'))
         if command == "update":
             one = True
