@@ -90,6 +90,26 @@ async def on_message(message):
     arguments = message.content.split(' ')
     command = arguments.pop(0)[1:]
 
+    ## TODO: BYC commands
+    ## Required permissions: Manage Roles, Manage Channels, Manage Nicknames,
+    ## View Channels, Send Messages, Embed Links, Attach Files,
+    ## Read Message History, Mention Everyone (402902032)
+    # command   | channel   | description
+    # !byc      | public/bot| start a BYC game - if already started, deny
+    # !byc      | private   | perform a BYC series of actions
+    # !ok       | private   | confirm performing an action
+    # !cancel   | private   | reject performing an action (or done with input)
+    # !choose   | private   | select a numeric value from the options
+    # !commit   | private   | show result of series of actions in public
+    # !undo     | private   | go back a step in the series of actions
+    # !redo     | private   | cycle through the series of actions again
+    # !reset    | private   | go back to the start of the series of actions
+    #
+    # !bot      | any       | test command
+    # !latest   | any       | retrieve BGG message from RSS feed
+    # !search   | any       | (also !card, !) search all decks
+    # !<deck>   | any       | search a specific deck
+
     if command == "bot":
         await message.channel.send(f'Hello {message.author.mention}!')
     if command == "latest":

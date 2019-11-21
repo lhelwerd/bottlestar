@@ -19,7 +19,7 @@ class Images:
         """
         Retrieve an image by its ID. If an image is already locally available
         then the path is returned. Otherwise, it is downloaded using the API
-        to retrieve the URL and extension for the imae.
+        to retrieve the URL and extension for the image.
         """
 
         if image_id in self.images:
@@ -32,7 +32,6 @@ class Images:
             return None
 
         request = self.session.get(f"{self.api_url}{image_id}")
-        print(request.headers)
         try:
             request.raise_for_status()
             result = request.json()

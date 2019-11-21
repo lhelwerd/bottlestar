@@ -19,6 +19,13 @@ from selenium.webdriver.support.expected_conditions import \
     visibility_of_element_located, invisibility_of_element
 from selenium.webdriver.support.wait import WebDriverWait
 
+def hash(user):
+    """
+    Convert a username to a unique hash in order to make it safe for filenames.
+    """
+
+    return urlsafe_b64encode(user.encode()).decode()
+
 class Dialog:
     """
     Parser for HTML dialogs made by the BYC script.
@@ -90,7 +97,7 @@ class ByYourCommand:
         self.driver = webdriver.Chrome(chrome_options=options)
         self.driver.set_window_size(520, 1560)
 
-    def run_page(self, user, choices, game_state):
+    def run_page(self, user, choices, game_state, force=False):
         """
         Perform action(s) for a user through script dialogs to bring the game
         to a certain state.
@@ -103,12 +110,12 @@ class ByYourCommand:
 
         try:
             current_user = self.driver.find_element_by_tag_name("h1")
-            if current_user.get_attribute("innerText") != user:
+            if force or current_user.get_attribute("innerText") != user:
                 raise ValueError("Context switched")
 
             choices = choices[-1:]
         except (NoSuchElementException, ValueError):
-            page = f"game/page-{self.game_id}-{urlsafe_b64encode(user.encode()).decode()}.html"
+            page = f"game/page-{self.game_id}-{hash(user)}.html"
             page_path = Path(page)
             script_url = self.SCRIPT_PATH.resolve().as_uri()
             with page_path.open('w') as page_file:
@@ -162,13 +169,13 @@ class ByYourCommand:
         textarea = self.driver.find_element_by_tag_name("textarea")
         return f'[q="{user}"]{textarea.get_attribute("value")}[/q]'
 
-    def save_game_state_screenshot(self, html):
+    def save_game_state_screenshot(self, user, html):
         """
         Using HTML parsed from a BYC Game State quote, create a screenshot
         that displays the current game state.
         """
 
-        page_path = Path(f"game/game-state-{self.game_id}.html")
+        page_path = Path(f"game/game-state-{self.game_id}-{hash(user)}.html")
         style_url = self.STYLE_PATH.resolve().as_uri()
         with page_path.open('w') as page_file:
             page_file.write(f'''<!DOCTYPE html>
@@ -182,8 +189,8 @@ class ByYourCommand:
 
         # TODO: Adjust window size to fit
         self.driver.get(page_path.resolve().as_uri())
-        screenshot_path = f"game/game-state-{self.game_id}.png"
-        self.driver.save_screenshot(screenshot_path)
+        screenshot_path = page_path.with_suffix(".png")
+        self.driver.save_screenshot(str(screenshot_path))
 
         screenshot = Image.open(screenshot_path)
         background = Image.new(screenshot.mode, screenshot.size,

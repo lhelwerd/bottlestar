@@ -86,8 +86,20 @@ def main():
         dialog = None
         choices = []
         while choice != "exit":
+            force = False
             if choice != "":
-                if choice in dialog.options:
+                if choice == "undo":
+                    print("Undoing last choice -- redoing all choices before")
+                    choices = choices[:-1]
+                    force = True
+                elif choice == "reset":
+                    print("Going back to the state before the last play")
+                    choices = []
+                    force = True
+                elif choice == "redo":
+                    print("Redoing all choices")
+                    force = True
+                elif choice in dialog.options:
                     choices.append(dialog.options[choice] + 1)
                 elif dialog.input:
                     choices.append(choice)
@@ -100,7 +112,7 @@ def main():
                 run = False
 
             if run:
-                dialog = byc.run_page(user, choices, game_state)
+                dialog = byc.run_page(user, choices, game_state, force=force)
 
             if not isinstance(dialog, Dialog):
                 game_state = dialog
@@ -110,7 +122,8 @@ def main():
                     game_state_file.write(game_state)
 
                 if bbcode.game_state != "":
-                    byc.save_game_state_screenshot(bbcode.game_state)
+                    path = byc.save_game_state_screenshot(user, bbcode.game_state)
+                    print(f"Current game state found in screenshot at {path}")
 
                 choice = "exit"
             else:
@@ -119,8 +132,9 @@ def main():
                     print(', '.join(dialog.buttons))
                 else:
                     print(' '.join(f"{idx+1}: {text}" for (idx, text) in enumerate(dialog.buttons)))
-                print(f"More options: {dialog.options}")
-                if len(dialog.buttons) == 1 and not dialog.input:
+                print(f"More options: {dialog.options}, undo, reset, redo, exit")
+                print(f"Choices made so far: {choices}")
+                if len(dialog.buttons) == 1 and not dialog.input and choice != "undo":
                     print("Only one option is available, continuing.")
                     choice = "1"
                 else:
