@@ -1,11 +1,29 @@
+@font-face {
+    font-family: Montserrat;
+    src: url(fonts/Montserrat-Regular.woff2) format("woff2");
+}
+@font-face {
+    font-family: Montserrat;
+    font-weight: 400;
+    src: url(fonts/Montserrat-Bold.woff2) format("woff2");
+}
+@font-face {
+    font-family: Montserrat;
+    font-weight: 400;
+    font-style: italic;
+    src: url(fonts/Montserrat-BoldItalic.woff2) format("woff2");
+}
 body {
-    font-family: proxima-nova, Arial, sans-serif; /* Montserrat */
+    font-family: Montserrat, Arial, sans-serif;
     font-style: normal;
     font-weight: 100;
     font-size: 15px;
     line-height: 1.428571429;
     background: #FFFFFF;
     color: #000000;
+}
+.ac {
+    text-align: center;
 }
 .fl {
     float: left;
@@ -19,4 +37,6 @@ body {
 .img {
     max-width: 100%;
     display: inline-block;
+    line-height: 0;
+    vertical-align: bottom;
 }

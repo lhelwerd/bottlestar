@@ -9,6 +9,7 @@ from pathlib import Path
 import re
 from urllib.parse import quote
 from markdownify import markdownify
+from PIL import Image, ImageChops
 import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -22,6 +23,8 @@ class Dialog:
     """
     Parser for HTML dialogs made by the BYC script.
     """
+
+    BUTTON_ATTRIBUTES = ("class", "innerText")
 
     def __init__(self, dialog):
         self.element = dialog
@@ -85,6 +88,7 @@ class ByYourCommand:
         options.headless = True
         options.add_argument("allow-file-access-from-files")
         self.driver = webdriver.Chrome(chrome_options=options)
+        self.driver.set_window_size(520, 1560)
 
     def run_page(self, user, choices, game_state):
         """
@@ -178,7 +182,21 @@ class ByYourCommand:
 
         # TODO: Adjust window size to fit
         self.driver.get(page_path.resolve().as_uri())
-        self.driver.save_screenshot(f"game/game-state-{self.game_id}.png")
+        screenshot_path = f"game/game-state-{self.game_id}.png"
+        self.driver.save_screenshot(screenshot_path)
+
+        screenshot = Image.open(screenshot_path)
+        background = Image.new(screenshot.mode, screenshot.size,
+                               color=screenshot.getpixel((0, 0)))
+        diff = ImageChops.difference(screenshot, background)
+        bbox = diff.getbbox()
+        if bbox:
+            safe_bbox = (max(0, bbox[0] - 5), max(0, bbox[1] - 5),
+                         min(screenshot.size[0], bbox[2] + 5),
+                         min(screenshot.size[1], bbox[3] + 5))
+            screenshot.crop(safe_bbox).save(screenshot_path)
+
+        return screenshot_path
 
     def _wait_for_dialog(self, wait=None):
         if wait is None:
