@@ -1,5 +1,4 @@
 import argparse
-import base64
 from datetime import datetime
 import logging
 from pathlib import Path
@@ -66,16 +65,12 @@ def main():
         else:
             user = args.user
 
-        if user == "seed":
-            match = re.search(r"New seed: (\S+)\[/color\]\[/size]", game_state)
-            if match:
-                seed = match.group(1)
-                print(seed)
-                print(base64.b64decode(seed.replace("-", "")))
-            return
-
         byc = ByYourCommand(0, config['script_url'])
         bbcode = BBCodeMarkdown(images)
+
+        if user == "seed":
+            print(byc.get_game_seed(game_state))
+            return
 
         if user == "images":
             byc.check_images(images)
@@ -100,11 +95,11 @@ def main():
                     print("Redoing all choices")
                     force = True
                 elif choice in dialog.options:
-                    choices.append(dialog.options[choice] + 1)
+                    choices.append(f"\b{dialog.options[choice] + 1}")
                 elif dialog.input:
                     choices.append(choice)
                 elif choice.isnumeric() and 0 < int(choice) <= len(dialog.buttons):
-                    choices.append(int(choice))
+                    choices.append(f"\b{choice}")
                 else:
                     print("Option not known")
                     run = False
@@ -128,6 +123,7 @@ def main():
                 choice = "exit"
             else:
                 print(cards.replace_cards(dialog.msg, args.display))
+                print(repr(dialog))
                 if dialog.input:
                     print(', '.join(dialog.buttons))
                 else:

@@ -10,6 +10,7 @@ class BBCode:
     def __init__(self, images):
         self.images = images
         self.game_state = ""
+        self.parser = None
         self._load_parser()
 
     def _load_parser(self):
@@ -42,9 +43,6 @@ class BBCodeMarkdown(BBCode):
         return value
 
     def _parse_imageid(self, tag_name, value, options, parent, context):
-        # TODO: Use something alike to bgg RSS.IMAGES to replace (or remove)
-        # the image. Perhaps populate it from static analysis of the BYC script 
-        # so that we can also replace the banners?
         image_id = super()._parse_imageid(tag_name, value, options, parent,
                                           context)
         text = self.images.retrieve(image_id, download=False)

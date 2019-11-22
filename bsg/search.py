@@ -16,6 +16,7 @@ class Card(Document):
     text = Text(analyzer='snowball')
     cylon = Text(fields={'raw': Keyword(normalizer=lowercase)})
     jump = Boolean()
+    character_class = Keyword()
 
     class Index:
         name = 'card'
@@ -28,5 +29,5 @@ class Card(Document):
                 Q('fuzzy', text=text)
         if deck != '':
             search = search.filter('term', deck=deck)
-        search_query = search.query(query)
+        search_query = search[:limit].query(query)
         return search_query.execute(), search_query.count()['value']

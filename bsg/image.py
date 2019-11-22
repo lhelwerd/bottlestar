@@ -12,8 +12,12 @@ class Images:
     def __init__(self, api_url):
         self.api_url = api_url
         self.session = requests.Session()
+        self.images = {}
         with open("images.yml") as images_file:
-            self.images = yaml.safe_load(images_file)
+            for data in yaml.safe_load_all(images_file):
+                for image_id, text in data["images"].items():
+                    text_format = data.get("format", "{}")
+                    self.images[image_id] = text_format.format(text)
 
     def retrieve(self, image_id, download=True):
         """
@@ -38,8 +42,8 @@ class Images:
             extension = result["extension"]
             url = result["images"]["original"]["url"]
         except (ConnectError, HTTPError, Timeout, ValueError, KeyError):
-            loggin.exception("Could not look up information about image ID %s",
-                             image_id)
+            logging.exception("Could not look up information about image ID %s",
+                              image_id)
             return None
 
         download = self.session.get(url, stream=True)

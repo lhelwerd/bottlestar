@@ -3,11 +3,11 @@ Standalone interpreter of the BYC script that runs it in a sandbox and stores
 game states.
 """
 
-from base64 import urlsafe_b64encode
+from base64 import b64decode, urlsafe_b64encode, urlsafe_b64decode
+import json
 import logging
 from pathlib import Path
 import re
-from urllib.parse import quote
 from markdownify import markdownify
 from PIL import Image, ImageChops
 import requests
@@ -19,7 +19,7 @@ from selenium.webdriver.support.expected_conditions import \
     visibility_of_element_located, invisibility_of_element
 from selenium.webdriver.support.wait import WebDriverWait
 
-def hash(user):
+def unique_hash(user):
     """
     Convert a username to a unique hash in order to make it safe for filenames.
     """
@@ -52,6 +52,14 @@ class Dialog:
             for attribute in self.BUTTON_ATTRIBUTES:
                 self.options[button.get_attribute(attribute)] = index
 
+    def __repr__(self):
+        options = urlsafe_b64encode(str(self.options).encode()).decode()
+        return f"{len(self.buttons)}:{options}:{1 if self.input else 0}"
+
+    @classmethod
+    def decode_options(cls, options):
+        return json.loads(urlsafe_b64decode(options.encode()).decode())
+
     # TODO: Language changes (BYC, Discord, CMD)
     # press Cancel      | use !cancel                         | enter "cancel"
     # quote this post   | talk to the bot in #byc-GAMEID-USER | ???
@@ -63,6 +71,7 @@ class ByYourCommand:
 
     SCRIPT_PATH = Path("byc.js")
     STYLE_PATH = Path("game_state.css")
+    GAME_SEED_REGEX = re.compile(r"\[size=(?:1|0)\]\[color=#(?:F4F4FF|FFFFFF)\]New seed: (\S+)\[/color\]\[/size]")
 
     def __init__(self, game_id, script_url):
         self.driver = None
@@ -97,6 +106,13 @@ class ByYourCommand:
         self.driver = webdriver.Chrome(chrome_options=options)
         self.driver.set_window_size(520, 1560)
 
+    def retrieve_game_state(self, user, force=False):
+        current_user = self.driver.find_element_by_tag_name("h1")
+        if force or current_user.get_attribute("innerText") != user:
+            raise ValueError("Context switched")
+
+        return self.driver.find_element_by_tag_name("textarea").get_attribute("value")
+
     def run_page(self, user, choices, game_state, force=False):
         """
         Perform action(s) for a user through script dialogs to bring the game
@@ -107,15 +123,14 @@ class ByYourCommand:
         # wants to do
         # TODO: Do we need to satisfy the script with a Quoted Article and thus 
         # an article ID?
+        # TODO: Save the game state every time so that we do not need to keep 
+        # choices around?
 
         try:
-            current_user = self.driver.find_element_by_tag_name("h1")
-            if force or current_user.get_attribute("innerText") != user:
-                raise ValueError("Context switched")
-
+            self.retrieve_game_state(user, force=force)
             choices = choices[-1:]
         except (NoSuchElementException, ValueError):
-            page = f"game/page-{self.game_id}-{hash(user)}.html"
+            page = f"game/page-{self.game_id}-{unique_hash(user)}.html"
             page_path = Path(page)
             script_url = self.SCRIPT_PATH.resolve().as_uri()
             with page_path.open('w') as page_file:
@@ -140,7 +155,7 @@ class ByYourCommand:
 
         for choice in choices:
             logging.info("Handling choice: %s", choice)
-            if dialog.input and not isinstance(choice, int):
+            if dialog.input and not choice.startswith("\b"): # Non-button input
                 dialog.input.send_keys(choice)
                 button = dialog.element.find_element_by_class_name("ok")
             else:
@@ -165,9 +180,23 @@ class ByYourCommand:
         logging.info("Browser log: %r", self.driver.get_log("browser"))
         return dialog
 
+    def _wait_for_dialog(self, wait=None):
+        if wait is None:
+            wait = visibility_of_element_located((By.CLASS_NAME, "dialog"))
+        return WebDriverWait(self.driver, 2).until(wait)
+
     def _get_game_state(self, user):
         textarea = self.driver.find_element_by_tag_name("textarea")
         return f'[q="{user}"]{textarea.get_attribute("value")}[/q]'
+
+    def get_game_seed(self, game_state):
+        match = self.GAME_SEED_REGEX.search(game_state)
+        if match:
+            seed = match.group(1)
+            state = b64decode(seed.replace("-", "")).decode()
+            return json.loads(state)
+
+        raise ValueError("No game seed found in text")
 
     def save_game_state_screenshot(self, user, html):
         """
@@ -175,7 +204,7 @@ class ByYourCommand:
         that displays the current game state.
         """
 
-        page_path = Path(f"game/game-state-{self.game_id}-{hash(user)}.html")
+        page_path = Path(f"game/game-state-{self.game_id}-{unique_hash(user)}.html")
         style_url = self.STYLE_PATH.resolve().as_uri()
         with page_path.open('w') as page_file:
             page_file.write(f'''<!DOCTYPE html>
@@ -187,7 +216,6 @@ class ByYourCommand:
                 <body>{html}</body>
             </html>''')
 
-        # TODO: Adjust window size to fit
         self.driver.get(page_path.resolve().as_uri())
         screenshot_path = page_path.with_suffix(".png")
         self.driver.save_screenshot(str(screenshot_path))
@@ -204,11 +232,6 @@ class ByYourCommand:
             screenshot.crop(safe_bbox).save(screenshot_path)
 
         return screenshot_path
-
-    def _wait_for_dialog(self, wait=None):
-        if wait is None:
-            wait = visibility_of_element_located((By.CLASS_NAME, "dialog"))
-        return WebDriverWait(self.driver, 2).until(wait)
 
     def _load_script(self):
         # Regular expressions that put together the source code from the page.

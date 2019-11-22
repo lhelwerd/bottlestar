@@ -18,6 +18,8 @@ class Cards:
                     self.expansions = set('expansions')
                     self.decks = data['decks']
                     self.skills = data['skills']
+                    self.character_classes = data['character_classes']
+                    self.titles = data['titles']
                     break
                 else:
                     raise ValueError('Meta must be first component')

@@ -89,6 +89,43 @@ skills:
     path: Tre
     discord: ":poop:"
     unicode: "\U0001F4A9"
+character_classes:
+  Military Leader:
+    priority: 7
+    color: green
+  Political Leader:
+    priority: 8
+    color: yellow
+  Support:
+    priority: 9
+    color: blue
+  Pilot:
+    priority: 10
+    color: red
+  Cylon Leader:
+    priority: 11
+    color: light_grey
+titles:
+  President:
+    priority: 3
+    color: orange
+  Admiral:
+    priority: 4
+    color: dark_green
+  Dictator:
+    priority: 2
+    color: purple
+    titles: [President, Admiral]
+  CAG:
+    priority: 5
+    color: dark_red
+  God:
+    priority: 1
+    color: purple
+    titles: [President, Admiral, CAG]
+  Mutineer:
+    priority: 6
+    color: brown
 ---
 expansion: base
 deck: crisis

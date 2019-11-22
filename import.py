@@ -58,7 +58,8 @@ def main():
                            text=text,
                            skills=skills,
                            cylon=card.get('cylon'),
-                           jump=card.get('jump', jump))
+                           jump=card.get('jump', jump),
+                           character_class=card.get('class'))
                 logging.debug('%r', doc.to_dict())
                 doc.save()
                 logging.info('Saved %s (%s card from %s)', card['name'],
