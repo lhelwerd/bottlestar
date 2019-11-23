@@ -186,6 +186,8 @@ def main():
         deck = ''
     elif command not in cards.decks:
         return
+    elif "alias" in cards.decks[command]:
+        deck = cards.decks[command]["alias"]
     else:
         deck = command
 

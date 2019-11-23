@@ -21,9 +21,11 @@ decks:
     path: Dest
     ext: png
   char:
-    alias: character
     name: Chars
     ext: png
+    denote: False
+  character:
+    alias: char
     denote: False
   loyalty:
     name: Loyalty
