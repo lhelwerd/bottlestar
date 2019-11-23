@@ -672,7 +672,7 @@ cards:
   - name: Abandon Galactica
     cylon: Basestars fire
     jump: True
-  - name: A Desparate Pact
+  - name: A Desperate Pact
     value: 15
     skills: [Politics, Leadership, Piloting]
     cylon: Raiders
@@ -1010,7 +1010,7 @@ cards:
     path: Racetrack
     class: Pilot
   - name: Kendra Shaw
-    path: Kendra shaw
+    path: Shaw
     class: Military Leader
 ---
 expansion: base
@@ -1344,7 +1344,7 @@ cards:
     path: PG Pol Intrigue
   - name: 'Personal Goal: Sacrifice: 6 Vipers Damaged or Destroyed'
     path: PG Sacrifice
-  - name: 'Personal Goal: Selft-Destruction: In the "Brig" or "Sickbay"'
+  - name: 'Personal Goal: Self-Destruction: In the "Brig" or "Sickbay"'
     path: PG Self Destruct
   - name: 'Personal Goal: Selfish: Discard Skill Cards Equal to 20 Strength'
     path: PG Selfish
@@ -1360,7 +1360,7 @@ replace: ''
 cards:
   - name: 'A False Sense Of Security'
     allegiance: Cylon
-  - name: A Justified Reponse
+  - name: A Justified Response
     allegiance: Cylon
   - name: End The Chase
     allegiance: Human
@@ -1429,7 +1429,7 @@ cards:
   - name: Samuel T. Anders
     path: Samuel T Anders
   - name: Saul Tigh
-  - name: Sharom Boomer Valerii
+  - name: Sharon Boomer Valerii
   - name: "Simon O'Neill"
     path: Simon Oneill
   - name: Tom Zarek
