@@ -31,13 +31,15 @@ class Dialog:
     Parser for HTML dialogs made by the BYC script.
     """
 
+    EMPTY = "0:e30=:0"
     BUTTON_ATTRIBUTES = ("class", "innerText")
+    MSG_TAGS = ['b', 'i', 'br', 'strong', 'em']
 
     def __init__(self, dialog):
         self.element = dialog
 
         msg = dialog.find_element_by_class_name("msg").get_attribute("innerHTML")
-        self.msg = markdownify(msg, convert=['b', 'i', 'br', 'strong', 'em'])
+        self.msg = markdownify(msg, convert=self.MSG_TAGS).replace('****', '')
 
         self.buttons = []
         try:
@@ -53,7 +55,7 @@ class Dialog:
                 self.options[button.get_attribute(attribute)] = index
 
     def __repr__(self):
-        options = urlsafe_b64encode(str(self.options).encode()).decode()
+        options = urlsafe_b64encode(json.dumps(self.options).encode()).decode()
         return f"{len(self.buttons)}:{options}:{1 if self.input else 0}"
 
     @classmethod
@@ -73,9 +75,10 @@ class ByYourCommand:
     STYLE_PATH = Path("game_state.css")
     GAME_SEED_REGEX = re.compile(r"\[size=(?:1|0)\]\[color=#(?:F4F4FF|FFFFFF)\]New seed: (\S+)\[/color\]\[/size]")
 
-    def __init__(self, game_id, script_url):
+    def __init__(self, game_id, user, script_url):
         self.driver = None
         self.game_id = game_id
+        self.user = user
         self.script_url = script_url
         self.load()
 
@@ -104,43 +107,44 @@ class ByYourCommand:
         options.headless = True
         options.add_argument("allow-file-access-from-files")
         self.driver = webdriver.Chrome(chrome_options=options)
-        self.driver.set_window_size(520, 1560)
+        self.driver.set_window_size(533, 1600)
 
-    def retrieve_game_state(self, user, force=False):
-        current_user = self.driver.find_element_by_tag_name("h1")
-        if force or current_user.get_attribute("innerText") != user:
-            raise ValueError("Context switched")
+    def retrieve_game_state(self, force=False):
+        try:
+            current_user = self.driver.find_element_by_tag_name("h1")
+            if force or current_user.get_attribute("innerText") != self.user:
+                raise ValueError("Context switched (user)")
 
-        return self.driver.find_element_by_tag_name("textarea").get_attribute("value")
+            textarea = self.driver.find_element_by_tag_name("textarea")
+            return textarea.get_attribute("value")
+        except NoSuchElementException:
+            raise ValueError("Context switched (state)")
 
-    def run_page(self, user, choices, game_state, force=False):
+    def run_page(self, choices, game_state, force=False):
         """
         Perform action(s) for a user through script dialogs to bring the game
         to a certain state.
         """
 
         # TODO: Think about how to handle cross-play and "undos" that the group 
-        # wants to do
+        # wants to do - manually grab a backup for now or do a crosspost fix
         # TODO: Do we need to satisfy the script with a Quoted Article and thus 
         # an article ID?
-        # TODO: Save the game state every time so that we do not need to keep 
-        # choices around?
 
         try:
-            self.retrieve_game_state(user, force=force)
+            self.retrieve_game_state(force=force)
             choices = choices[-1:]
-        except (NoSuchElementException, ValueError):
-            page = f"game/page-{self.game_id}-{unique_hash(user)}.html"
+        except ValueError:
+            page = f"game/page-{self.game_id}-{unique_hash(self.user)}.html"
             page_path = Path(page)
             script_url = self.SCRIPT_PATH.resolve().as_uri()
             with page_path.open('w') as page_file:
-                # TODO: Include current game state BBCode in textarea
                 page_file.write(f'''<!DOCTYPE html>
                 <html>
                     <head><title>BYC</title></head>
                     <body>
-                        <h1>{user}</h1>
-                        <a href="/collection/user/{user}">Collection</a>
+                        <h1>{self.user}</h1>
+                        <a href="/collection/user/{self.user}">Collection</a>
                         <textarea>{game_state}</textarea>
                         <script src="{script_url}"></script>
                     </body>
@@ -151,15 +155,16 @@ class ByYourCommand:
         try:
             dialog = Dialog(self._wait_for_dialog())
         except TimeoutException:
-            return self._get_game_state(user)
+            return self._get_game_state()
 
         for choice in choices:
-            logging.info("Handling choice: %s", choice)
+            logging.info("Handling choice: %s", choice.lstrip("\b"))
             if dialog.input and not choice.startswith("\b"): # Non-button input
                 dialog.input.send_keys(choice)
                 button = dialog.element.find_element_by_class_name("ok")
             else:
-                selector = f"button:nth-child({choice})"
+                index = choice.lstrip("\b")
+                selector = f"button:nth-child({index})"
                 button = dialog.element.find_element_by_css_selector(selector)
 
             logging.info("Pressed: %s", button.get_attribute("innerText"))
@@ -174,7 +179,7 @@ class ByYourCommand:
             try:
                 dialog = Dialog(self._wait_for_dialog())
             except TimeoutException:
-                return self._get_game_state(user)
+                return self._get_game_state()
 
         logging.info("Dialog: %s", dialog.element.get_attribute("innerHTML"))
         logging.info("Browser log: %r", self.driver.get_log("browser"))
@@ -185,9 +190,9 @@ class ByYourCommand:
             wait = visibility_of_element_located((By.CLASS_NAME, "dialog"))
         return WebDriverWait(self.driver, 2).until(wait)
 
-    def _get_game_state(self, user):
+    def _get_game_state(self):
         textarea = self.driver.find_element_by_tag_name("textarea")
-        return f'[q="{user}"]{textarea.get_attribute("value")}[/q]'
+        return f'[q="{self.user}"]{textarea.get_attribute("value")}[/q]'
 
     def get_game_seed(self, game_state):
         match = self.GAME_SEED_REGEX.search(game_state)
@@ -198,13 +203,13 @@ class ByYourCommand:
 
         raise ValueError("No game seed found in text")
 
-    def save_game_state_screenshot(self, user, html):
+    def save_game_state_screenshot(self, html):
         """
         Using HTML parsed from a BYC Game State quote, create a screenshot
         that displays the current game state.
         """
 
-        page_path = Path(f"game/game-state-{self.game_id}-{unique_hash(user)}.html")
+        page_path = Path(f"game/game-state-{self.game_id}-{unique_hash(self.user)}.html")
         style_url = self.STYLE_PATH.resolve().as_uri()
         with page_path.open('w') as page_file:
             page_file.write(f'''<!DOCTYPE html>
@@ -254,7 +259,13 @@ class ByYourCommand:
 
         return totaljs.replace("&gt;", ">").replace("&amp;", "&")
 
-    def check_images(self, images):
+    def check_images(self, images, download=False):
+        """
+        Check and optionally preload images from the BYC script.
+        Detect imageO calls and determine which function it is inside.
+        Report any unknown images.
+        """
+
         ok_functions = {
             "textGameState", "characterImage", "locationImage",
             "locationImage2", "nametag", "locationtag", "allyImage",
@@ -289,7 +300,7 @@ class ByYourCommand:
                         else:
                             function = "(no match)"
 
-                    image = images.retrieve(image_id, download=False)
+                    image = images.retrieve(image_id, download=download)
                     if image is None and function not in ok_functions:
                         logging.info("Unknown image ID %s in function %s (%d:%d)",
                                      image_id, function, start, pos)

@@ -65,7 +65,7 @@ def main():
         else:
             user = args.user
 
-        byc = ByYourCommand(0, config['script_url'])
+        byc = ByYourCommand(0, user, config['script_url'])
         bbcode = BBCodeMarkdown(images)
 
         if user == "seed":
@@ -107,7 +107,7 @@ def main():
                 run = False
 
             if run:
-                dialog = byc.run_page(user, choices, game_state, force=force)
+                dialog = byc.run_page(choices, game_state, force=force)
 
             if not isinstance(dialog, Dialog):
                 game_state = dialog
@@ -117,13 +117,13 @@ def main():
                     game_state_file.write(game_state)
 
                 if bbcode.game_state != "":
-                    path = byc.save_game_state_screenshot(user, bbcode.game_state)
+                    path = byc.save_game_state_screenshot(bbcode.game_state)
                     print(f"Current game state found in screenshot at {path}")
 
                 choice = "exit"
             else:
                 print(cards.replace_cards(dialog.msg, args.display))
-                print(repr(dialog))
+                print(f"{dialog}")
                 if dialog.input:
                     print(', '.join(dialog.buttons))
                 else:
@@ -132,7 +132,7 @@ def main():
                 print(f"Choices made so far: {choices}")
                 if len(dialog.buttons) == 1 and not dialog.input and choice != "undo":
                     print("Only one option is available, continuing.")
-                    choice = "1"
+                    choice = "\b1"
                 else:
                     choice = input()
                 run = True
@@ -173,6 +173,14 @@ def main():
         print(cards.replace_cards(' '.join(arguments),
               display=args.display))
         return
+    if command == "class":
+        search = Card.search(using='main').source(['path', 'character_class']) \
+            .filter("term", deck="char")
+        if len(arguments) > 0:
+            search = search.query("match", path=' '.join(arguments))
+        for card in search.scan():
+            print(card.to_dict())
+            print(card.path, card.character_class)
 
     if command in ('card', 'search'):
         deck = ''
@@ -186,6 +194,7 @@ def main():
     for hit in response:
         url = cards.get_url(hit.to_dict())
         print(f'{hit.name}: {url} (score: {hit.meta.score:.3f})')
+        print(hit.to_dict())
 
 if __name__ == "__main__":
     main()

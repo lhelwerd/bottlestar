@@ -11,6 +11,8 @@ class Cards:
         self.decks = {}
         self.skills = {}
         self.expansions = set()
+        self.character_classes = {}
+        self.titles = {}
 
         with open("data.yml") as data_file:
             for data in yaml.safe_load_all(data_file):
@@ -94,12 +96,15 @@ class Cards:
 
         return f'{self.url}/{deck_path}/{prefix}{path}.{ext}'
 
-    def replace_cards(self, message, display='discord'):
+    def replace_cards(self, message, display='discord', deck=True):
         for skill_type, skill_regex in self.skill_colors.items():
             emoji = self.skills[skill_type][display]
             message = skill_regex.sub(fr"\1{emoji}", message)
-        for deck, card_regex in self.deck_cards.items():
-            replacement = fr"\1 ({self.decks[deck]['name']})"
-            message = card_regex.sub(replacement, message)
+        for key, title in self.titles.items():
+            message = message.replace(key, f"{key}{title[display]}")
+        if deck:
+            for deck, card_regex in self.deck_cards.items():
+                replacement = fr"\1 ({self.decks[deck]['name']})"
+                message = card_regex.sub(replacement, message)
 
         return message

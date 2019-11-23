@@ -28,6 +28,7 @@ class BBCode:
         for example Discord.
         """
 
+        self.game_state = ""
         return self.parser.format(text)
 
 class BBCodeMarkdown(BBCode):
@@ -78,13 +79,19 @@ class BBCodeMarkdown(BBCode):
 
         self.parser.add_simple_formatter('-', '~%(value)s~')
         self.parser.add_simple_formatter('i', '*%(value)s*')
-        self.parser.add_simple_formatter('user', '@%(value)s')
+        self.parser.add_simple_formatter('user', '%(value)s')
         self.parser.add_simple_formatter('size', '%(value)s')
 
         self.parser.add_formatter('color', self._parse_color)
         self.parser.add_formatter('imageid', self._parse_imageid,
                                   standalone=True)
         self.parser.add_formatter('q', self._parse_quote, render_embedded=False)
+
+        for tag, options in self.parser.recognized_tags.values():
+            options.escape_html = False
+            options.replace_links = False
+            options.replace_cosmetic = False
+
         # Colors:
         # - red (Cylon)
         # - green (Human PG)
@@ -99,6 +106,9 @@ class BBCodeMarkdown(BBCode):
         # - blue (Engineering)
         # - brown (Treachery)
 
+    def process_bbcode(self, text):
+        return super().process_bbcode(text).replace('****', '')
+
 class BBCodeHTML(BBCode):
     """
     HTML output for BGG BYC BBCode.
@@ -112,9 +122,6 @@ class BBCodeHTML(BBCode):
         image_id = super()._parse_imageid(tag_name, value, options, parent,
                                           context)
         # Retrieve images via API
-        # TODO: Also preload them from the BYC script (detect imageO calls 
-        # inside the textGameReport function) - will need to be able to start 
-        # a download from multiple sources
         path = self.images.retrieve(image_id)
         if isinstance(path, PurePath):
             return f'<div class="img"><img src="{path.resolve().as_uri()}"></div>'
@@ -146,5 +153,6 @@ class BBCodeHTML(BBCode):
                                          standalone=True)
         self.parser.add_simple_formatter('hr', '<hr>', standalone=True)
 
-    def process_bbcode(self, text, display='discord'):
-        return self.parser.format(text)
+        for tag, options in self.parser.recognized_tags.values():
+            options.replace_links = False
+            options.replace_cosmetic = False
