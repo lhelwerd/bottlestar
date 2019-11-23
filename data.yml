@@ -75,8 +75,8 @@ skills:
     unicode: "\U0001F419"
   Politics:
     path: Pol
-    discord: ":prince:"
-    unicode: "\U0001F934"
+    discord: ":full_moon:"
+    unicode: "\U0001F315"
   Piloting:
     path: Pil
     discord: ":airplane_small:"
@@ -89,6 +89,56 @@ skills:
     path: Tre
     discord: ":poop:"
     unicode: "\U0001F4A9"
+character_classes:
+  Military Leader:
+    priority: 7
+    color: green
+  Political Leader:
+    priority: 8
+    color: yellow
+  Support:
+    priority: 9
+    color: blue
+  Pilot:
+    priority: 10
+    color: red
+  Cylon Leader:
+    priority: 11
+    color: light_grey
+titles:
+  President:
+    priority: 3
+    color: orange
+    discord: ":prince:"
+    unicode: "\U0001F934"
+  Admiral:
+    priority: 4
+    color: dark_green
+    discord: ":dragon_face:"
+    unicode: "\U0001F432"
+  Dictator:
+    priority: 2
+    color: purple
+    titles: [President, Admiral]
+    discord: ":smiling_imp:"
+    unicode: "\U0001F608"
+  CAG:
+    priority: 5
+    color: dark_red
+    discord: ":guardsman:"
+    unicode: "\U0001F482"
+  God:
+    priority: 1
+    color: purple
+    titles: [President, Admiral, CAG]
+    discord: ":unicorn:"
+    unicode: "\U0001F984"
+  Mutineer:
+    priority: 6
+    color: dark_grey
+    titles: [theMutineer]
+    discord: ":cowboy:"
+    unicode: "\U0001F920"
 ---
 expansion: base
 deck: crisis

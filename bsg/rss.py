@@ -7,27 +7,10 @@ import requests
 
 class RSS:
     ACTIONS_SPLIT = re.compile(r'Quoted Article: \d+</font>')
-    IMAGES = {
-        "3807729": "-3=",
-        "3807730": "-2=",
-        "3807731": "-1=",
-        "3807732": "+1=",
-        "3807733": "+2=",
-        "3807734": "+3=",
-        "3807735": "+4=",
-        "3807736": "+5=",
-        "3789064": "1",
-        "3789070": "2",
-        "3789073": "3",
-        "3789077": "4",
-        "3789080": "5",
-        "3789081": "6",
-        "3789096": "7",
-        "3789084": "8"
-    }
 
-    def __init__(self, url, image_url=None, session_id=None):
+    def __init__(self, url, images, image_url=None, session_id=None):
         self.url = url
+        self.images = images
         self.image_url = image_url
         self.session_id = session_id
 
@@ -54,7 +37,7 @@ class RSS:
             description = item.find('description')
 
             if self.image_url is not None:
-                for image_id, replacement in self.IMAGES.items():
+                for image_id, replacement in self.images.images.items():
                     url = self.image_url + image_id
                     for link in description.find_all('a', {"href": url}):
                         link.replace_with(replacement)

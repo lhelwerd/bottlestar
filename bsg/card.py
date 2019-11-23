@@ -11,6 +11,8 @@ class Cards:
         self.decks = {}
         self.skills = {}
         self.expansions = set()
+        self.character_classes = {}
+        self.titles = {}
 
         with open("data.yml") as data_file:
             for data in yaml.safe_load_all(data_file):
@@ -18,6 +20,8 @@ class Cards:
                     self.expansions = set('expansions')
                     self.decks = data['decks']
                     self.skills = data['skills']
+                    self.character_classes = data['character_classes']
+                    self.titles = data['titles']
                     break
                 else:
                     raise ValueError('Meta must be first component')
@@ -51,8 +55,9 @@ class Cards:
 
     def _build_skill_regex(self, skill_type):
         search = Card.search(using='main').filter("term", deck="skill") \
-            .filter("term", skill=skill_type)
+            .filter("term", skills=skill_type.lower())
         skill_cards = self._build_regex(card.name for card in search.scan())
+        logging.info('%s %s', skill_type, skill_cards)
         if skill_cards == '':
             return re.compile(fr'\b({skill_type})\b')
 
@@ -91,12 +96,15 @@ class Cards:
 
         return f'{self.url}/{deck_path}/{prefix}{path}.{ext}'
 
-    def replace_cards(self, message, display='discord'):
+    def replace_cards(self, message, display='discord', deck=True):
         for skill_type, skill_regex in self.skill_colors.items():
             emoji = self.skills[skill_type][display]
             message = skill_regex.sub(fr"\1{emoji}", message)
-        for deck, card_regex in self.deck_cards.items():
-            replacement = fr"\1 ({self.decks[deck]['name']})"
-            message = card_regex.sub(replacement, message)
+        for key, title in self.titles.items():
+            message = message.replace(key, f"{key}{title[display]}")
+        if deck:
+            for deck, card_regex in self.deck_cards.items():
+                replacement = fr"\1 ({self.decks[deck]['name']})"
+                message = card_regex.sub(replacement, message)
 
         return message
