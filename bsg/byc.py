@@ -161,6 +161,13 @@ class ByYourCommand:
         except TimeoutException:
             return self._get_game_state()
 
+        # Check for BYC updates
+        if self._check_script_update():
+            try:
+                dialog = Dialog(self._wait_for_dialog())
+            except TimeoutException:
+                return self._get_game_state()
+
         for choice in choices:
             logging.info("Handling choice: %s", choice.lstrip("\b"))
             if dialog.input and not choice.startswith("\b"): # Non-button input
@@ -252,6 +259,20 @@ class ByYourCommand:
             screenshot.crop(safe_bbox).save(screenshot_path)
 
         return screenshot_path
+
+    def _check_script_update(self):
+        urgent_script = 'return window.localStorage.getItem("bycUrgent");'
+        urgent = self.driver.execute_script(urgent_script)
+        if urgent in ("requested", "outdated"):
+            logging.info("Updating BYC: %s", urgent)
+            with self.SCRIPT_PATH.open('w') as script_file:
+                script_file.write(self._load_script())
+
+            self.driver.execute_script('window.localStorage.removeItem("bycUrgent");')
+            self.driver.refresh()
+            return True
+
+        return False
 
     def _load_script(self):
         # Regular expressions that put together the source code from the page.
