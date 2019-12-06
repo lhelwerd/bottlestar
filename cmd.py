@@ -144,7 +144,7 @@ def main():
         print(cards.replace_cards(text, args.display))
         return
 
-    if command == "latest" or command == "all" or command == "update":
+    if command in ("latest", "all", "update", "image", "game_seed"):
         rss = RSS(config['rss_url'], images, config['image_url'],
                   config.get('session_id'))
         if command == "update":
@@ -157,11 +157,30 @@ def main():
             one = False
             if_modified_since = None
 
-        result = rss.parse(if_modified_since=if_modified_since, one=one)
+        game_seed = command == "game_seed"
+        game_state = command == "image"
+
+        result = rss.parse(if_modified_since=if_modified_since, one=one,
+                           game_seed=game_seed, game_state=game_state)
         try:
             ok = True
             while ok:
-                print(cards.replace_cards(next(result), display=args.display))
+                output = next(result)
+                if game_state or game_seed:
+                    game_id = config["rss_url"].split("/")[-1]
+                    state, player = output
+                    byc = ByYourCommand(game_id, player, config["script_url"])
+                    if game_seed:
+                        text = byc.run_page(["2", "\b2", "\b1"],
+                                            byc.make_game_seed(state),
+                                            force=True)
+                        bbcode = BBCodeMarkdown(images)
+                        bbcode.process_bbcode(state)
+                        state = bbcode.game_state
+
+                    print(byc.save_game_state_screenshot(state))
+                else:
+                    print(cards.replace_cards(output, display=args.display))
                 if command == "all":
                     print('\n' + '=' * 80 + '\n')
                 else:

@@ -799,10 +799,40 @@ async def on_message(message):
         return
     if command == "latest":
         try:
-            await message.channel.send(replace_roles(next(rss.parse()),
-                                                     message.guild))
+            await send_message(message.channel, replace_roles(next(rss.parse()),
+                                                              message.guild))
         except StopIteration:
             await message.channel.send('No post found!')
+        return
+    if command == "image":
+        # Create a game state image based on the most recent game seed; NB: do 
+        # not use the XML or RSS to grab the HTML because it does not contain 
+        # all the tags. Instead run the seed through a BYC instance and take 
+        # a screenshot.
+        try:
+            game_id = config["rss_url"].split("/")[-1]
+            state, player = next(rss.parse(game_seed=True))
+            logging.info("Player: %s", player)
+            byc = ByYourCommand(game_id, player, config["script_url"])
+            game_seed = byc.make_game_seed(state)
+            choices = []
+            dialog = byc.run_page(choices, game_seed)
+            if "You are not recognized as a player" in dialog.msg:
+                choices.append("\b1")
+            choices.extend(["2", "\b2", "\b1"])
+            logging.info('%r', choices)
+            text = byc.run_page(choices, game_seed, num=len(choices))
+            bbcode.process_bbcode(text)
+            state = bbcode.game_state
+
+            path = byc.save_game_state_screenshot(state)
+            await message.channel.send(file=discord.File(path))
+        except StopIteration:
+            await message.channel.send('No post found!')
+        except:
+            logging.exception('Could not retrieve game state image')
+            await message.channel.send('Uh oh')
+        return
 
     if command in ('card', 'search', ''):
         deck = ''
