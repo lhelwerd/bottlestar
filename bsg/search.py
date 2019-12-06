@@ -14,9 +14,12 @@ class Card(Document):
     destination = Integer()
     skills = Keyword(normalizer=lowercase)
     text = Text(analyzer='snowball')
-    cylon = Text(fields={'raw': Keyword(normalizer=lowercase)})
+    cylon = Keyword()
     jump = Boolean()
     character_class = Keyword()
+    allegiance = Keyword()
+    ability = Boolean()
+    reckless = Boolean()
 
     class Index:
         name = 'card'

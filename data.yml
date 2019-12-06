@@ -1,11 +1,11 @@
 ---
 meta: True
 expansions:
-  - base
-  - pegasus
-  - exodus
-  - daybreak
-  - unofficial
+  base: "BSG"
+  pegasus: "BSP"
+  exodus: "BSE"
+  daybreak: "BSD"
+  unofficial: "BGG"
 decks:
   crisis:
     name: Crisis
@@ -66,46 +66,52 @@ decks:
     jump: False
 skills:
   Leadership:
+    short: G
     path:
       default: Led
       daybreak: Lea
     discord: ":green_apple:"
     unicode: "\U0001F34F"
   Tactics:
+    short: P
     path: Tac
     discord: ":octopus:"
     unicode: "\U0001F419"
   Politics:
+    short: Y
     path: Pol
     discord: ":full_moon:"
     unicode: "\U0001F315"
   Piloting:
+    short: R
     path: Pil
     discord: ":airplane_small:"
     unicode: "\U0001F6E9️"
   Engineering:
+    short: B
     path: Eng
     discord: ":large_blue_diamond:"
     unicode: "\U0001F537"
   Treachery:
+    short: O
     path: Tre
     discord: ":poop:"
     unicode: "\U0001F4A9"
 character_classes:
   Military Leader:
-    priority: 7
+    priority: 8
     color: green
   Political Leader:
-    priority: 8
+    priority: 9
     color: yellow
   Support:
-    priority: 9
+    priority: 10
     color: blue
   Pilot:
-    priority: 10
+    priority: 11
     color: red
   Cylon Leader:
-    priority: 11
+    priority: 12
     color: light_grey
 titles:
   President:
@@ -113,22 +119,26 @@ titles:
     color: orange
     discord: ":prince:"
     unicode: "\U0001F934"
+    images: president_banners
   Admiral:
     priority: 4
     color: dark_green
     discord: ":dragon_face:"
     unicode: "\U0001F432"
+    images: admiral_banners
   Dictator:
     priority: 2
     color: purple
     titles: [President, Admiral]
     discord: ":smiling_imp:"
     unicode: "\U0001F608"
+    images: dictator_banners
   CAG:
     priority: 5
     color: dark_red
     discord: ":guardsman:"
     unicode: "\U0001F482"
+    images: cag_banners
   God:
     priority: 1
     color: purple
@@ -141,6 +151,30 @@ titles:
     titles: [theMutineer]
     discord: ":cowboy:"
     unicode: "\U0001F920"
+loyalty:
+  Cylon:
+    priority: 7
+    color: red
+    discord: ":robot:"
+    unicode: "\U0001F916"
+    images: cylon_banners
+  Human:
+    priority: 13
+    color: blue
+    discord: ":innocent:"
+    unicode: "\U0001F607"
+    images: banners
+  Infiltrator:
+    priority: 14
+    color: magenta
+    discord: ":spy:"
+    unicode: "\U0001F575"
+activations:
+  Basestars fire: B
+  Basestars launch Raiders: L
+  Raiders: R
+  Heavy Raiders: H
+  Occupation Forces: O
 ---
 expansion: base
 deck: crisis
@@ -167,7 +201,10 @@ cards:
   - name: Bomb Threat
     value: 13
     skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
   - name: Build Cylon Detector
+    cylon: Heavy Raiders
   - name: Colonial Day
     value: 10
     skills: [Politics, Tactics]
@@ -1065,6 +1102,7 @@ cards:
   - name: Support the People
     path: Support
     value: [1, 2]
+    skill: Politics
     reckless: True
   - name: Preventative Policy
     path: Prev Policy
@@ -1304,12 +1342,16 @@ path: BSG Loyalty
 cards:
   - name: Can Send a Character to the Brig
     path: Brig
+    allegiance: Cylon
   - name: Can Damage Galactica
     path: Damage Gal
+    allegiance: Cylon
   - name: Can Reduce Morale by 1
     path: Morale
+    allegiance: Cylon
   - name: Can Send a Character to Sickbay
     path: Sickbay
+    allegiance: Cylon
   - name: You Are a Sympathizer
     path: Sympathizer
 ---
@@ -1319,6 +1361,7 @@ path: BSP Loyalty
 cards:
   - name: Can Make Players Draw Treachery Cards
     path: Cylon
+    allegiance: Cylon
 ---
 expansion: exodus
 deck: loyalty

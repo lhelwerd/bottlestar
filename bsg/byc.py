@@ -3,7 +3,7 @@ Standalone interpreter of the BYC script that runs it in a sandbox and stores
 game states.
 """
 
-from base64 import b64decode, urlsafe_b64encode, urlsafe_b64decode
+from base64 import b64encode, b64decode, urlsafe_b64encode, urlsafe_b64decode
 import json
 import logging
 from pathlib import Path
@@ -63,8 +63,9 @@ class Dialog:
         return json.loads(urlsafe_b64decode(options.encode()).decode())
 
     # TODO: Language changes (BYC, Discord, CMD)
-    # press Cancel      | use !cancel                         | enter "cancel"
-    # quote this post   | talk to the bot in #byc-GAMEID-USER | ???
+    # press Cancel    | use **!cancel**                       | enter "cancel"
+    # quote this post | use **!byc** in their private channel | ???
+    # BGG             | Discord                               | command line
 
 class ByYourCommand:
     """
@@ -83,6 +84,9 @@ class ByYourCommand:
         self.load()
 
     def __del__(self):
+        self.stop()
+
+    def stop(self):
         if self.driver is not None:
             self.driver.quit()
             self.driver = None
@@ -107,7 +111,7 @@ class ByYourCommand:
         options.headless = True
         options.add_argument("allow-file-access-from-files")
         self.driver = webdriver.Chrome(chrome_options=options)
-        self.driver.set_window_size(533, 1600)
+        self.driver.set_window_size(600, 1600)
 
     def retrieve_game_state(self, force=False):
         try:
@@ -120,7 +124,7 @@ class ByYourCommand:
         except NoSuchElementException:
             raise ValueError("Context switched (state)")
 
-    def run_page(self, choices, game_state, force=False):
+    def run_page(self, choices, game_state, force=False, num=1):
         """
         Perform action(s) for a user through script dialogs to bring the game
         to a certain state.
@@ -133,7 +137,7 @@ class ByYourCommand:
 
         try:
             self.retrieve_game_state(force=force)
-            choices = choices[-1:]
+            choices = choices[-num:]
         except ValueError:
             page = f"game/page-{self.game_id}-{unique_hash(self.user)}.html"
             page_path = Path(page)
@@ -192,16 +196,27 @@ class ByYourCommand:
 
     def _get_game_state(self):
         textarea = self.driver.find_element_by_tag_name("textarea")
-        return f'[q="{self.user}"]{textarea.get_attribute("value")}[/q]'
+        value = textarea.get_attribute("value").encode("iso-8859-1").decode()
+        return f'[q="{self.user}"]{value}[/q]'
+
+    def load_game_seed(self, seed):
+        return json.loads(b64decode(seed.replace("-", "")).decode())
 
     def get_game_seed(self, game_state):
         match = self.GAME_SEED_REGEX.search(game_state)
         if match:
-            seed = match.group(1)
-            state = b64decode(seed.replace("-", "")).decode()
-            return json.loads(state)
+            return self.load_game_seed(match.group(1))
 
-        raise ValueError("No game seed found in text")
+        return {}
+
+    def make_game_seed(self, state):
+        return f"[size=0][color=#FFFFFF]New seed: {state}[/color][/size]"
+
+    def set_game_seed(self, game_state, seed):
+        encoded = b64encode(json.dumps(seed).encode()).decode()
+        state = "-".join(re.findall(r".{1,20}", encoded))
+        new_seed = self.make_game_seed(state)
+        return self.GAME_SEED_REGEX.sub(new_seed, game_state)
 
     def save_game_state_screenshot(self, html):
         """
@@ -277,7 +292,7 @@ class ByYourCommand:
         }
         seen = set()
         function_regex = re.compile(r"function (\w+)\([^)]*\) {")
-        image_regex = re.compile(r"imageO\((\d+)\)|\[ima\" \+ bl \+ \"geid=(\d+)\D")
+        image_regex = re.compile(r"image[MO]\((\d+)\)|\[ima\" \+ bl \+ \"geid=(\d+)\D", re.I)
         with self.SCRIPT_PATH.open('r') as script_file:
             for script in script_file:
                 for match in image_regex.finditer(script):

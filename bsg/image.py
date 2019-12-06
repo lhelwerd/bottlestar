@@ -13,8 +13,15 @@ class Images:
         self.api_url = api_url
         self.session = requests.Session()
         self.images = {}
+        self.banners = {}
         with open("images.yml") as images_file:
             for data in yaml.safe_load_all(images_file):
+                if data["type"].endswith("banners"):
+                    self.banners[data["type"]] = {
+                        name: image_id
+                        for image_id, name in data["images"].items()
+                    }
+
                 for image_id, text in data["images"].items():
                     text_format = data.get("format", "{}")
                     self.images[image_id] = text_format.format(text)
@@ -53,3 +60,6 @@ class Images:
                 image_file.write(chunk)
 
         return image_path
+
+    def banner(self, banner_type, name):
+        return self.banners.get(banner_type, {}).get(name)

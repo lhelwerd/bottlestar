@@ -132,7 +132,7 @@ def main():
                 print(f"Choices made so far: {choices}")
                 if len(dialog.buttons) == 1 and not dialog.input and choice != "undo":
                     print("Only one option is available, continuing.")
-                    choice = "\b1"
+                    choice = "1"
                 else:
                     choice = input()
                 run = True
@@ -196,7 +196,7 @@ def main():
     for hit in response:
         url = cards.get_url(hit.to_dict())
         print(f'{hit.name}: {url} (score: {hit.meta.score:.3f})')
-        print(hit.to_dict())
+        print(cards.get_text(hit))
 
 if __name__ == "__main__":
     main()

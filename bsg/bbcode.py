@@ -48,7 +48,7 @@ class BBCodeMarkdown(BBCode):
                                           context)
         text = self.images.retrieve(image_id, download=False)
         if not isinstance(text, PurePath):
-            return f"{text}\n"
+            return text
 
         logging.info('Found unknown image: %s', image_id)
         return ''

@@ -1,6 +1,6 @@
 ---
 type: actions
-format: "__**{}**__"
+format: "__**{}**__\n"
 images:
     "606443": "*Sleeper Phase*"
     "647924": "Dradis Contact"
@@ -8,6 +8,17 @@ images:
     "713177": "New Caprica"
     "735196": "Crisis"
     "606444": "*Jump*"
+    "954448": "*Crossroads*"
+---
+type: trauma
+format: "{}"
+images:
+    "900695": "Antagonistic: "
+    "900696": ""
+    "900697": "Disaster: "
+    "900698": ""
+    "900699": "Benevolent: "
+    "900700": ""
 ---
 type: die_rolls
 format: "**{}**"
@@ -30,7 +41,7 @@ images:
     "3789084": "8"
 ---
 type: banners
-format: "Player: {}"
+format: "Player: {}\n"
 images:
     "544211": "Adama"
     "544204": "Apollo"
@@ -74,7 +85,7 @@ images:
     "900675": "Crashdown"
 ---
 type: cylon_banners
-format: "Player: {} (Cylon)"
+format: "Player: {} (Cylon)\n"
 images:
     "551658": "Adama"
     "551665": "Apollo"
@@ -118,7 +129,7 @@ images:
     "1273566": "Crashdown"
 ---
 type: president_banners
-format: "Player: President {}"
+format: "Player: President {}\n"
 images:
     "1302932": "Adama"
     "1263108": "Apollo"
@@ -155,7 +166,7 @@ images:
     "1324091": "Crashdown"
 ---
 type: admiral_banners
-format: "Player: Admiral {}"
+format: "Player: Admiral {}\n"
 images:
     "1263070": "Adama"
     "1263072": "Apollo"
@@ -192,7 +203,7 @@ images:
     "1324094": "Crashdown"
 ---
 type: cag_banners
-format: "Player: CAG {}"
+format: "Player: CAG {}\n"
 images:
     "1263088": "Adama"
     "1263090": "Apollo"
@@ -228,8 +239,8 @@ images:
     "1324146": "Billy"
     "1324096": "Crashdown"
 ---
-type: banners
-format: "Player: Dictator {}"
+type: dictator_banners
+format: "Player: Dictator {}\n"
 images:
     "741584": "Adama"
     "1382131": "Apollo"

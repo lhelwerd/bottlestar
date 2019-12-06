@@ -1,7 +1,9 @@
 import argparse
 import asyncio
+from contextlib import contextmanager
 from datetime import datetime
 from glob import glob
+from itertools import chain, zip_longest
 import logging
 from pathlib import Path
 import re
@@ -48,11 +50,27 @@ byc_commands = {
     "commit": "Show result of series of actions in public",
     "state": "Display game state in public (must **!commit** afterward)",
     "hand": "Display hand in private",
-    "undo": ("step", "Go back step(s) in the series of actions (expensive)"),
+    "undo": ("step", "Go back step(s) in the actions/states (expensive)"),
     "redo": "Perform the series of actions again (expensive), for bot restarts",
     "reset": "Go back to the start of the series of actions (like **!byc**)",
-    "cleanup": ("channel", "Delete all items related to the current game")
+    "cleanup": ("channel", "Delete all items related to the current game"),
+    "refresh": "Perform updates for the current game (role positions)"
 }
+byc_role_text = {
+    "character": (" chooses to play ", " returns as ", " pick a new character"),
+    "title": (" is now the ", " the Mutineer.", " receives the Mutineer card "),
+    "loyalty": (" reveals ", " becomes a Cylon.", " is a [color=red]Cylon[/color]!")
+}
+
+async def send_message(channel, message, **kwargs):
+    messages = []
+    while len(message) > 2000:
+        pos = message.rfind('\n', 0, 2000 - 1)
+        messages.append(await channel.send(message[:pos]))
+        message = message[pos+1:]
+
+    messages.append(await channel.send(message, **kwargs))
+    return messages
 
 async def check_for_updates(client, server_id, channel_id):
     if server_id is None or channel_id is None:
@@ -68,7 +86,7 @@ async def check_for_updates(client, server_id, channel_id):
             logging.info('We have a new message in the RSS, posting')
             guild = client.get_guild(server_id)
             channel = guild.get_channel(channel_id)
-            await channel.send(replace_roles(next(message), guild))
+            await send_message(channel, replace_roles(next(message), guild))
         except StopIteration:
             logging.info("No new message")
 
@@ -87,9 +105,11 @@ def replace_roles(message, guild=None, seed=None, users=False, deck=True):
         if not role.mentionable:
             continue
         if seed is None or role.name in seed["players"] or role.name in titles:
-            message = re.sub(rf"\b{role.name}\b", role.mention, message)
+            message = re.sub(rf"\b{role.name}\b(?!['-])", role.mention,
+                             message)
 
     if seed is not None and users:
+        logging.info("Usernames to replace: %r", seed["usernames"])
         for username in seed["usernames"]:
             member = guild.get_member_named(username)
             if member is not None:
@@ -106,32 +126,58 @@ async def on_ready():
             logging.info('Channel: %s #%d', channel.name, channel.id)
         for role in guild.roles:
             if role.mentionable:
-                logging.info('Role: %s', role.name)
+                logging.info('Role: %s (#%d)', role.name, role.position)
 
     client.loop.create_task(check_for_updates(client, config.get('server_id'),
                                               config.get('channel_id')))
 
 def format_private_channel(channel_name, user):
-    # If user contains spaces then remove/replace those
-    return f"byc-{channel_name}-{user.split(' ')[0].lower()}"
+    return f"byc-{channel_name}-{format_username(user)}"
 
-async def byc_cleanup(guild, channel, game_id):
+def format_username(user, replacement="-"):
+    # Remove/replace spaces and other special characters (channel name-safe)
+    return re.sub(r"\W+", replacement, user).strip(replacement)
+
+async def byc_cleanup(guild, channel, game_id, user, game_state_path):
+    # Cleanup channels
     await channel.edit(topic="", reason="Cleanup of BYC status")
     private_channel_prefix = f"byc-{channel.name}-"
-    for channel in guild.channels:
-        if channel.name.startswith(private_channel_prefix):
-            # TODO: Cleanup BYC roles of the user
-            #user = channel.name[len(private_channel_prefix):]
+    for other_channel in guild.channels:
+        if other_channel.name.startswith(private_channel_prefix):
             await channel.delete(reason="Cleanup of private channels for BYC")
 
-    for path in glob(f"game/game-{game_id}*.txt"):
+    # Cleanup roles of users involved in the game
+    with game_state_path.open('r') as game_state_file:
+        game_state = game_state_file.read()
+        with get_byc(game_id, user) as byc:
+            game_seed = byc.get_game_seed(game_state)
+
+    roles = {role.name: role for role in guild.roles}
+    empty_game_seed = game_seed.copy()
+    empty_game_seed["players"] = []
+    for key, title in cards.titles.items():
+        empty_game_seed.update({field: -1 for field in get_titles(key, title)})
+
+    banner_priority = [float('inf')] * len(game_seed["usernames"])
+    await update_character_roles(guild, roles, game_seed, empty_game_seed)
+    await update_title_roles(guild, roles, game_seed, empty_game_seed,
+                             banner_priority)
+    if "Cylon" in roles:
+        for user in seed["usernames"]:
+            member = guild.get_member_named(user)
+            if member is not None:
+                await member.remove_roles(roles["Cylon"])
+
+    # Cleanup game states and HTML pages/screenshots
+    game_state_path.unlink()
+    for path in glob(f"game/game-{game_id}-*.txt"):
         Path(path).unlink()
     for path in glob(f"game/game-state-{game_id}-*"):
         Path(path).unlink()
     for path in glob(f"game/page-{game_id}-*.html"):
         Path(path).unlink()
 
-async def create_role(guild, name, metadata, class_name=None):
+async def create_role(guild, name, metadata, class_name=None, mentionable=True):
     if class_name is None:
         class_name = name
 
@@ -142,12 +188,16 @@ async def create_role(guild, name, metadata, class_name=None):
         logging.exception("Could not get class/title color for %s", name)
         color = discord.Colour.default()
 
-    return await guild.create_role(name=name, colour=color, mentionable=True)
+    return await guild.create_role(name=name, colour=color,
+                                   mentionable=mentionable)
 
-async def update_character_roles(guild, seed):
-    roles = {role.name: role for role in guild.roles}
-    for username, character in zip(seed["usernames"], seed["players"]):
-        if character not in roles:
+async def update_character_roles(guild, roles, old_seed, seed):
+    iterator = zip_longest(seed["usernames"], seed["players"],
+                           old_seed.get("players"))
+    for username, character, old_character in iterator:
+        if character is None:
+            role = None
+        elif character not in roles:
             # Search in cards what the class is and use metadata for color
             search = Card.search(using='main').source(['character_class']) \
                 .filter("term", deck="char").query("match", path=character)
@@ -165,31 +215,93 @@ async def update_character_roles(guild, seed):
 
         member = guild.get_member_named(username)
         if member is not None:
-            await member.add_roles(role)
+            if role is not None:
+                await member.add_roles(role)
+            if old_character is not None and old_character != character and \
+                old_character in roles:
+                await member.remove_roles(roles[old_character])
+
+def get_titles(key, title):
+    keys = title.get("titles", [key])
+    return [name if name[0].islower() else name.lower() for name in keys]
 
 def has_titles(seed, titles, index):
     return index != -1 and all(seed.get(name, -1) == index for name in titles)
 
-async def update_title_roles(guild, old_seed, seed):
-    roles = {role.name: role for role in guild.roles}
+def update_banner(seed, banner_priority, index, metadata):
+    if "images" in metadata and banner_priority[index] > metadata["priority"]:
+        banner = images.banner(metadata["images"], seed["players"][index])
+        if banner is not None:
+            banner_priority[index] = metadata["priority"]
+            updated = seed["banners"][index] != banner
+            seed["banners"][index] = banner
+            return updated
+
+    return False
+
+async def update_title_roles(guild, roles, old_seed, seed, banner_priority):
+    updated = False
     for key, title in cards.titles.items():
-        keys = title.get("titles", [key])
-        titles = [name if name[0].islower() else name.lower() for name in keys]
+        titles = get_titles(key, title)
         old_index = old_seed.get(titles[0], -1)
         index = seed.get(titles[0], -1)
         role = roles.get(key)
         if has_titles(seed, titles, index):
+            if update_banner(seed, banner_priority, index, title):
+                updated = True
+
             if role is None:
                 role = await create_role(guild, key, cards.titles)
             user = seed["usernames"][index]
             member = guild.get_member_named(user)
             if member is not None:
                 await member.add_roles(role)
-        elif role is not None and has_titles(old_seed, titles, old_index):
+
+        if role is not None and has_titles(old_seed, titles, old_index) and \
+            not has_titles(seed, titles, old_index):
+            if update_banner(seed, banner_priority, old_index,
+                             cards.loyalty["Human"]):
+                updated = True
+
             old_user = seed["usernames"][old_index]
             old_member = guild.get_member_named(old_user)
             if old_member is not None:
                 await old_member.remove_roles(role)
+
+    return updated
+
+async def update_loyalty_roles(guild, roles, old_seed, seed, banner_priority):
+    updated = False
+    iterator = enumerate(zip(seed["revealedCylons"], seed["usernames"]))
+    for index, (cylon, user) in iterator:
+        loyalty = "Cylon" if cylon else "Human"
+        if update_banner(seed, banner_priority, index, cards.loyalty[loyalty]):
+            updated = True
+        if cylon:
+            role = roles.get(loyalty)
+            if role is None:
+                role = await create_role(guild, loyalty, cards.loyalty,
+                                         mentionable=False)
+            member = guild.get_member_named(user)
+            if member is not None:
+                await member.add_roles(role)
+
+    return updated
+
+async def sort_roles(guild):
+    roles = {role.name: role for role in guild.roles}
+    iterator = chain(cards.character_classes.items(),
+                     cards.titles.items(), cards.loyalty.items())
+    priorities = {name: title.get("priority", 99) for name, title in iterator}
+    search = Card.search(using='main').source(['path']) \
+        .filter("term", deck="char")
+    priorities.update({char.path: 99 for char in search.scan()})
+    sorted_roles = sorted(roles.items(),
+                          key=lambda item: priorities.get(item[0], -1))
+    logging.info('%r', sorted_roles)
+    for i, (name, role) in enumerate(reversed(sorted_roles)):
+        if name in priorities:
+            await role.edit(position=i + 1)
 
 async def update_channel(channel, game_id, dialog, choices):
     if not choices and channel.id == game_id:
@@ -210,7 +322,7 @@ async def update_channels(guild, channel, game_id, seed):
         byc_category = await guild.create_category('By Your Command')
 
     for user in seed["usernames"]:
-        private_channel = f"byc-{channel.name}-{user}"
+        private_channel = f"byc-{channel.name}-{format_username(user)}"
         deny = discord.PermissionOverwrite(read_messages=False,
                                            send_messages=False)
         allow = discord.PermissionOverwrite(read_messages=True,
@@ -237,7 +349,173 @@ def is_byc_enabled(guild, channel):
         return False
 
     permissions = guild.get_member(client.user.id).permissions_in(channel)
-    return permissions.is_superset(discord.Permissions(402902032))
+    return permissions.is_superset(discord.Permissions(402910224))
+
+@contextmanager
+def get_byc(game_id, user, keep=None):
+    key = f"{game_id}-{user}"
+    if key not in byc_games:
+        byc_games[key] = ByYourCommand(game_id, user, config['script_url'])
+
+    try:
+        yield byc_games[key]
+    finally:
+        if keep is None or not keep():
+            byc_games.pop(key, None)
+
+def format_undo_option(guild, data, timestamp):
+    if data == {}:
+        return 'Current game state'
+
+    if "user" in data:
+        member = guild.get_member_named(data["user"])
+        mention = member.mention if member is not None else data["user"]
+    else:
+        mention = "an unknown user"
+
+    date = timestamp.strftime("%Y-%m-%d %H:%M:%S")
+    if "undo" in data:
+        return (f'Undone game state that went {data["undo"]} steps back at '
+                f'{date} triggered by {mention}')
+
+    return f'Turn {data["round"]}.{data["turn"]+1} at {date} posted by {mention}'
+
+def get_undo_data(files, timestamps, index, game_seed):
+    if index >= len(timestamps) - 1:
+        return game_seed
+
+    return files[timestamps[index + 1]]
+
+async def undo_backup(guild, channel, game_id, user, choice):
+    files = {}
+    game_seed = {}
+    game_state_path = Path(f"game/game-{game_id}.txt")
+    for path in glob(f"game/game-{game_id}-*.txt"):
+        parts = path.split('-')
+        timestamp = datetime.strptime('-'.join(parts[4:-1]),
+                                      '%Y-%m-%d %H:%M:%S.%f')
+        files[timestamp] = {
+            "path": Path(path),
+            "user": parts[-1][:-len(".txt")]
+        }
+        if parts[2].isnumeric():
+            files[timestamp].update({
+                "round": int(parts[2]),
+                "turn": int(parts[3]),
+            })
+        else:
+            files[timestamp]["undo"] = int(parts[3])
+
+    timestamps = sorted(files.keys())[-10:]
+    if choice.isnumeric() and 0 <= int(choice) < len(timestamps) and \
+        (int(choice) != 0 or "undo" in files[0]):
+        index = len(timestamps) - int(choice) - 1
+        path = files[timestamps[index]]["path"]
+        data = get_undo_data(files, timestamps, index, game_seed)
+        backup = f"game/game-{game_id}-undo-{choice}-{datetime.now()}-{format_username(user, '_')}.txt"
+        shutil.copy(str(game_state_path), backup)
+        if path != game_state_path:
+            shutil.copy(str(path), str(game_state_path))
+            path.unlink()
+
+        if int(choice) == 0:
+            label = "to the latest undone game state: "
+        else:
+            label = f"{choice} game states to "
+        label += format_undo_option(guild, data, timestamp)
+        await channel.send(f'Going back {label}...')
+        with game_state_path.open('r') as game_state_file:
+            game_state = game_state_file.read() 
+            with get_byc(game_id, user) as byc:
+                await byc_public_result(byc, guild, channel,
+                                        game_state=game_state)
+
+        return
+
+    # Display options, including latest game seed data
+    with game_state_path.open('r') as game_state_file:
+        game_state = game_state_file.read()
+        with get_byc(game_id, user) as byc:
+            game_seed = byc.get_game_seed(game_state)
+
+        match = re.match(r'\[q="([^"]*)"\]', game_state)
+        if match:
+            game_seed["user"] = match.group(1)
+
+    msg = ""
+    for index, timestamp in enumerate(timestamps):
+        data = get_undo_data(files, timestamps, index, game_seed)
+        if index == len(timestamps) - 1:
+            msg += '\nCurrent game state: '
+        else:
+            msg += f'\n{len(timestamps) - index - 1}. '
+        msg += format_undo_option(guild, data, timestamp)
+
+    await channel.send(f"Pick a state to undo to with **!undo <number>**:{msg}")
+
+async def byc_public_result(byc, guild, main_channel, game_state_path=None,
+                            game_state="", old_game_state="",
+                            initial_setup=False):
+    seed = byc.get_game_seed(game_state)
+    users = initial_setup
+    updated = False
+    old_seed = {}
+    role_texts = {}
+    roles = {}
+    banner_priority = [float('inf')] * len(seed["usernames"])
+    for role_group, role_text in byc_role_text.items():
+        role_texts[role_group] = any(text in game_state for text in role_text)
+        if role_texts[role_group] and old_seed is None:
+            old_seed = byc.get_game_seed(old_game_state)
+            roles = {role.name: role for role in guild.roles}
+
+    if role_texts["character"]:
+        users = True
+        await update_character_roles(guild, roles, old_seed, seed)
+    if role_texts["title"]:
+        if await update_title_roles(guild, roles, old_seed, seed, banner_priority):
+            updated = True
+    if role_texts["loyalty"]:
+        if await update_loyalty_roles(guild, roles, old_seed, seed, banner_priority):
+            updated = True
+
+    if initial_setup:
+        await update_channels(guild, main_channel, byc.game_id, seed)
+
+    if any(style != 1 for style in seed.get("promptStyle", [])):
+        seed["promptStyle"] = [1] * len(seed["players"])
+        updated = True
+    if updated:
+        game_state = byc.set_game_seed(game_state, seed)
+
+    if game_state_path is not None:
+        if "round" in seed:
+            backup = f'game/game-{byc.game_id}-{seed["round"]}-{seed["turn"]}-{datetime.now()}-{format_username(byc.user, "_")}.txt'
+            shutil.copy(str(game_state_path), backup)
+
+        with game_state_path.open('w') as game_state_file:
+            game_state_file.write(game_state)
+
+    # Process the game state (BBCode -> Markdown and HTML game state)
+    game_state_markdown = bbcode.process_bbcode(game_state)
+    public_message = replace_roles(game_state_markdown, guild,
+                                   seed=seed, users=users, deck=False)
+
+    if bbcode.game_state != "":
+        path = byc.save_game_state_screenshot(bbcode.game_state)
+        image = discord.File(path)
+    else:
+        image = None
+
+    new_messages = await send_message(main_channel, public_message, file=image)
+
+    # Pin the message if it has a screenshot - unpin others
+    if image is not None:
+        pins = await main_channel.pins()
+        for pin in pins:
+            await pin.unpin()
+        for new_message in new_messages:
+            await new_message.pin()
 
 async def byc_command(message, command, arguments):
     choice = ' '.join(arguments)
@@ -292,19 +570,27 @@ async def byc_command(message, command, arguments):
                                    "this channel's #name.")
                 return
 
-            await byc_cleanup(guild, channel, game_id)
+            await byc_cleanup(guild, channel, game_id, user, game_state_path)
             await channel.send("All items related to the BYC game deleted.")
             return
-        elif choices and choices[0] == "byc":
-            if choices[1] != user:
+        elif command == "refresh":
+            await sort_roles(guild)
+            await channel.send("Roles have been repositioned.")
+            return
+        elif len(choices) >= 2 and choices[0] == "byc":
+            if choices[1] != format_username(user):
                 member = guild.get_member_named(choices[1])
                 mention = member.mention if member is not None else choices[1]
                 await channel.send("The game is currently being set up. Only "
-                                   "{mention} is able to answer the dialogs.")
+                                   f"{mention} is able to answer the dialogs.")
                 return
 
             initial_setup = True
-        else:
+        elif command in ("undo", "redo"):
+            await undo_backup(guild, channel, game_id, user,
+                              '0' if command == "redo" else choice)
+            return
+        elif command != "state":
             reply = ("A BYC game is currently underway in this channel and "
                      "you do not seem to be a part of this game. To start "
                      "a new game, use another channel and type **!byc**.")
@@ -316,9 +602,13 @@ async def byc_command(message, command, arguments):
 
             await channel.send(reply)
             return
-    elif command == "cleanup":
-        await channel.send("Please use the command **!cleanup #main_channel** "
-                           "from within the main BYC game channel.")
+    elif command in ("cleanup", "refresh"):
+        if command == "cleanup":
+            example = "**!cleanup** #main_channel"
+        else:
+            example = f"**!{command}**"
+        await channel.send(f"Please use the command {example} from within "
+                           "the main BYC game channel.")
         return
 
     if command in ("ok", "cancel"):
@@ -334,12 +624,12 @@ async def byc_command(message, command, arguments):
     force = False
     if command == "undo":
         try:
-            choice = int(choice)
+            count = int(choice)
         except ValueError:
-            choice = 1
+            count = 1
 
         await channel.send(f"Undoing last {choice} choice(s)...")
-        choices = choices[:-choice]
+        choices = choices[:-count]
         force = True
     elif command == "redo":
         await channel.send("Redoing choices...")
@@ -350,128 +640,112 @@ async def byc_command(message, command, arguments):
         force = True
     elif command == "hand":
         if choices and "Save and Quit" not in options:
-            await channel.send("Showing game state is only possible when you "
-                               "are in the main menu.")
+            await channel.send("Showing hand report is only possible when you "
+                               "are in the main dialog.")
             return
         choices.append("1")
     elif command == "state":
-        # TODO: Remove !state, !hand choices afterward to avoid too long chain
-        if choices and "Save and Quit" not in options:
+        if channel.id == game_id and not initial_setup:
+            choices = ["2", "\b2", "\b1"]
+            force = True
+        elif choices and "Save and Quit" not in options:
             await channel.send("Showing game state is only possible when you "
                                "are in the main dialog.")
             return
-        choices.append("2")
+        else:
+            choices.append("2")
     elif command == "byc":
-        choices = ["byc", user] if initial_setup else []
+        choices = ["byc", format_username(user)] if initial_setup else []
         force = not initial_setup
     elif choice in options:
         choices.append(f"\b{options[choice] + 1}")
     elif has_input:
-        choices.append(choice)
-    elif choice.isnumeric() and 0 < int(choice) < num_buttons:
+        if initial_setup and choice.startswith('<@') and message.mentions:
+            choices.append(message.mentions[0].name)
+        else:
+            choices.append(choice)
+    elif choice.isnumeric() and 0 < int(choice) <= num_buttons:
         choices.append(f"\b{choice}")
     else:
         await channel.send("Option not known. Correct your command usage.")
         return
 
-    key = f"{game_id}-{user}"
-    if key not in byc_games:
-        byc_games[key] = ByYourCommand(game_id, user, config['script_url'])
+    query = False
+    with get_byc(game_id, user, keep=lambda: query) as byc:
+        if not initial_setup:
+            # Try to avoid reading files all the time and use the browser's
+            # current game state instead
+            try:
+                game_state = byc.retrieve_game_state(force=force)
+            except ValueError:
+                with game_state_path.open('r') as game_state_file:
+                    game_state = game_state_file.read()
 
-    byc = byc_games[key]
+        run = True
+        while run:
+            dialog = byc.run_page(choices[2:] if initial_setup else choices,
+                                  game_state, force=force)
 
-    if not initial_setup:
-        # Try to avoid reading files all the time and use the browser's current 
-        # game state instead
-        try:
-            game_state = byc.retrieve_game_state(force=force)
-        except ValueError:
-            with game_state_path.open('r') as game_state_file:
-                game_state = game_state_file.read()
+            # Store choices into the topic, adjust channel topic
+            query = isinstance(dialog, Dialog)
+            if query:
+                await update_channel(channel, game_id, dialog, choices)
+                if len(dialog.buttons) == 2 and not dialog.input:
+                    if dialog.buttons[0] == "Dialog":
+                        # Do not allow hand display in Spoiler
+                        # TODO: Unless the game has ended and the command is
+                        # used from the main game channel
+                        choices.append("\b1")
+                        continue
+                    if command == "state":
+                        await send_message(channel, dialog.msg)
+                        choices.append("\b2")
+                        continue
 
-    run = True
-    while run:
-        dialog = byc.run_page(choices[2:] if initial_setup else choices,
-                              game_state, force=force)
+                if command == "state":
+                    reply = ("Options: **!commit**: Save and Quit,"
+                             "**!undo 2**, **!reset**")
+                    run = False
+                else:
+                    reply = cards.replace_cards(dialog.msg, deck=False)
+                    if "Save and Quit" in dialog.options:
+                        reply = reply \
+                            .replace("Print Hand Report",
+                                     "Show Hand Report (**!hand**)") \
+                            .replace("Display Game State",
+                                     "Post Game State (**!state**)")
+                    if len(dialog.buttons) > 1 or dialog.input or \
+                        command == "undo":
+                        buttons = ["cancel", "ok"]
+                        options = ', '.join([
+                            format_button(buttons[index], text)
+                            for index, text in enumerate(dialog.buttons)
+                            if not dialog.input or buttons[index] != "ok"
+                        ])
+                        if dialog.input:
+                            sample = "input" if initial_setup else "number"
+                            options += f', **!choose** <{sample}>'
+                        if command == "undo":
+                            options += ', **!undo**'
 
-        # Store choices into the topic, adjust channel topic
-        query = isinstance(dialog, Dialog)
-        if query:
-            await update_channel(channel, game_id, dialog, choices)
-            if len(dialog.buttons) == 2 and not dialog.input:
-                if dialog.buttons[0] == "Dialog":
-                    # Do not allow hand display in Spoiler
-                    # TODO: Unless the game has ended
-                    choices.append("\b1")
-                    continue
-                elif command == "state":
-                    await channel.send(dialog.msg)
-                    choices.append("\b2")
-                    continue
+                        reply += f"\nOptions: {options}"
+                        run = False
+                    else:
+                        choices.append("\b1")
 
-            reply = cards.replace_cards(dialog.msg, deck=False)
-            if command == "state":
-                reply = "Options: **!commit**: Save and Quit, **!undo 2**, **!reset**"
-                run = False
-            elif len(dialog.buttons) > 1 or dialog.input or command == "undo":
-                buttons = ["cancel", "ok"]
-                options = ', '.join([
-                    format_button(buttons[index], text)
-                    for index, text in enumerate(dialog.buttons)
-                    if buttons[index] != "ok" or not dialog.input
-                ])
-                if dialog.input:
-                    options += ', **!choose** <number>'
-                if command == "undo":
-                    options += ', **!undo**'
-
-                reply += f"\nOptions: {options}"
-                run = False
+                await send_message(channel, reply)
             else:
-                choices.append("\b1")
+                if channel.id != game_id or command != "state":
+                    await update_channel(channel, game_id, Dialog.EMPTY, [])
+                # Update based on game state
+                main_channel = guild.get_channel(game_id)
+                await byc_public_result(byc, guild, main_channel,
+                                        game_state_path=game_state_path,
+                                        game_state=dialog,
+                                        old_game_state=game_state,
+                                        initial_setup=initial_setup)
 
-            await channel.send(reply)
-        else:
-            await update_channel(channel, game_id, Dialog.EMPTY, [])
-            # Update based on game state
-            seed = byc.get_game_seed(dialog)
-            users = initial_setup
-            if " chooses to play " in dialog:
-                users = True
-                await update_character_roles(guild, seed)
-            if " is now the " in dialog:
-                try:
-                    old_seed = byc.get_game_seed(game_state)
-                except ValueError:
-                    old_seed = {}
-
-                await update_title_roles(guild, old_seed, seed)
-            if initial_setup:
-                await update_channels(guild, channel, game_id, seed)
-
-            if "round" in seed:
-                backup = f'game/game-{game_id}-{seed["round"]}-{seed["turn"]}-{datetime.now()}-{user}.txt'
-                shutil.copy(str(game_state_path), backup)
-
-            with game_state_path.open('w') as game_state_file:
-                game_state_file.write(dialog)
-
-            # Process the game state (BBCode -> Markdown and HTML game state)
-            game_state_markdown = bbcode.process_bbcode(dialog)
-            public_message = replace_roles(game_state_markdown, guild,
-                                           seed=seed, users=users, deck=False)
-
-            if bbcode.game_state != "":
-                path = byc.save_game_state_screenshot(bbcode.game_state)
-                image = discord.File(path)
-            else:
-                image = None
-
-            main_channel = guild.get_channel(game_id)
-            await main_channel.send(public_message, file=image)
-
-            byc_games.pop(key, None)
-            run = False
+                run = False
 
 def format_command(command, description):
     if isinstance(description, tuple):
@@ -499,13 +773,13 @@ async def on_message(message):
                 for command, description in byc_commands.items()
             ])
 
-        await message.channel.send(reply)
+        await send_message(message.channel, reply)
         return
 
     # BYC commands
     # Required permissions: Manage Roles, Manage Channels, Manage Nicknames,
-    # View Channels, Send Messages, Embed Links, Attach Files,
-    # Read Message History, Mention Everyone (402902032)
+    # View Channels, Send Messages, Manage Messages, Embed Links, Attach Files,
+    # Read Message History, Mention Everyone (402910224)
     #
     # Undocumented commands:
     # !bot      | test command
@@ -522,6 +796,7 @@ async def on_message(message):
 
     if command == "bot":
         await message.channel.send(f'Hello {message.author.mention}!')
+        return
     if command == "latest":
         try:
             await message.channel.send(replace_roles(next(rss.parse()),
