@@ -1369,34 +1369,49 @@ path: BSE Loyalty
 cards:
   - name: Can Place a Centurion Token on the Boarding Party Track
     path: Cylon 1
+    allegiance: Cylon
   - name: Can Decrease the Jump Preparation Track by 2
     path: Cylon 2
+    allegiance: Cylon
   - name: 'The Final Five: Whoever Examines this Card is Executed'
     path: FinalFive1
+    allegiance: Human
   - name: 'The Final Five: If this Card is Examined, Cylon Ships are Activated'
     path: FinalFive2
+    allegiance: Human
   - name: 'The Final Five: If this Card is Examined, Galactica is Damaged Twice'
     path: FinalFive3
+    allegiance: Human
   - name: 'The Final Five: If this Card is Examined, you are Executed'
     path: FinalFive4
+    allegiance: Human
   - name: 'The Final Five: Whoever Examines this Card is Sent to the "Brig"'
     path: FinalFive5
+    allegiance: Human
   - name: 'Personal Goal: Acquire Power: 2 or more Title Cards at the Same Time'
     path: PG Aquire Power
+    allegiance: Human
   - name: 'Personal Goal: Devastation: Admiral has no Remaining Nuke Tokens'
     path: PG Devastation
+    allegiance: Human
   - name: 'Personal Goal: Political Intrigue: The President is in the "Brig"'
     path: PG Pol Intrigue
+    allegiance: Human
   - name: 'Personal Goal: Sacrifice: 6 Vipers Damaged or Destroyed'
     path: PG Sacrifice
+    allegiance: Human
   - name: 'Personal Goal: Self-Destruction: In the "Brig" or "Sickbay"'
     path: PG Self Destruct
+    allegiance: Human
   - name: 'Personal Goal: Selfish: Discard Skill Cards Equal to 20 Strength'
     path: PG Selfish
+    allegiance: Human
   - name: 'Personal Goal: Stand and Fight: 10 or More Raiders'
     path: PG Stand Fight
+    allegiance: Human
   - name: 'Personal Goal: Use Caution: The Fleet has Made a 1-Distance Jump'
     path: PG Use Caution
+    allegiance: Human
 ---
 expansion: daybreak
 deck: motive
