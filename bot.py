@@ -849,7 +849,7 @@ async def on_message(message):
     else:
         for hit in response:
             url = cards.get_url(hit.to_dict())
-            await message.channel.send(f'{url} (score: {hit.meta.score:.3f}, {count} hits)')
+            await message.channel.send(f'{cards.get_text(hit)}\n{url} (score: {hit.meta.score:.3f}, {count} hits)')
             break
 
 if __name__ == "__main__":

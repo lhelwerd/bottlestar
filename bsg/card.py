@@ -23,7 +23,10 @@ class Cards:
                 for key, value in items.items()
             ])}""")
         },
-        'special': lambda text: f"\n**3. Special Rule** - {text}" # Italics?
+        'special': lambda text: f"\n**3. Special Rule** - {text}",
+        'skillset': ('dict', lambda items: f"""\n{', '.join([
+            str(value) + " " + key.title() for key, value in items.items()
+        ])}""")
     }
 
     def __init__(self, url):
@@ -147,6 +150,8 @@ class Cards:
         deck = self.decks.get(card.deck, {})
         expansion = self.expansions.get(card.expansion, "BSG")
         msg = f"{expansion} {deck.get('name', card.deck)}: **{card.name}**"
+        if card.character_class is not None:
+            msg += f" ({card.character_class})"
         if card.value is not None:
             msg += f" - {'/'.join(str(value) for value in card.value)}"
         if card.jump is not None:
