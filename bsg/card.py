@@ -157,7 +157,7 @@ class Cards:
         if card.character_class is not None:
             msg += f" ({card.character_class})"
         if card.value is not None:
-            msg += f" - {'/'.join(str(value) for value in card.value)}"
+            msg += f" - [{'|'.join(str(value) for value in card.value)}]"
         if card.jump is not None:
             if card.skills is not None:
                 msg += ''.join([
@@ -182,7 +182,7 @@ class Cards:
             msg += f"\n**Allegiance: {card.allegiance}**"
 
         try:
-            data = json.loads(card['text'], object_pairs_hook=OrderedDict)
+            data = json.loads(card.text, object_pairs_hook=OrderedDict)
             msg += self._parse_text(data, deck=card.deck)
         except ValueError:
             logging.exception("Not actually json")

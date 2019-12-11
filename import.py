@@ -41,7 +41,8 @@ def main():
             ability = meta['decks'][deck].get('ability')
             reckless = meta['decks'][deck].get('reckless')
             path = data.get('path', meta['decks'][deck].get('path', deck_name))
-            replace = data.get('replace', meta['decks'][deck].get('replace', '_'))
+            # Insert with spaces for better Elastisearch tokenization
+            replace = data.get('replace', meta['decks'][deck].get('replace', ' '))
             ext = data.get('ext', meta['decks'][deck]['ext'])
             for card in data['cards']:
                 card_path = card.get('path', card['name'])
