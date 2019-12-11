@@ -59,6 +59,7 @@ def main():
                 doc = Card(name=card['name'],
                            prefix=path,
                            path=card_path.replace(' ', replace),
+                           url=card.get('url'),
                            deck=deck,
                            expansion=expansion,
                            ext=card.get('ext', ext),

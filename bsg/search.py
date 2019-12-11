@@ -7,6 +7,7 @@ class Card(Document):
 
     name = Text(analyzer='snowball', fields={'raw': Keyword()})
     path = Text(analyzer='snowball', fields={'raw': Keyword()})
+    url = Keyword()
     deck = Keyword()
     expansion = Keyword()
     ext = Keyword()

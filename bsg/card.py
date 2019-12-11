@@ -95,6 +95,10 @@ class Cards:
         return self._build_regex(card.name for card in search.scan())
 
     def get_url(self, card):
+        url = card.get('url')
+        if url is not None:
+            return url
+
         default_deck = {
             'name': card['deck'],
             'ext': 'png'

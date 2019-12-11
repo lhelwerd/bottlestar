@@ -1051,6 +1051,10 @@ cards:
   - name: Kendra Shaw
     path: Shaw
     class: Military Leader
+  - name: Diana Hardball Seelix
+    path: Seelix
+    url: ""
+    class: Pilot
 ---
 expansion: base
 deck: skill
@@ -1412,6 +1416,13 @@ cards:
   - name: 'Personal Goal: Use Caution: The Fleet has Made a 1-Distance Jump'
     path: PG Use Caution
     allegiance: Human
+---
+expansion: daybreak
+deck: loyalty
+path: BSD Loyalty
+cards:
+  - name: You Are The Mutineer
+    url: https://images-cdn.fantasyflightgames.com/ffg_content/Battlestar_Galactica/daybreak/BSG04_Card_Loyalty-YouAreTheMutineer.png
 ---
 expansion: daybreak
 deck: motive
