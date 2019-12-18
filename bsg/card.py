@@ -143,7 +143,13 @@ class Cards:
                 for subkey, subtext in text.items()
             ])
         else:
-            result = f"\n{text}"
+            if isinstance(text, list) and len(text) == 2:
+                text = f"**{text[0]}:** {text[1]}"
+            if key != "" and key[0].isupper():
+                separator = self.decks.get(deck, {}).get("separator", ":")
+                result = f"\n**{key}{separator}** {text}"
+            else:
+                result = f"\n{text}"
 
         if parser is not None:
             return parser(result.lstrip("\n"))
@@ -153,7 +159,14 @@ class Cards:
     def get_text(self, card):
         deck = self.decks.get(card.deck, {})
         expansion = self.expansions.get(card.expansion, "BSG")
-        msg = f"{expansion} {deck.get('name', card.deck)}: **{card.name}**"
+        msg = f"{expansion} {deck.get('name', card.deck)}: "
+        if card.allegiance is not None and card.deck == "loyalty":
+            if card.allegiance == "Cylon":
+                yaac = "You Are a Cylon"
+            else:
+                yaac = "You Are Not a Cylon"
+            msg += f"**{yaac}**\n"
+        msg += f"**{card.name}**"
         if card.character_class is not None:
             msg += f" ({card.character_class})"
         if card.value is not None:
@@ -178,8 +191,11 @@ class Cards:
                 msg += extra
         elif card.skills is not None:
             msg += f" ({card.skills[0]})"
-        elif card.allegiance is not None:
+        elif card.allegiance is not None and card.deck != "loyalty":
             msg += f"\n**Allegiance: {card.allegiance}**"
+
+        if card.reckless:
+            msg += f"\n**Reckless**"
 
         try:
             data = json.loads(card.text, object_pairs_hook=OrderedDict)

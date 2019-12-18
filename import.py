@@ -11,6 +11,10 @@ def parse_args():
     log_options = ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']
     parser.add_argument('--log', default='INFO', choices=log_options,
                         help='log level')
+    parser.add_argument('--host', default='localhost',
+                        help='ElasticSearch host')
+    parser.add_argument('cards', nargs='*',
+                        help='Only replace these cards (must not be renamed)')
     args = parser.parse_args()
     return args
 
@@ -20,10 +24,12 @@ def main():
                         level=getattr(logging, args.log, None))
 
     # Define a default Elasticsearch client
-    connections.create_connection(hosts=['localhost'])
+    connections.create_connection(alias='main', hosts=[args.host])
 
-    Card._index.delete(ignore=404)
-    Card.init()
+    if not args.cards:
+        logging.info('Cleaning up entire index')
+        Card._index.delete(using='main', ignore=404)
+        Card.init(using='main')
 
     meta = {}
     with open("data.yml", "r") as data_file:
@@ -45,6 +51,20 @@ def main():
             replace = data.get('replace', meta['decks'][deck].get('replace', ' '))
             ext = data.get('ext', meta['decks'][deck]['ext'])
             for card in data['cards']:
+                if args.cards:
+                    if card['name'] not in args.cards:
+                        continue
+
+                    try:
+                        old = Card.search(using='main') \
+                            .filter("term", deck=deck) \
+                            .query("match", name=card['name']).execute().hits[0]
+                        old.delete(using='main')
+                    except IndexError:
+                        logging.warning("No hits for %s, watch for duplicates",
+                                        card['name'])
+                        pass
+
                 card_path = card.get('path', card['name'])
                 value = card.get('value')
                 if value is not None:
@@ -75,7 +95,7 @@ def main():
                            ability=card.get('ability', ability),
                            reckless=card.get('reckless', reckless))
                 logging.debug('%r', doc.to_dict())
-                doc.save()
+                doc.save(using='main')
                 logging.info('Saved %s (%s card from %s)', card['name'],
                              deck_name, expansion)
 
