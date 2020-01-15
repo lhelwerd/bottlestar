@@ -14,7 +14,9 @@ class Cards:
         'partial': ('list', lambda items: f"\n**{items[0]}:** {items[1]}"),
         'fail': lambda text: f"\n**Fail:** {text}",
         'consequence': lambda text: f"\n**Consequence:** {text}",
-        'activate': lambda text: f"\n**1. Activate:** {text}",
+        'activate': ('list', lambda text: f"""\n**1. Activate:** {', '.join(
+            [text] if isinstance(text, str) else text
+        )}"""),
         'setup': {
             'char': lambda text: f"\nSetup: {text}",
             'ally': lambda text: f"\n*{text}*",
@@ -143,8 +145,12 @@ class Cards:
                 for subkey, subtext in text.items()
             ])
         else:
-            if isinstance(text, list) and len(text) == 2:
-                text = f"**{text[0]}:** {text[1]}"
+            if isinstance(text, list):
+                if len(text) == 2 and deck != "location":
+                    text = f"**{text[0]}:** {text[1]}"
+                else:
+                    text = "\n".join(text)
+
             if key != "" and key[0].isupper():
                 separator = self.decks.get(deck, {}).get("separator", ":")
                 result = f"\n**{key}{separator}** {text}"
