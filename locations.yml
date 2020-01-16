@@ -1,0 +1,264 @@
+# x0,y0,x1,y1
+# Align on even numbers
+# Normal locations:
+# x1-x0 = 214
+# y1-y0 = 294
+# Skill check locations:
+# x1-x0 = 244
+# y1-y0 = 294
+# Hazardous locations:
+# x1-x0 = 240
+# y1-y0 = 324
+# Hazardous skill check locations:
+# x1-x0 = 272
+# y1-y0 = 324
+# Colonial One locations:
+# x1-x0 = 208
+# y1-y0 = 294
+# Colonial One skill check locations:
+# x1-x0 = 240
+# y1-y0 = 294
+# Cylon locations:
+# x1-x0 = 186
+# y1-y0 = 294
+expansion: base
+boards:
+  - name: Galactica
+    path: BSG_board.jpg
+    locations:
+      - name: FTL Control
+        bbox: [890, 1608, 1104, 1902]
+        text:
+            Action: 'Jump the fleet if the Jump Preparation track is not in the red zone. Might lose population.'
+      - name: Weapons Control
+        bbox: [1190, 1440, 1404, 1734]
+        text:
+            Action: 'Attack 1 Cylon ship with Galactica.'
+      - name: Communications
+        bbox: [1488, 1440, 1702, 1734]
+        text:
+            Action: 'Look at the back of 2 civilian ships. You may then move them to adjacent area(s).'
+      - name: Research Lab
+        bbox: [1786, 1440, 2000, 1734]
+        text:
+            Action: 'Draw 1 engineering or 1 tactics Skill Card.'
+      - name: Command
+        bbox: [1190, 1778, 1404, 2072]
+        text:
+            Action: 'Activate up to 2 unmanned vipers.'
+      - name: "Admiral's Quarters"
+        bbox: [1472, 1778, 1716, 2072]
+        value: 7
+        skills: [Leadership, Tactics]
+        text:
+            Action: 'Choose a character, then pass this skill check to send him to the "Brig."'
+      - name: Hangar Deck
+        bbox: [1784, 1782, 1998, 2076]
+        text:
+            Action: 'Launch yourself in a viper. You may then take 1 more action.'
+      - name: Armory
+        bbox: [2082, 1610, 2296, 1904]
+        text:
+            Action: 'Attack a centurion on the Boarding Party Track (destroyed on roll of 7-8).'
+      - name: Sickbay
+        bbox: [2368, 1428, 2608, 1752]
+        hazardous: True
+        text: 'You may only draw 1 Skill Card during your Receive Skills step.'
+      - name: Brig
+        bbox: [2352, 1768, 2626, 2090]
+        hazardous: True
+        value: 7
+        skills: [Politics, Tactics]
+        text:
+          - 'You may not move, draw Crisis Cards, or add more than 1 card to skill checks.'
+          - Action: 'Pass this skill check to move to any location.'
+  - name: Colonial One
+    path: BSG_board.jpg
+    locations:
+      - name: Press Room
+        bbox: [686, 466, 894, 760]
+        text:
+            Action: 'Draw 2 politics Skill Cards.'
+      - name: "President's Office"
+        bbox: [956, 466, 1164, 760]
+        text:
+            Action: 'If you are President, draw 1 Quorum Card. You may then draw 1 additional Quorum Card or play 1 from your hand.'
+      - name: Administration
+        bbox: [1210, 466, 1450, 760]
+        value: 5
+        skills: [Politics, Leadership]
+        text:
+            Action: 'Choose a character, then pass this skill check to give him the President title.'
+  - name: Cylon Locations
+    path: BSG_board.jpg
+    cylon: True
+    locations:
+      - name: Caprica
+        bbox: [1790, 504, 1976, 798]
+        text:
+            Action: 'Play your Super Crisis Card or draw 2 Crisis Cards, choose 1 to resolve, and discard the other. No Activate Cylon Ships or Prepare for Jump steps.'
+      - name: Cylon Fleet
+        bbox: [1982, 504, 2168, 798]
+        text:
+            Action: 'Activate all Cylon ships of one type, or launch 2 raiders and 1 heavy raider from each basestar.'
+      - name: Human Fleet
+        bbox: [2174, 504, 2360, 798]
+        text:
+            Action: >-
+                Look at any player's hand, and steal 1 Skill Card (place it in your hand). Then roll a die, and if 5 or higher, damage Galactica.
+      - name: Resurrection Ship
+        bbox: [2366, 504, 2552, 798]
+        text:
+            Action: 'You may discard your Super Crisis Card to draw a new one. Then, if distance is 7 or less, give your unrevealed Loyalty Card(s) to any player.'
+---
+# x0,y0,x1,y1
+# Align on even numbers
+# Pegasus locations:
+# x1-x0 = 154
+# y1-y0 = 214
+# Pegasus skill check locations:
+# x1-x0 = 176
+# y1-y0 = 214
+expansion: pegasus
+boards:
+  - name: Pegaus
+    path: pegasus.png
+    locations:
+      - name: Pegasus CIC
+        bbox: [32, 272, 186, 486]
+        text:
+          Action:
+            - 'Choose a basestar and roll a die:'
+            - '1-3: Damage Pegasus'
+            - '4-6: Damage basestar'
+            - '7-8: Damage basestar twice'
+      - name: Airlock
+        bbox: [280, 308, 456, 522]
+        value: 12
+        skills: [Politics, Tactics, Treachery]
+        text:
+            Action: 'Choose a character and pass this Skill check to execute him. Reduce the difficulty of this check by 4 if the character is in the "Brig."'
+      - name: Main Batteries
+        bbox: [538, 308, 702, 522]
+        text:
+          Action:
+            - 'Choose a space area to affect and roll a die:'
+            - '1: Destroy 1 civilian ship'
+            - '2-3: Damage 1 viper'
+            - '4-6: Destroy 2 raiders'
+            - '7-8: Destroy 4 raiders'
+      - name: Engine Room
+        bbox: [814, 276, 968, 490]
+        text:
+            Action: 'Discard 2 Skill Cards to treat the next Crisis Card drawn this turn as if it had a "prepare for jump" icon.'
+  - name: New Caprica
+    path: new_caprica.png
+    locations:
+      - name: Medical Center
+        hazardous: True
+        text: 'You may only draw 1 Skill Card during your Receive Skill Cards step.'
+      - name: Resistance HQ
+        value: 7
+        skills: [Leadership, Tactics, Treachery]
+        text:
+            Human Action: 'Choose a character on New Caprica (human or Cylon), then pass this Skill check to execute him.'
+      - name: Detention
+        hazardous: True
+        value: 9
+        skills: [Politics, Tactics]
+        text:
+          - 'You may not move or add more than 2 cards to Skill checks.'
+          - Action: 'Pass this Skill check to more to any location.'
+      - name: Occupation Authority
+        occupation: 1
+        text:
+            Human Action: 'If you are the President, you may draw 1 Quorum Card. Then, you may play 1 Quorum Card.'
+            Cylon Action: 'Activate 1 occupation force and then place 1 occupation force on this location.'
+      - name: "Breeder's Canyon"
+        occupation: 2
+        text:
+            Human Action: 'Reduce the highest resource by 1 to advance the fleet marker 1 space up the Jump track.'
+            Cylon Action: 'Draw and resolve the top card of the Crisis deck. Skip the Prepare for Jump Step of this turn.'
+      - name: Shipyard
+        occupation: 3
+        text:
+          Human Action:
+            - 'Prepare or evacuate 1 civilian ship.'
+            - 'If you activate a civilian ship, you may then move to any Galactica location.'
+          Cylon Action: 'Look at the top ship of the Locked Civilian Ship stack, and place it on the top or bottom of the stack.'
+---
+expansion: exodus
+boards:
+  - name: Cylon Fleet
+    path: basestar_bridge.png
+    locations:
+      - name: Basestar Bridge
+        text:
+          Action:
+            - 'Choose 2 of the following abilities:'
+            - 'The CAG must place 1 civilian ship (following all placement rules)'
+            - 'Place 1 Basestar or 3 Raiders in any 1 area on this game board.'
+            - ['Roll a die:', '1-3: Decrease the jump track by 1', '4-8: Increase the pursuit track by 1']
+            - 'Roll a die. If the result is less than the number of raiders on the main game board, draw 2 Galactica damage tokens and choose 1 to resolve.'
+---
+expansion: daybreak
+boards:
+    - name: Demetrius
+      path: demetrius.png
+      locations:
+        - name: Bridge
+          text:
+            - [Action, 'If there is no Mission Card on the "Active Mission" space, activate the top card of the Mission deck.']
+            - 'Do not draw a Crisis Card this turn.'
+        - name: Tactical Plot
+          text:
+              Action: 'Look at the top card of the Mission deck and place it on the top or bottom of the deck.'
+        - name: "Captain's Cabin"
+          text:
+              Action: 'Choose a skill type (it may be from outside your skill set). Each player, including Cylon players, draws 1 Skill Card of that type.'
+    - name: Rebel Basestar
+      path: rebel_basestar.png
+      locations:
+        - name: Hybrid Tank
+          text:
+              Action: 'Discard a miracle token or a Super Crisis Card to look at the top 5 cards of the Crisis deck. Then, place them on the top of the deck in the order of your choosing.'
+        - name: Datastream
+          text:
+              Action: 'Discard a miracle token or a Super Crisis Card to search 1 Skill deck and its discard pile for any 3 cards. Then add those cards to your hand and shuffle the discard pile into the deck.'
+        - name: Raider Bay
+          text:
+              Action: 'Discard a miracle token or a Super Crisis Card to choose a space area. Place either 2 raiders or 4 unmanned vipers in this area and immediately activate them.'
+    - name: Colonial One
+      path: colonial_one_daybreak.png
+      locations:
+        - name: Quorum Chamber
+          text:
+              Action: 'If you are the President, draw 1 Quorum Card. You may then either draw 1 additional Quorum Card or play 1 from your hand.'
+        - name: Press Room
+          text:
+              Action: 'Choose another player to draw 1 Mutiny Card. (He does not move to the "Brig.") He keeps 1 of his Mutiny Cards and discards the rest. You may then discard a Mutiny Card.'
+        - name: "President's Office"
+          text:
+              Action: 'Draw 2 politics Skill Cards.'
+        - name: Administration
+          text:
+              Action: 'Draw 1 Mutiny Card. If the President has any Mutiny Cards, choose a player to gain the President title. If the "Accept Prophecy" card is in play, the President may discard it to keep his title.'
+    - name: Cylon Locations
+      path: cylon_overlay_daybreak.png
+      locations:
+        - name: Caprica
+          text:
+              Action: 'Play 1 of your Super Crisis Cards or draw 2 Crisis Cards, choose 1 to resolve, and place the other on the bottom of the deck. No "Activate Cylon Ships" step.'
+        - name: Cylon Fleet
+          text:
+              Action: 'Activate all Cylon ships of one type or launch 2 raiders and 1 heavy raider from each basestar.'
+        - name: Human Fleet
+          text:
+              - Action: 'Look at the top card of the Crisis or Destination deck and place it on the top or bottom of that deck. Then, draw 2 Skill Cards.'
+              - 'or'
+              - Action: 'Infiltrate Galactica.'
+        - name: Resurrection Ship
+          hazardous: True
+          text:
+              - 'Draw only 1 Skill Card during your Draw Skill Cards step.'
+              - Action: 'Draw 1 Super Crisis Card.'

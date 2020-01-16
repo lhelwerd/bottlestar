@@ -22,6 +22,8 @@ def parse_args():
                         help='user to log in as')
     parser.add_argument('--display', choices=('unicode', 'discord'),
                         default='unicode', help='format emoji')
+    parser.add_argument('--limit', default=10, type=int,
+                        help='Number of results to show from card search')
     parser.add_argument('command', help='command')
     parser.add_argument('arguments', nargs='*', help='arguments')
     args = parser.parse_args()
@@ -210,8 +212,9 @@ def main():
     else:
         deck = command
 
-    response, count = Card.search_freetext(' '.join(arguments), deck=deck)
-    print(f'{count} hits (at most 10 are shown):')
+    response, count = Card.search_freetext(' '.join(arguments), deck=deck,
+                                           limit=args.limit)
+    print(f'{count} hits (at most {args.limit} are shown):')
     for hit in response:
         url = cards.get_url(hit.to_dict())
         print(f'{hit.name}: {url} (score: {hit.meta.score:.3f})')

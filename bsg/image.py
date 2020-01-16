@@ -42,6 +42,7 @@ class Images:
         if not download:
             return None
 
+        # Retrieve the API data for the image.
         request = self.session.get(f"{self.api_url}{image_id}")
         try:
             request.raise_for_status()
@@ -53,8 +54,16 @@ class Images:
                               image_id)
             return None
 
+        return self.download(url, f"{image_id}.{extension}")
+
+    def download(self, url, filename):
+        """
+        Download an image from a URL to the local storage.
+        Returns the Path of the local file.
+        """
+
         download = self.session.get(url, stream=True)
-        image_path = Path(f"images/{image_id}.{extension}")
+        image_path = Path(f"images/{filename}")
         with image_path.open("wb") as image_file:
             for chunk in download.iter_content(chunk_size=1024):
                 image_file.write(chunk)
@@ -62,4 +71,8 @@ class Images:
         return image_path
 
     def banner(self, banner_type, name):
+        """
+        Retrieve a banner.
+        """
+
         return self.banners.get(banner_type, {}).get(name)
