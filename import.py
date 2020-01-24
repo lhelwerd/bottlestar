@@ -41,6 +41,7 @@ def main():
                 raise ValueError('Meta must be first document')
 
             expansion = data['expansion']
+            expansion_name = meta['expansions'].get(expansion, {}).get('name', expansion)
             deck = data['deck']
             deck_name = meta['decks'][deck]['name']
             jump = meta['decks'][deck].get('jump')
@@ -97,7 +98,7 @@ def main():
                 logging.debug('%r', doc.to_dict())
                 doc.save(using='main')
                 logging.info('Saved %s (%s card from %s)', card['name'],
-                             deck_name, expansion)
+                             deck_name, expansion_name)
 
 if __name__ == "__main__":
     main()

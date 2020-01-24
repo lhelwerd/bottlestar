@@ -164,7 +164,7 @@ class Cards:
 
     def get_text(self, card):
         deck = self.decks.get(card.deck, {})
-        expansion = self.expansions.get(card.expansion, "BSG")
+        expansion = self.expansions.get(card.expansion, {}).get("prefix", "BSG")
         msg = f"{expansion} {deck.get('name', card.deck)}: "
         if card.allegiance is not None and card.deck == "loyalty":
             if card.allegiance == "Cylon":

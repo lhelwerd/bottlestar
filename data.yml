@@ -1,11 +1,21 @@
 ---
 meta: True
 expansions:
-  base: "BSG"
-  pegasus: "BSP"
-  exodus: "BSE"
-  daybreak: "BSD"
-  unofficial: "BGG"
+  base:
+    name: Battlestar Galactica
+    prefix: BSG
+  pegasus:
+    name: Pegasus
+    prefix: BSP
+  exodus:
+    name: Exodus
+    prefix: BSE
+  daybreak:
+    name: Daybreak
+    prefix: BSD
+  unofficial:
+    name: BoardGameGeek
+    prefix: BGG
 decks:
   crisis:
     name: Crisis
