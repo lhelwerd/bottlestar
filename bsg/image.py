@@ -1,5 +1,6 @@
 from glob import glob
 from pathlib import Path
+from PIL import Image, ImageChops
 import requests
 from requests.exceptions import ConnectionError as ConnectError, HTTPError, Timeout
 import yaml
@@ -76,3 +77,17 @@ class Images:
         """
 
         return self.banners.get(banner_type, {}).get(name)
+
+    def crop(self, path, bbox=None):
+        image = Image.open(path)
+        if bbox is None:
+            background = Image.new(image.mode, image.size,
+                                   color=image.getpixel((0, 0)))
+            diff = ImageChops.difference(image, background)
+            bbox = diff.getbbox()
+
+        if bbox:
+            safe_bbox = (max(0, bbox[0] - 5), max(0, bbox[1] - 5),
+                         min(image.size[0], bbox[2] + 5),
+                         min(image.size[1], bbox[3] + 5))
+            image.crop(safe_bbox).save(path)

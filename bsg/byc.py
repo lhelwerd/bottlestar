@@ -9,7 +9,6 @@ import logging
 from pathlib import Path
 import re
 from markdownify import markdownify
-from PIL import Image, ImageChops
 import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -225,7 +224,7 @@ class ByYourCommand:
         new_seed = self.make_game_seed(state)
         return self.GAME_SEED_REGEX.sub(new_seed, game_state)
 
-    def save_game_state_screenshot(self, html):
+    def save_game_state_screenshot(self, images, html):
         """
         Using HTML parsed from a BYC Game State quote, create a screenshot
         that displays the current game state.
@@ -247,16 +246,7 @@ class ByYourCommand:
         screenshot_path = page_path.with_suffix(".png")
         self.driver.save_screenshot(str(screenshot_path))
 
-        screenshot = Image.open(screenshot_path)
-        background = Image.new(screenshot.mode, screenshot.size,
-                               color=screenshot.getpixel((0, 0)))
-        diff = ImageChops.difference(screenshot, background)
-        bbox = diff.getbbox()
-        if bbox:
-            safe_bbox = (max(0, bbox[0] - 5), max(0, bbox[1] - 5),
-                         min(screenshot.size[0], bbox[2] + 5),
-                         min(screenshot.size[1], bbox[3] + 5))
-            screenshot.crop(safe_bbox).save(screenshot_path)
+        images.crop(screenshot_path)
 
         return screenshot_path
 

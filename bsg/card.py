@@ -171,7 +171,8 @@ class Cards:
                 yaac = "You Are a Cylon"
             else:
                 yaac = "You Are Not a Cylon"
-            msg += f"**{yaac}**\n"
+            if yaac != card.name:
+                msg += f"**{yaac}**\n"
         msg += f"**{card.name}**"
         if card.character_class is not None:
             msg += f" ({card.character_class})"

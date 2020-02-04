@@ -119,7 +119,8 @@ def main():
                     game_state_file.write(game_state)
 
                 if bbcode.game_state != "":
-                    path = byc.save_game_state_screenshot(bbcode.game_state)
+                    path = byc.save_game_state_screenshot(images,
+                                                          bbcode.game_state)
                     print(f"Current game state found in screenshot at {path}")
 
                 choice = "exit"

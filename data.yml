@@ -54,6 +54,8 @@ decks:
     name: Motive
     path: Motives
     ext: jpg
+  agenda:
+    name: Agenda
   ally:
     name: Ally
     ext: png
@@ -259,6 +261,7 @@ cards:
     cylon: Heavy Raiders
     jump: True
   - name: Food Shortage
+    count: 4
     cylon: Raiders
     jump: True
   - name: Forced Water Mining
@@ -441,6 +444,7 @@ cards:
     jump: True
   - name: Water Shortage (B/*)
     path: Water Short
+    count: 4
     cylon: Basestars fire
     jump: True
   - name: Water Shortage (R/*)
@@ -881,25 +885,35 @@ expansion: base
 deck: destination
 cards:
   - name: Asteroid Field
+    count: 2
     destination: 3
   - name: Barren Planet
     path: Baren Planet
+    count: 4
     destination: 2
   - name: Cylon Ambush
+    count: 1
     destination: 3
   - name: Cylon Refinery
+    count: 1
     destination: 2
   - name: Deep Space
+    count: 3
     destination: 2
   - name: Desolate Moon
+    count: 1
     destination: 3
   - name: Icy Moon
+    count: 2
     destination: 1
   - name: Ragnar Anchorage
+    count: 1
     destination: 1
   - name: Remote Planet
+    count: 3
     destination: 2
   - name: Tylium Planet
+    count: 4
     destination: 1
 ---
 expansion: pegasus
@@ -1312,22 +1326,33 @@ expansion: base
 deck: quorum
 cards:
   - name: Accept Prophecy
+    count: 1
   - name: Arrest Order
+    count: 2
   - name: Assign Arbitrator
+    count: 1
   - name: Assign Mission Specialist
     path: Assign Miss Specialist
+    count: 1
   - name: Assign Vice President
     path: Assign V Pres
+    count: 1
   - name: Authorization of Brutal Force
     path: Authorize Brute Force
+    count: 2
   - name: Encourage Mutiny
+    count: 1
   - name: Food Rationing
+    count: 2
   - name: Inspirational Speech
     path: Inspire Speech
+    count: 4
   - name: Presidential Pardon
     path: Pres Pardon
+    count: 1
   - name: Release Cylon Mugshots
     path: Release Mugshots
+    count: 1
 ---
 expansion: pegasus
 deck: quorum
@@ -1359,6 +1384,10 @@ expansion: base
 deck: loyalty
 path: BSG Loyalty
 cards:
+  - name: You Are Not a Cylon
+    count: 11
+    url: https://www.ultraboardgames.com/battlestar-galactica/gfx/determining-cylon.jpg
+    bbox: [202, 0, 406, 320]
   - name: Can Send a Character to the Brig
     path: Brig
     allegiance: Cylon
@@ -1430,6 +1459,46 @@ cards:
     allegiance: Human
   - name: 'Personal Goal: Use Caution: The Fleet has Made a 1-Distance Jump'
     path: PG Use Caution
+    allegiance: Human
+---
+expansion: pegasus
+deck: agenda
+cards:
+  - name: Convert the Infidels
+    url: ''
+    allegiance: Human
+  - name: Join the Colonials
+    url: ''
+    allegiance: Human
+  - name: Guide Them To Destiny
+    url: ''
+    allegiance: Human
+  - name: Prove Their Worth
+    url: ''
+    allegiance: Human
+  - name: The Illusion of Hope
+    url: ''
+    allegiance: Cylon
+  - name: Salvage Their Equipment
+    url: ''
+    allegiance: Cylon
+  - name: 'Show Their True Nature'
+    url: ''
+    allegiance: Cylon
+  - name: Siege Warfare
+    url: ''
+    allegiance: Cylon
+  - name: Reduce Them To Ruins
+    url: ''
+    allegiance: Cylon
+  - name: Genocide
+    url: ''
+    allegiance: Cylon
+  - name: Grant Mercy
+    url: ''
+    allegiance: Human
+  - name: Mutual Annihilation
+    url: ''
     allegiance: Human
 ---
 expansion: daybreak

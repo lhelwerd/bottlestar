@@ -50,7 +50,7 @@ def main():
             path = data.get('path', meta['decks'][deck].get('path', deck_name))
             # Insert with spaces for better Elastisearch tokenization
             replace = data.get('replace', meta['decks'][deck].get('replace', ' '))
-            ext = data.get('ext', meta['decks'][deck]['ext'])
+            ext = data.get('ext', meta['decks'][deck].get('ext'))
             for card in data['cards']:
                 if args.cards:
                     if card['name'] not in args.cards:
@@ -82,9 +82,11 @@ def main():
                            prefix=path,
                            path=card_path.replace(' ', replace),
                            url=card.get('url'),
+                           bbox=card.get('bbox'),
                            deck=deck,
                            expansion=expansion,
                            ext=card.get('ext', ext),
+                           count=card.get('count'),
                            value=value,
                            destination=card.get('destination'),
                            text=text,

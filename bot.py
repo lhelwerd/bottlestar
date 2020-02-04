@@ -502,7 +502,7 @@ async def byc_public_result(byc, guild, main_channel, game_state_path=None,
                                    seed=seed, users=users, deck=False)
 
     if bbcode.game_state != "":
-        path = byc.save_game_state_screenshot(bbcode.game_state)
+        path = byc.save_game_state_screenshot(images, bbcode.game_state)
         image = discord.File(path)
     else:
         image = None
@@ -825,7 +825,7 @@ async def on_message(message):
             bbcode.process_bbcode(text)
             state = bbcode.game_state
 
-            path = byc.save_game_state_screenshot(state)
+            path = byc.save_game_state_screenshot(images, state)
             await message.channel.send(file=discord.File(path))
         except StopIteration:
             await message.channel.send('No post found!')
@@ -849,7 +849,18 @@ async def on_message(message):
     else:
         for hit in response:
             url = cards.get_url(hit.to_dict())
-            await message.channel.send(f'{cards.get_text(hit)}\n{url} (score: {hit.meta.score:.3f}, {count} hits)')
+            if hit.bbox:
+                filename = f"{hit.path}.{hit.ext}"
+                path = Path(f"images/{filename}")
+                if not path.exists():
+                    path = images.download(url, filename)
+                images.crop(path, bbox=hit.bbox)
+                image = discord.File(path)
+                url = ''
+            else:
+                image = None
+
+            await message.channel.send(f'{cards.get_text(hit)}\n{url} (score: {hit.meta.score:.3f}, {count} hits)', file=image)
             break
 
 if __name__ == "__main__":
