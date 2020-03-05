@@ -1092,42 +1092,52 @@ deck: skill
 cards:
   - name: Consolidate Power
     value: [1, 2]
+    count: [8, 6]
     skill: Politics
     path: Con Power
   - name: Investigative Committee
     value: [3, 4, 5]
+    count: [4, 2, 1]
     skill: Politics
     path: Inv Committee
   - name: Executive Order
     value: [1, 2]
+    count: [8, 6]
     skill: Leadership
     path: XO
   - name: Declare Emergency
     value: [3, 4, 5]
+    count: [4, 2, 1]
     skill: Leadership
     path: Dec Emergency
   - name: Launch Scout
     value: [1, 2]
+    count: [8, 6]
     skill: Tactics
     path: Launch Scout
   - name: Strategic Planning
     value: [3, 4, 5]
+    count: [4, 2, 1]
     skill: Tactics
     path: Strat
   - name: Evasive Maneuvers
     value: [1, 2]
+    count: [8, 6]
     skill: Piloting
     path: Evasive
   - name: Maximum Firepower
     value: [3, 4, 5]
+    count: [4, 2, 1]
     skill: Piloting
     path: Maximum
   - name: Repair
     value: [1, 2]
+    count: [8, 6]
     skill: Engineering
     path: Repair
   - name: Scientific Research
     value: [3, 4, 5]
+    count: [4, 2, 1]
     skill: Engineering
     path: Sci Research
 ---
@@ -1137,67 +1147,83 @@ cards:
   - name: Support the People
     path: Support
     value: [1, 2]
+    count: [1, 1]
     skill: Politics
     reckless: True
   - name: Preventative Policy
     path: Prev Policy
     value: [3, 4, 5]
+    count: [1, 1, 1]
     skill: Politics
   - name: Major Victory
     path: Maj Vic
     value: [1, 2]
+    count: [1, 1]
     skill: Leadership
   - name: At Any Cost
     path: Cost
     value: [3, 4, 5]
+    count: [1, 1, 1]
     skill: Leadership
     reckless: True
   - name: Guts and Initiative
     path: Guts
     value: [1, 2]
+    count: [1, 1]
     skill: Tactics
     reckless: True
   - name: Critical Situation
     path: Crit Sit
     value: [3, 4, 5]
+    count: [1, 1, 1]
     skill: Tactics
   - name: Full Throttle
     value: [1, 2]
+    count: [1, 1]
     skill: Piloting
   - name: Run Interference
     value: [3, 4, 5]
+    count: [1, 1, 1]
     skill: Piloting
   - name: Calculations
     value: [3, 4, 5]
+    count: [1, 1, 1]
     skill: Engineering
   - name: Jury Rigged
     value: [1, 2]
+    count: [1, 1]
     skill: Engineering
     reckless: True
   - name: Broadcast Location
     path: Broadcast
     value: [1]
+    count: [8]
     skill: Treachery
     ability: True
   - name: By Your Command
     value: [1]
+    count: [4]
     skill: Treachery
     ability: True
     reckless: True
   - name: "God's Plan"
     path: Gods Plan
     value: [2]
+    count: [3]
     skill: Treachery
   - name: Special Destiny
     value: [2]
+    count: [5]
     skill: Treachery
     ability: True
   - name: Human Weakness
     path: Human Weak
     value: [3]
+    count: [3]
     skill: Treachery
   - name: Sabotage
     value: [3]
+    count: [3]
     skill: Treachery
 ---
 expansion: exodus
@@ -1205,42 +1231,52 @@ deck: skill
 cards:
   - name: Red Tape
     value: [0]
+    count: [3]
     skill: Politics
     ability: True
   - name: Political Prowess
     path: Pol Prowess
     value: [6]
+    count: [1]
     skill: Politics
   - name: Iron Will
     value: [0]
+    count: [3]
     skill: Leadership
     ability: True
   - name: State of Emergency
     path: State Emergency
     value: [6]
+    count: [1]
     skill: Leadership
   - name: Trust Instincts
     value: [0]
+    count: [3]
     skill: Tactics
     ability: True
   - name: Scout for Fuel
     path: Scout Fuel
     value: [6]
+    count: [1]
     skill: Tactics
   - name: Protect the Fleet
     path: Protect Fleet
     value: [0]
+    count: [3]
     skill: Piloting
     ability: True
   - name: Best of the Best
     path: Best Best
     value: [6]
+    count: [1]
     skill: Piloting
   - name: Build Nuke
     value: [6]
+    count: [1]
     skill: Engineering
   - name: Establish Network
     value: [0]
+    count: [3]
     skill: Engineering
     ability: True
 ---
@@ -1250,75 +1286,96 @@ replace: ''
 cards:
   - name: Force Their Hand
     value: 0
+    count: [2]
     skill: Politics
     ability: True
   - name: Negotiation
     value: 5
+    count: [1]
     skill: Politics
   - name: Popular Influence
     value: [3, 4]
+    count: [1, 1]
     skill: Politics
   - name: All Hands On Deck
     value: 0
+    count: [2]
     skill: Leadership
   - name: Change Of Plans
     value: 5
+    count: [1]
     skill: Leadership
   - name: Restore Order
     value: [3, 4]
+    count: [1, 1]
     skill: Leadership
   - name: Quick Thinking
     value: 0
+    count: [2]
     skill: Tactics
     ability: True
   - name: A Second Chance
     value: 5
+    count: [1]
     skill: Tactics
   - name: Unorthodox Plan
     value: [3, 4]
+    count: [1, 1]
     skill: Tactics
   - name: Dogfight
     value: 0
+    count: [2]
     skill: Piloting
     ability: True
   - name: Launch Reserves
     value: 5
+    count: [1]
     skill: Piloting
   - name: Combat Veteran
     value: [3, 4]
+    count: [1, 1]
     skill: Piloting
   - name: Install Upgrades
     value: 0
+    count: [2]
     skill: Engineering
     ability: True
   - name: Test The Limits
     value: 5
+    count: [1]
     skill: Engineering
   - name: Raptor Specialist
     value: [3, 4]
+    count: [1, 1]
     skill: Engineering
   - name: Bait
     value: 0
+    count: [6]
     skill: Treachery
     ability: True
   - name: Dradis Contact
     value: 0
+    count: [6]
     skill: Treachery
     ability: True
   - name: A Better Machine
     value: 3
+    count: [4]
     skill: Treachery
     ability: True
   - name: Personal Vices
     value: 3
+    count: [4]
     skill: Treachery
     ability: True
   - name: Violent Outbursts
     value: 4
+    count: [3]
     skill: Treachery
     ability: True
   - name: Exploit A Weakness
     value: 5
+    count: [3]
     skill: Treachery
     ability: True
 ---
