@@ -150,7 +150,7 @@ class Cards:
         else:
             if isinstance(text, list):
                 if deck == "board":
-                    text = "\n".join([
+                    text = "".join([
                         self._parse_text(subtext, "", deck) for subtext in text
                     ])
                 elif len(text) == 2 and deck != "location":
@@ -169,6 +169,12 @@ class Cards:
 
         return result
 
+    def _get_short_skills(self, skills):
+        return ''.join([
+            self.skills.get(skill, {}).get("short", skill[0])
+            for skill in skills
+        ])
+
     def get_card_header(self, card):
         deck = self.decks.get(card.deck, {})
         msg = f"{deck.get('name', card.deck)}: "
@@ -186,10 +192,7 @@ class Cards:
             msg += f" - [{'|'.join(str(value) for value in card.value)}]"
         if card.jump is not None:
             if card.skills is not None:
-                msg += ''.join([
-                    self.skills.get(skill, {}).get("short", skill[0])
-                    for skill in card.skills
-                ])
+                msg += self._get_short_skills(card.skills)
 
             if card.cylon is not None:
                 activations = ''.join([
@@ -221,6 +224,9 @@ class Cards:
             deck = card.deck
         else:
             msg += f"{card.board_name}: **{card.name}**"
+            if card.value is not None:
+                skills = self._get_short_skills(card.skills)
+                msg += f" - {card.value[0]}{skills}"
             deck = "board"
 
         try:

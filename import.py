@@ -115,12 +115,14 @@ def load_locations():
             for board in data['boards']:
                 board_name = board['name']
                 path = board['path']
+                ext = board['ext']
                 for location in board['locations']:
                     value = location.get('value')
                     if isinstance(value, int):
                         value = [value]
                     doc = Location(board_name=board_name,
                                    path=path,
+                                   ext=ext,
                                    name=location['name'],
                                    expansion=expansion,
                                    hazardous=location.get('hazardous', False),

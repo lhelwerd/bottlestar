@@ -16,7 +16,7 @@ from bsg.byc import ByYourCommand, Dialog
 from bsg.rss import RSS
 from bsg.card import Cards
 from bsg.image import Images
-from bsg.search import Card
+from bsg.search import Card, Location
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Command-line bot reply')
@@ -843,7 +843,10 @@ async def on_message(message):
     else:
         deck = command
 
-    response, count = Card.search_freetext(' '.join(arguments), deck=deck)
+    if command == 'board':
+        response, count = Location.search_freetext(' '.join(arguments))
+    else:
+        response, count = Card.search_freetext(' '.join(arguments), deck=deck)
     if count == 0:
         await message.channel.send('No card found')
     else:

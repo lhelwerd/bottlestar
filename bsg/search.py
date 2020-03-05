@@ -9,8 +9,8 @@ class Card(Document):
     path = Text(analyzer='snowball', fields={'raw': Keyword()})
     url = Keyword()
     bbox = Integer()
-    deck = Keyword()
-    expansion = Keyword()
+    deck = Keyword(normalizer=lowercase)
+    expansion = Keyword(normalizer=lowercase)
     ext = Keyword()
     count = Integer()
     value = Integer()
@@ -39,12 +39,13 @@ class Card(Document):
         return search_query.execute(), search_query.count()['value']
 
 class Location(Document):
-    SEARCH_FIELDS = ['name', 'expansion', 'text', 'skills']
+    SEARCH_FIELDS = ['name', 'text', 'expansion', 'skills']
 
     board_name = Text(analyzer='snowball', fields={'raw': Keyword()})
     path = Text(analyzer='snowball', fields={'raw': Keyword()})
+    ext = Keyword()
     name = Text(analyzer='snowball', fields={'raw': Keyword()})
-    expansion = Keyword()
+    expansion = Keyword(normalizer=lowercase)
     hazardous = Boolean()
     bbox = Integer()
     value = Integer()
