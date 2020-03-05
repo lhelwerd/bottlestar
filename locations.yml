@@ -155,14 +155,17 @@ boards:
     path: new_caprica.png
     locations:
       - name: Medical Center
+        bbox: [36, 28, 178, 218]
         hazardous: True
         text: 'You may only draw 1 Skill Card during your Receive Skill Cards step.'
       - name: Resistance HQ
+        bbox: [188, 32, 342, 210]
         value: 7
         skills: [Leadership, Tactics, Treachery]
         text:
             Human Action: 'Choose a character on New Caprica (human or Cylon), then pass this Skill check to execute him.'
       - name: Detention
+        bbox: [28, 226, 186, 416]
         hazardous: True
         value: 9
         skills: [Politics, Tactics]
@@ -170,16 +173,19 @@ boards:
           - 'You may not move or add more than 2 cards to Skill checks.'
           - Action: 'Pass this Skill check to more to any location.'
       - name: Occupation Authority
+        bbox: [202, 234, 336, 458]
         occupation: 1
         text:
             Human Action: 'If you are the President, you may draw 1 Quorum Card. Then, you may play 1 Quorum Card.'
             Cylon Action: 'Activate 1 occupation force and then place 1 occupation force on this location.'
       - name: "Breeder's Canyon"
+        bbox: [350, 234, 484, 458]
         occupation: 2
         text:
             Human Action: 'Reduce the highest resource by 1 to advance the fleet marker 1 space up the Jump track.'
             Cylon Action: 'Draw and resolve the top card of the Crisis deck. Skip the Prepare for Jump Step of this turn.'
       - name: Shipyard
+        bbox: [498, 234, 780, 458]
         occupation: 3
         text:
           Human Action:
@@ -207,58 +213,72 @@ boards:
       path: demetrius.png
       locations:
         - name: Bridge
+          bbox: [114, 300, 284, 536]
           text:
             - [Action, 'If there is no Mission Card on the "Active Mission" space, activate the top card of the Mission deck.']
             - 'Do not draw a Crisis Card this turn.'
         - name: Tactical Plot
+          bbox: [374, 300, 544, 536]
           text:
               Action: 'Look at the top card of the Mission deck and place it on the top or bottom of the deck.'
         - name: "Captain's Cabin"
+          bbox: [626, 304, 796, 538]
           text:
               Action: 'Choose a skill type (it may be from outside your skill set). Each player, including Cylon players, draws 1 Skill Card of that type.'
     - name: Rebel Basestar
       path: rebel_basestar.png
       locations:
         - name: Hybrid Tank
+          bbox: [174, 298, 344, 534]
           text:
               Action: 'Discard a miracle token or a Super Crisis Card to look at the top 5 cards of the Crisis deck. Then, place them on the top of the deck in the order of your choosing.'
         - name: Datastream
+          bbox: [514, 334, 684, 570]
           text:
               Action: 'Discard a miracle token or a Super Crisis Card to search 1 Skill deck and its discard pile for any 3 cards. Then add those cards to your hand and shuffle the discard pile into the deck.'
         - name: Raider Bay
+          bbox: [856, 298, 1024, 534]
           text:
               Action: 'Discard a miracle token or a Super Crisis Card to choose a space area. Place either 2 raiders or 4 unmanned vipers in this area and immediately activate them.'
     - name: Colonial One
       path: colonial_one_daybreak.png
       locations:
         - name: Quorum Chamber
+          bbox: [94, 48, 248, 264]
           text:
               Action: 'If you are the President, draw 1 Quorum Card. You may then either draw 1 additional Quorum Card or play 1 from your hand.'
         - name: Press Room
+          bbox: [304, 48, 458, 264]
           text:
               Action: 'Choose another player to draw 1 Mutiny Card. (He does not move to the "Brig.") He keeps 1 of his Mutiny Cards and discards the rest. You may then discard a Mutiny Card.'
         - name: "President's Office"
+          bbox: [514, 48, 668, 264]
           text:
               Action: 'Draw 2 politics Skill Cards.'
         - name: Administration
+          bbox: [726, 48, 880, 264]
           text:
               Action: 'Draw 1 Mutiny Card. If the President has any Mutiny Cards, choose a player to gain the President title. If the "Accept Prophecy" card is in play, the President may discard it to keep his title.'
     - name: Cylon Locations
       path: cylon_overlay_daybreak.png
       locations:
         - name: Caprica
+          bbox: [28, 60, 214, 370]
           text:
               Action: 'Play 1 of your Super Crisis Cards or draw 2 Crisis Cards, choose 1 to resolve, and place the other on the bottom of the deck. No "Activate Cylon Ships" step.'
         - name: Cylon Fleet
+          bbox: [220, 60, 406, 370]
           text:
               Action: 'Activate all Cylon ships of one type or launch 2 raiders and 1 heavy raider from each basestar.'
         - name: Human Fleet
+          bbox: [412, 60, 598, 370]
           text:
               - Action: 'Look at the top card of the Crisis or Destination deck and place it on the top or bottom of that deck. Then, draw 2 Skill Cards.'
               - 'or'
               - Action: 'Infiltrate Galactica.'
         - name: Resurrection Ship
           hazardous: True
+          bbox: [598, 50, 800, 374]
           text:
               - 'Draw only 1 Skill Card during your Draw Skill Cards step.'
               - Action: 'Draw 1 Super Crisis Card.'
