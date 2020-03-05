@@ -11,7 +11,7 @@ from bsg.rss import RSS
 from bsg.byc import ByYourCommand, Dialog
 from bsg.card import Cards
 from bsg.image import Images
-from bsg.search import Card
+from bsg.search import Card, Location
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Command-line bot reply')
@@ -213,8 +213,12 @@ def main():
     else:
         deck = command
 
-    response, count = Card.search_freetext(' '.join(arguments), deck=deck,
-                                           limit=args.limit)
+    if command == 'board':
+        response, count = Location.search_freetext(' '.join(arguments),
+                                                   limit=args.limit)
+    else:
+        response, count = Card.search_freetext(' '.join(arguments), deck=deck,
+                                               limit=args.limit)
     print(f'{count} hits (at most {args.limit} are shown):')
     for hit in response:
         url = cards.get_url(hit.to_dict())

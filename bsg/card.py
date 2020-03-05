@@ -101,14 +101,17 @@ class Cards:
         if url is not None:
             return url
 
+        card_deck = card.get('deck', 'board')
         default_deck = {
-            'name': card['deck'],
+            'name': card_deck,
             'ext': 'png'
         }
-        deck = self.decks.get(card['deck'], default_deck)
+        deck = self.decks.get(card_deck, default_deck)
         deck_name = deck['name']
         deck_path = deck.get('path', deck_name).replace(' ', '_')
         ext = card.get('ext', deck['ext'])
+        if ext != '':
+            ext = f".{ext}"
         replacement = deck.get('replace', '_')
         path = card.get('path', card['name'])
         if 'skills' in card and len(card['skills']) == 1:
@@ -123,11 +126,11 @@ class Cards:
         path = path.replace(' ', replacement)
 
         # Usually the deck path is repeated in each file name, but not always
-        prefix = card.get('prefix', deck_path).replace(' ', '_')
+        prefix = card.get('prefix', deck.get('prefix', deck_path))
         if prefix != '':
-            prefix = prefix + '_'
+            prefix = prefix.replace(' ', '_') + '_'
 
-        return f'{self.url}/{deck_path}/{prefix}{path}.{ext}'
+        return f'{self.url}/{deck_path}/{prefix}{path}{ext}'
 
     def _parse_text(self, text, key="", deck="default"):
         parser = None
@@ -146,7 +149,11 @@ class Cards:
             ])
         else:
             if isinstance(text, list):
-                if len(text) == 2 and deck != "location":
+                if deck == "board":
+                    text = "\n".join([
+                        self._parse_text(subtext, "", deck) for subtext in text
+                    ])
+                elif len(text) == 2 and deck != "location":
                     text = f"**{text[0]}:** {text[1]}"
                 else:
                     text = "\n".join(text)
@@ -162,10 +169,9 @@ class Cards:
 
         return result
 
-    def get_text(self, card):
+    def get_card_header(self, card):
         deck = self.decks.get(card.deck, {})
-        expansion = self.expansions.get(card.expansion, {}).get("prefix", "BSG")
-        msg = f"{expansion} {deck.get('name', card.deck)}: "
+        msg = f"{deck.get('name', card.deck)}: "
         if card.allegiance is not None and card.deck == "loyalty":
             if card.allegiance == "Cylon":
                 yaac = "You Are a Cylon"
@@ -204,14 +210,27 @@ class Cards:
         if card.reckless:
             msg += f"\n**Reckless**"
 
+        return msg
+
+    def get_text(self, card):
+        expansion = self.expansions.get(card.expansion, {}).get("prefix", "BSG")
+        msg = f"{expansion} "
+       
+        if isinstance(card, Card):
+            msg += self.get_card_header(card)
+            deck = card.deck
+        else:
+            msg += f"{card.board_name}: **{card.name}**"
+            deck = "board"
+
         try:
             data = json.loads(card.text, object_pairs_hook=OrderedDict)
-            msg += self._parse_text(data, deck=card.deck)
+            msg += self._parse_text(data, deck=deck)
         except ValueError:
             logging.exception("Not actually json")
             msg += f"\n{card.text}"
 
-        if card.destination is not None:
+        if isinstance(card, Card) and card.destination is not None:
             msg += f"\n( {card.destination} )"
 
         return msg

@@ -3,8 +3,7 @@ import logging
 import json
 from elasticsearch_dsl.connections import connections
 import yaml
-from bsg.card import Cards
-from bsg.search import Card
+from bsg.search import Card, Location
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Command-line bot reply')
@@ -31,6 +30,13 @@ def main():
         Card._index.delete(using='main', ignore=404)
         Card.init(using='main')
 
+    load_cards(args.cards)
+
+    Location._index.delete(using='main', ignore=404)
+    Location.init(using='main')
+    load_locations()
+
+def load_cards(card_names=None):
     meta = {}
     with open("data.yml", "r") as data_file:
         for data in yaml.safe_load_all(data_file):
@@ -52,8 +58,8 @@ def main():
             replace = data.get('replace', meta['decks'][deck].get('replace', ' '))
             ext = data.get('ext', meta['decks'][deck].get('ext'))
             for card in data['cards']:
-                if args.cards:
-                    if card['name'] not in args.cards:
+                if card_names:
+                    if card['name'] not in card_names:
                         continue
 
                     try:
@@ -101,6 +107,32 @@ def main():
                 doc.save(using='main')
                 logging.info('Saved %s (%s card from %s)', card['name'],
                              deck_name, expansion_name)
+
+def load_locations():
+    with open("locations.yml", "r") as locations_file:
+        for data in yaml.safe_load_all(locations_file):
+            expansion = data['expansion']
+            for board in data['boards']:
+                board_name = board['name']
+                path = board['path']
+                for location in board['locations']:
+                    value = location.get('value')
+                    if isinstance(value, int):
+                        value = [value]
+                    doc = Location(board_name=board_name,
+                                   path=path,
+                                   name=location['name'],
+                                   expansion=expansion,
+                                   hazardous=location.get('hazardous', False),
+                                   bbox=location.get('bbox'),
+                                   value=value,
+                                   skills=location.get('skills'),
+                                   occupation=location.get('occupation'),
+                                   text=json.dumps(location.get('text', {})))
+                    logging.debug('%r', doc.to_dict())
+                    doc.save(using='main')
+                    logging.info('Saved %s (%s location from %s)',
+                                 location['name'], board_name, expansion)
 
 if __name__ == "__main__":
     main()

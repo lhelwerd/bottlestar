@@ -79,6 +79,11 @@ decks:
     path: NC_Crisis
     ext: gif
     jump: False
+  board:
+    name: Boards
+    path: Boards
+    ext: ''
+    prefix: ''
 skills:
   Leadership:
     short: G
