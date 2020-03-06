@@ -48,7 +48,7 @@ def main():
 
     if command == "bot":
         at = "@"
-        print("Hello, {at}{args.user}!")
+        print(f"Hello, {at}{args.user}!")
         return
 
     if command == "byc":
