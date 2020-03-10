@@ -78,7 +78,10 @@ class Images:
 
         return self.banners.get(banner_type, {}).get(name)
 
-    def crop(self, path, bbox=None):
+    def crop(self, path, target_path=None, bbox=None):
+        if target_path is None:
+            target_path = path
+
         image = Image.open(path)
         if bbox is None:
             background = Image.new(image.mode, image.size,
@@ -90,4 +93,4 @@ class Images:
             safe_bbox = (max(0, bbox[0] - 5), max(0, bbox[1] - 5),
                          min(image.size[0], bbox[2] + 5),
                          min(image.size[1], bbox[3] + 5))
-            image.crop(safe_bbox).save(path)
+            image.crop(safe_bbox).save(target_path)

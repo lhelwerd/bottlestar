@@ -855,10 +855,20 @@ async def on_message(message):
             if hit.bbox:
                 filename = f"{hit.path}.{hit.ext}"
                 path = Path(f"images/{filename}")
-                if not path.exists():
-                    path = images.download(url, filename)
-                images.crop(path, bbox=hit.bbox)
-                image = discord.File(path)
+                if command == 'board' and hit.bbox:
+                    name = hit.name.replace(' ', '_')
+                    target_path = Path(f"images/{hit.path}_{name}.{hit.ext}")
+                else:
+                    target_path = path
+
+                if not target_path.exists():
+                    if not path.exists():
+                        path = images.download(url, filename)
+                    try:
+                        images.crop(path, target_path=target_path, bbox=hit.bbox)
+                    except:
+                        path = target_path
+                image = discord.File(target_path)
                 url = ''
             else:
                 image = None

@@ -152,7 +152,7 @@ class Cards:
                 if deck == "board":
                     text = "".join([
                         self._parse_text(subtext, "", deck) for subtext in text
-                    ])
+                    ]).lstrip("\n")
                 elif len(text) == 2 and deck != "location":
                     text = f"**{text[0]}:** {text[1]}"
                 else:

@@ -26,6 +26,7 @@ boards:
   - name: Galactica
     path: BSG_board
     ext: jpg
+    bbox: [700, 1340, 2820, 2260]
     locations:
       - name: FTL Control
         bbox: [890, 1608, 1104, 1902]
@@ -76,6 +77,7 @@ boards:
   - name: Colonial One
     path: BSG_board
     ext: jpg
+    bbox: [400, 408, 1738, 816]
     locations:
       - name: Press Room
         bbox: [686, 466, 894, 760]
@@ -94,6 +96,7 @@ boards:
   - name: Cylon Locations
     path: BSG_board
     ext: jpg
+    bbox: [1768, 440, 2572, 816]
     cylon: True
     locations:
       - name: Caprica

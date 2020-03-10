@@ -120,11 +120,21 @@ def load_locations():
                 board_name = board['name']
                 path = board['path']
                 ext = board['ext']
+                doc = Location(board_name=board_name,
+                               path=path,
+                               ext=ext,
+                               name=board_name,
+                               expansion=expansion,
+                               bbox=board.get('bbox'),
+                               text=json.dumps({}))
+                doc.save(using='main')
+                logging.info('Saved %s (board from %s)',
+                             board_name, expansion)
                 for location in board['locations']:
                     value = location.get('value')
                     if isinstance(value, int):
                         value = [value]
-                    doc = Location(board_name=board_name,
+                    loc = Location(board_name=board_name,
                                    path=path,
                                    ext=ext,
                                    name=location['name'],
@@ -135,8 +145,8 @@ def load_locations():
                                    skills=location.get('skills'),
                                    occupation=location.get('occupation'),
                                    text=json.dumps(location.get('text', {})))
-                    logging.debug('%r', doc.to_dict())
-                    doc.save(using='main')
+                    logging.debug('%r', loc.to_dict())
+                    loc.save(using='main')
                     logging.info('Saved %s (%s location from %s)',
                                  location['name'], board_name, expansion)
 
