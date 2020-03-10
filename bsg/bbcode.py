@@ -68,7 +68,8 @@ class BBCodeMarkdown(BBCode):
                              escape_html=False, replace_links=False,
                              replace_cosmetic=False, drop_unrecognized=False)
         self.parser.add_simple_formatter('b', '**%(value)s**')
-        # Drop spoilers
+        # Drop code and spoilers
+        self.parser.add_simple_formatter('c', '')
         self.parser.add_simple_formatter('o', '')
         # Drop external URLs
         self.parser.add_simple_formatter('url', '')
@@ -139,6 +140,7 @@ class BBCodeHTML(BBCode):
                              replace_cosmetic=False, drop_unrecognized=False)
         self.parser.add_simple_formatter('b', '<b>%(value)s</b>')
         self.parser.add_simple_formatter('i', '<i>%(value)s</i>')
+        self.parser.add_simple_formatter('c', '<code>%(value)s</code>')
         self.parser.add_formatter('size', self._parse_size)
         self.parser.add_formatter('color', self._parse_color)
         self.parser.add_formatter('imageid', self._parse_imageid,

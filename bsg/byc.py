@@ -73,7 +73,7 @@ class ByYourCommand:
 
     SCRIPT_PATH = Path("byc.js")
     STYLE_PATH = Path("game_state.css")
-    GAME_SEED_REGEX = re.compile(r"\[size=(?:1|0)\]\[color=#(?:F4F4FF|FFFFFF)\]New seed: (\S+)\[/color\]\[/size]")
+    GAME_SEED_REGEX = re.compile(r"(?:\[c\])?\[size=(?:1|0)\]\[color=#(?:F4F4FF|FFFFFF)\]New seed: (\S+)\[/color\]\[/size](?:\[/c\])?")
 
     def __init__(self, game_id, user, script_url):
         self.driver = None
@@ -216,7 +216,7 @@ class ByYourCommand:
         return {}
 
     def make_game_seed(self, state):
-        return f"[size=0][color=#FFFFFF]New seed: {state}[/color][/size]"
+        return f"[c][size=1][color=#FFFFFF]New seed: {state}[/color][/size][/c]"
 
     def set_game_seed(self, game_state, seed):
         encoded = b64encode(json.dumps(seed).encode()).decode()

@@ -22,6 +22,14 @@ body {
     background: #FFFFFF;
     color: #000000;
 }
+code {
+	display: inline-block;
+	max-width: 100%;
+	vertical-align: middle;
+	overflow: auto;
+	white-space: pre;
+	font-size: 90%;
+}
 .ac {
     text-align: center;
 }
