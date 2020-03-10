@@ -207,7 +207,11 @@ class Cards:
                 msg += extra
         elif card.skills is not None:
             msg += f" ({card.skills[0]})"
-        elif card.allegiance is not None and card.deck != "loyalty":
+
+        if card.count is not None:
+            msg += ",".join(f" {count}\u00d7" for count in card.count)
+
+        if card.allegiance is not None and card.deck != "loyalty":
             msg += f"\n**Allegiance: {card.allegiance}**"
 
         if card.reckless:

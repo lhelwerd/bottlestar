@@ -72,6 +72,10 @@ def load_cards(card_names=None):
                                         card['name'])
                         pass
 
+                count = card.get('count')
+                if isinstance(count, int):
+                    count = [count]
+
                 card_path = card.get('path', card['name'])
                 value = card.get('value')
                 if value is not None:
@@ -92,7 +96,7 @@ def load_cards(card_names=None):
                            deck=deck,
                            expansion=expansion,
                            ext=card.get('ext', ext),
-                           count=card.get('count'),
+                           count=count,
                            value=value,
                            destination=card.get('destination'),
                            text=text,
