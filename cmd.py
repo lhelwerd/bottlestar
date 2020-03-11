@@ -78,6 +78,13 @@ def main():
             byc.check_images(images)
             return
 
+        if user == "succession":
+            seed = byc.get_game_seed(game_state)
+            search = Card.search(using='main').filter("term", deck="char") \
+                .filter("terms", path__raw=seed.get("players", []))
+            print(cards.lines_of_succession([char for char in search.scan()]))
+            return
+
         choice = ""
         run = True
         dialog = None

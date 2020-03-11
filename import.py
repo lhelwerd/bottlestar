@@ -88,6 +88,8 @@ def load_cards(card_names=None):
                                   [card['skill']] if 'skill' in card else [])
                 cylon = card.get('cylon')
                 text = json.dumps(card.get('text', {}))
+                succession = card.get('succession', {})
+                default_succession = 99 if 'character_class' in card else None
                 doc = Card(name=card['name'],
                            prefix=path,
                            path=card_path.replace(' ', replace),
@@ -104,6 +106,9 @@ def load_cards(card_names=None):
                            cylon=[cylon] if isinstance(cylon, str) else cylon,
                            jump=card.get('jump', jump),
                            character_class=card.get('class'),
+                           president=succession.get('president', default_succession),
+                           admiral=succession.get('admiral', default_succession),
+                           cag=succession.get('cag', default_succession),
                            allegiance=card.get('allegiance'),
                            ability=card.get('ability', ability),
                            reckless=card.get('reckless', reckless))

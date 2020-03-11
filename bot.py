@@ -93,8 +93,12 @@ async def check_for_updates(client, server_id, channel_id):
         previous_check = datetime.now()
         await asyncio.sleep(timeout)
 
-def replace_roles(message, guild=None, seed=None, users=False, deck=True):
-    message = cards.replace_cards(message, deck=deck)
+def replace_roles(message, guild=None, seed=None, users=False, emoji=True,
+                  deck=True):
+    if emoji or deck:
+        message = cards.replace_cards(message,
+                                      display='discord' if emoji else '',
+                                      deck=deck)
 
     if guild is None:
         return message

@@ -246,12 +246,14 @@ class Cards:
         return msg
 
     def replace_cards(self, message, display='discord', deck=True):
-        for skill_type, skill_regex in self.skill_colors.items():
-            emoji = self.skills[skill_type][display]
-            message = skill_regex.sub(fr"\1{emoji}", message)
-        for key, title in self.titles.items():
-            message = re.sub(rf"\b{key}\b(?!['-])", f"{key}{title[display]}",
-                             message)
+        if display != '':
+            for skill_type, skill_regex in self.skill_colors.items():
+                emoji = self.skills[skill_type][display]
+                message = skill_regex.sub(fr"\1{emoji}", message)
+            for key, title in self.titles.items():
+                message = re.sub(rf"\b{key}\b(?!['-])",
+                                 f"{key}{title[display]}", message)
+
         if deck:
             for deck, card_regex in self.deck_cards.items():
                 replacement = fr"\1 ({self.decks[deck]['name']})"
@@ -270,3 +272,17 @@ class Cards:
                 return expansion
 
         return ''
+
+    def lines_of_succession(self, chars):
+        titles = sorted((title for title, data in self.titles.items()
+                         if 'titles' not in data),
+                        key=lambda title: self.titles[title]['priority'])
+        report = []
+        for title in titles:
+            names = "\n".join(
+                f"{index+1}: {char.name}"
+                for index, char in enumerate(sorted(chars, key=lambda char: getattr(char, title.lower())))
+            )
+            report.append(f"{title}:\n{names}")
+
+        return "\n\n".join(report)

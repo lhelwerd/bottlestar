@@ -963,33 +963,73 @@ cards:
   - name: William Adama
     path: Adama
     class: Military Leader
+    succession:
+      president: 12
+      admiral: 2
+      cag: 13
   - name: 'Lee "Apollo" Adama'
     path: Apollo
     class: Pilot
+    succession:
+      president: 9
+      admiral: 10
+      cag: 1
   - name: Gaius Baltar
     path: Baltar
     class: Political Leader
+    succession:
+      president: 2
+      admiral: 27
+      cag: 27
   - name: 'Sharon "Boomer" Valerii'
     path: Boomer
     class: Pilot
+    succession:
+      president: 25
+      admiral: 15
+      cag: 5
   - name: '"Chief" Galen Tyrol'
     path: Chief
     class: Support
+    succession:
+      president: 14
+      admiral: 20
+      cag: 21
   - name: 'Karl "Helo" Agathon'
     path: Helo
     class: Military Leader
+    succession:
+      president: 13
+      admiral: 6
+      cag: 10
   - name: Laura Roslin
     path: Roslin
     class: Political Leader
+    succession:
+      president: 1
+      admiral: 30
+      cag: 31
   - name: 'Kara "Starbuck" Thrace'
     path: Starbuck
     class: Pilot
+    succession:
+      president: 31
+      admiral: 13
+      cag: 2
   - name: Saul Tigh
     path: Tigh
     class: Military Leader
+    succession:
+      president: 27
+      admiral: 3
+      cag: 15
   - name: Tom Zarek
     path: Zarek
     class: Political Leader
+    succession:
+      president: 4
+      admiral: 24
+      cag: 24
 ---
 expansion: pegasus
 deck: char
@@ -997,15 +1037,31 @@ cards:
   - name: Helena Cain
     path: Cain
     class: Military Leader
+    succession:
+      president: 20
+      admiral: 1
+      cag: 14
   - name: 'Anastasia "Dee" Dualla'
     path: Dee
     class: Support
+    succession:
+      president: 21
+      admiral: 11
+      cag: 18
   - name: Ellen Tigh
     path: Ellen
     class: Political Leader
+    succession:
+      president: 8
+      admiral: 25
+      cag: 25
   - name: 'Louanne "Kat" Katraine'
     path: Kat
     class: Pilot
+    succession:
+      president: 32
+      admiral: 14
+      cag: 3
 ---
 expansion: exodus
 deck: char
@@ -1013,15 +1069,31 @@ cards:
   - name: Samuel T. Anders
     path: Anders
     class: Pilot
+    succession:
+      president: 30
+      admiral: 18
+      cag: 8
   - name: 'Callandra "Cally" Tyrol'
     path: Cally
     class: Support
+    succession:
+      president: 16
+      admiral: 21
+      cag: 22
   - name: Felix Gaeta
     path: Gaeta
     class: Military Leader
+    succession:
+      president: 11
+      admiral: 7
+      cag: 17
   - name: Tory Foster
     path: Tory
     class: Political Leader
+    succession:
+      president: 6
+      admiral: 29
+      cag: 28
 ---
 expansion: pegasus
 deck: char
@@ -1034,6 +1106,10 @@ cards:
   - name: 'Sherman "Doc" Cottle'
     path: Cottle
     class: Support
+    succession:
+      president: 18
+      admiral: 22
+      cag: 23
   - name: "D'Anna Biers"
     path: DAnna
     class: Cylon Leader
@@ -1047,24 +1123,48 @@ cards:
   - name: Gaius Baltar
     path: Gaius
     class: Support
+    succession:
+      president: 15
+      admiral: 26
+      cag: 26
   - name: Louis Hoshi
     path: Hoshi
     class: Military Leader
+    succession:
+      president: 22
+      admiral: 8
+      cag: 19
   - name: 'Brendan "Hot Dog" Costanza'
     path: HotDog
     class: Pilot
+    succession:
+      president: 29
+      admiral: 16
+      cag: 6
   - name: 'Karl "Helo" Agathon'
     path: Karl
     class: Pilot
+    succession:
+      president: 23
+      admiral: 12
+      cag: 4
   - name: Lee Adama
     path: Lee
     class: Political Leader
+    succession:
+      president: 3
+      admiral: 23
+      cag: 9
   - name: Leoben Conoy
     path: Leoben
     class: Cylon Leader
   - name: Romo Lampkin
     path: Romo
     class: Political Leader
+    succession:
+      president: 5
+      admiral: 28
+      cag: 29
   - name: "Simon O'Neill"
     path: Simon
     class: Cylon Leader
@@ -1074,6 +1174,10 @@ cards:
   - name: Tom Zarek
     path: Tom
     class: Military Leader
+    succession:
+      president: 10
+      admiral: 9
+      cag: 20
 ---
 expansion: unofficial
 deck: char
@@ -1081,16 +1185,32 @@ cards:
   - name: Billy Keikeya
     path: Billy
     class: Political Leader
+    succession:
+      president: 6.5
+      admiral: 30.5
+      cag: 32
   - name: 'Margaret "Racetrack" Edmondson'
     path: Racetrack
     class: Pilot
+    succession:
+      president: 24
+      admiral: 14.5
+      cag: 4.5
   - name: Kendra Shaw
     path: Shaw
     class: Military Leader
+    succession:
+      president: 26
+      admiral: 4
+      cag: 16
   - name: 'Diana "Hardball" Seelix'
     path: Seelix
     url: ""
     class: Pilot
+    succession:
+      president: 17
+      admiral: 19
+      cag: 8.5
 ---
 expansion: base
 deck: skill
