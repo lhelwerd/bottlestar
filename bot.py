@@ -429,7 +429,7 @@ async def undo_backup(guild, channel, game_id, user, choice):
         label += format_undo_option(guild, data, timestamp)
         await channel.send(f'Going back {label}...')
         with game_state_path.open('r') as game_state_file:
-            game_state = game_state_file.read() 
+            game_state = game_state_file.read()
             with get_byc(game_id, user) as byc:
                 await byc_public_result(byc, guild, channel,
                                         game_state=game_state)
@@ -808,7 +808,7 @@ async def on_message(message):
         except StopIteration:
             await message.channel.send('No post found!')
         return
-    if command == "image":
+    if command in ("image", "succession"):
         # Create a game state image based on the most recent game seed; NB: do 
         # not use the XML or RSS to grab the HTML because it does not contain 
         # all the tags. Instead run the seed through a BYC instance and take 
@@ -818,19 +818,35 @@ async def on_message(message):
             state, player = next(rss.parse(game_seed=True))
             logging.info("Player: %s", player)
             byc = ByYourCommand(game_id, player, config["script_url"])
-            game_seed = byc.make_game_seed(state)
-            choices = []
-            dialog = byc.run_page(choices, game_seed)
-            if "You are not recognized as a player" in dialog.msg:
-                choices.append("\b1")
-            choices.extend(["2", "\b2", "\b1"])
-            logging.info('%r', choices)
-            text = byc.run_page(choices, game_seed, num=len(choices))
-            bbcode.process_bbcode(text)
-            state = bbcode.game_state
+            if command == "game_seed":
+                game_seed = byc.make_game_seed(state)
+                choices = []
+                dialog = byc.run_page(choices, game_seed)
+                if "You are not recognized as a player" in dialog.msg:
+                    choices.append("\b1")
+                choices.extend(["2", "\b2", "\b1"])
+                logging.info('%r', choices)
+                text = byc.run_page(choices, game_seed, num=len(choices))
+                bbcode.process_bbcode(text)
+                state = bbcode.game_state
 
-            path = byc.save_game_state_screenshot(images, state)
-            await message.channel.send(file=discord.File(path))
+                path = byc.save_game_state_screenshot(images, state)
+                await message.channel.send(file=discord.File(path))
+            else:
+                seed = byc.load_game_seed(state)
+                search = Card.search(using='main') \
+                    .filter("term", deck="char") \
+                    .filter("terms", path__raw=seed.get("players", []))
+                cylons = {
+                    player: cylon
+                    for player, cylon in zip(seed["players"], seed["revealedCylons"])
+                }
+                lines = cards.lines_of_succession([char for char in search.scan()], cylons)
+                await message.channel.send(replace_roles(lines,
+                                                         guild=message.guild,
+                                                         seed=seed,
+                                                         emoji=False,
+                                                         deck=False))
         except StopIteration:
             await message.channel.send('No post found!')
         except:

@@ -82,7 +82,12 @@ def main():
             seed = byc.get_game_seed(game_state)
             search = Card.search(using='main').filter("term", deck="char") \
                 .filter("terms", path__raw=seed.get("players", []))
-            print(cards.lines_of_succession([char for char in search.scan()]))
+            cylons = {
+                player: cylon 
+                for player, cylon in zip(seed["players"], seed["revealedCylons"])
+            }
+            print(cards.lines_of_succession([char for char in search.scan()],
+                                            cylons))
             return
 
         choice = ""
@@ -154,7 +159,7 @@ def main():
         print(cards.replace_cards(text, args.display))
         return
 
-    if command in ("latest", "all", "update", "image", "game_seed"):
+    if command in ("latest", "all", "update", "succession", "image", "game_seed"):
         rss = RSS(config['rss_url'], images, config['image_url'],
                   config.get('session_id'))
         if command == "update":
@@ -167,28 +172,38 @@ def main():
             one = False
             if_modified_since = None
 
-        game_seed = command == "game_seed"
-        game_state = command == "image"
+        fetch_seed = command in ("succession", "game_seed")
+        fetch_state = command == "image"
 
         result = rss.parse(if_modified_since=if_modified_since, one=one,
-                           game_seed=game_seed, game_state=game_state)
+                           game_seed=fetch_seed, game_state=fetch_state)
         try:
             ok = True
             while ok:
                 output = next(result)
-                if game_state or game_seed:
+                if fetch_state or fetch_seed:
                     game_id = config["rss_url"].split("/")[-1]
                     state, player = output
                     byc = ByYourCommand(game_id, player, config["script_url"])
-                    if game_seed:
-                        text = byc.run_page(["2", "\b2", "\b1"],
-                                            byc.make_game_seed(state),
+                    if command == "game_seed":
+                        seed = byc.make_game_seed(state)
+                        text = byc.run_page(["2", "\b2", "\b1"], seed,
                                             force=True)
                         bbcode = BBCodeMarkdown(images)
                         bbcode.process_bbcode(state)
                         state = bbcode.game_state
-
-                    print(byc.save_game_state_screenshot(state))
+                    elif command == "succession":
+                        seed = byc.load_game_seed(state)
+                        search = Card.search(using='main') \
+                            .filter("term", deck="char") \
+                            .filter("terms", path__raw=seed.get("players", []))
+                        cylons = {
+                            player: cylon 
+                            for player, cylon in zip(seed["players"], seed["revealedCylons"])
+                        }
+                        print(cards.lines_of_succession([char for char in search.scan()], cylons))
+                    else:
+                        print(byc.save_game_state_screenshot(state))
                 else:
                     print(cards.replace_cards(output, display=args.display))
                 if command == "all":

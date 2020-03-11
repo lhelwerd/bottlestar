@@ -273,15 +273,28 @@ class Cards:
 
         return ''
 
-    def lines_of_succession(self, chars):
+    def _format_succession(self, index, char, cylons):
+        if char.path not in char.name:
+            name = f"{char.name} ({char.path})"
+        else:
+            name = char.name
+
+        line = f"{index}. {name}"
+        if cylons.get(char.path):
+            line = f"~~{line}~~"
+
+        return line
+
+    def lines_of_succession(self, chars, cylons):
         titles = sorted((title for title, data in self.titles.items()
                          if 'titles' not in data),
                         key=lambda title: self.titles[title]['priority'])
         report = []
         for title in titles:
+            line = sorted(chars, key=lambda char: getattr(char, title.lower()))
             names = "\n".join(
-                f"{index+1}: {char.name}"
-                for index, char in enumerate(sorted(chars, key=lambda char: getattr(char, title.lower())))
+                self._format_succession(index + 1, char, cylons)
+                for index, char in enumerate(line)
             )
             report.append(f"{title}:\n{names}")
 
