@@ -844,7 +844,9 @@ async def on_message(message):
         deck = command
 
     if command == 'board':
-        response, count = Location.search_freetext(' '.join(arguments))
+        expansion = cards.find_expansion(arguments)
+        response, count = Location.search_freetext(' '.join(arguments),
+                                                   expansion=expansion)
     else:
         response, count = Card.search_freetext(' '.join(arguments), deck=deck)
     if count == 0:

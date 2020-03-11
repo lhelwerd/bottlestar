@@ -214,7 +214,9 @@ def main():
         deck = command
 
     if command == 'board':
+        expansion = cards.find_expansion(arguments)
         response, count = Location.search_freetext(' '.join(arguments),
+                                                   expansion=expansion,
                                                    limit=args.limit)
     else:
         response, count = Card.search_freetext(' '.join(arguments), deck=deck,

@@ -258,3 +258,15 @@ class Cards:
                 message = card_regex.sub(replacement, message)
 
         return message
+
+    def find_expansion(self, arguments):
+        lower_arguments = [argument.lower() for argument in arguments]
+        for expansion, data in self.expansions.items():
+            if expansion in lower_arguments:
+                arguments.pop(lower_arguments.index(expansion))
+                return expansion
+            if data['prefix'].lower() in lower_arguments:
+                arguments.pop(lower_arguments.index(data['prefix'].lower()))
+                return expansion
+
+        return ''
