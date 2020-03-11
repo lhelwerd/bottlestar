@@ -86,8 +86,12 @@ def main():
                 player: cylon 
                 for player, cylon in zip(seed["players"], seed["revealedCylons"])
             }
-            print(cards.lines_of_succession([char for char in search.scan()],
-                                            cylons))
+            locations = {
+                player: location
+                for player, location in zip(seed["players"], seed["playerLocations"])
+            }
+            print(cards.lines_of_succession(list(search.scan()),
+                                            cylons, locations))
             return
 
         choice = ""
@@ -201,7 +205,12 @@ def main():
                             player: cylon 
                             for player, cylon in zip(seed["players"], seed["revealedCylons"])
                         }
-                        print(cards.lines_of_succession([char for char in search.scan()], cylons))
+                        locations = {
+                            player: location
+                            for player, location in zip(seed["players"], seed["playerLocations"])
+                        }
+                        print(cards.lines_of_succession(list(search.scan()),
+                                                        cylons, locations))
                     else:
                         print(byc.save_game_state_screenshot(state))
                 else:

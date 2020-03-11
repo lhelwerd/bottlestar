@@ -841,7 +841,12 @@ async def on_message(message):
                     player: cylon
                     for player, cylon in zip(seed["players"], seed["revealedCylons"])
                 }
-                lines = cards.lines_of_succession([char for char in search.scan()], cylons)
+                locations = {
+                    player: location
+                    for player, location in zip(seed["players"], seed["playerLocations"])
+                }
+                lines = cards.lines_of_succession(list(search.scan()), cylons,
+                                                  locations)
                 await message.channel.send(replace_roles(lines,
                                                          guild=message.guild,
                                                          seed=seed,
@@ -850,7 +855,7 @@ async def on_message(message):
         except StopIteration:
             await message.channel.send('No post found!')
         except:
-            logging.exception('Could not retrieve game state image')
+            logging.exception(f'Could not retrieve game state for {command}')
             await message.channel.send('Uh oh')
         return
 
