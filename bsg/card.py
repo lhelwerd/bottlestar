@@ -21,11 +21,11 @@ class Cards:
             'char': lambda text: f"\nSetup: {text}",
             'ally': lambda text: f"\n*{text}*",
             'default': ('dict', lambda items: f"""\n**2. Setup:** {', '.join([
-                str(value) + " " + (key[:-1] if value == 1 else key)
+                str(value) + " " + (key[:-1] if value == 1 and key[-1] == "s" else key)
                 for key, value in items.items()
             ])}""")
         },
-        'special': lambda text: f"\n**3. Special Rule** - {text}",
+        'special': ('list', lambda text: f"\n**3. Special Rule** - *{text[0]}*: {text[1]}"),
         'skillset': ('dict', lambda items: f"""\n{', '.join([
             str(value) + " " + key.title() for key, value in items.items()
         ])}""")
