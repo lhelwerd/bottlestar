@@ -275,10 +275,10 @@ class Cards:
 
     @staticmethod
     def _format_succession(title, index, char, cylons, locations):
-        if char.path not in char.name:
+        name, match = re.subn(fr'"?{re.escape(char.path)}"?',
+                              char.path, char.name, count=1)
+        if not match:
             name = f"{char.name} ({char.path})"
-        else:
-            name = char.name
 
         line = f"{index}. {name}"
         if cylons.get(char.path):
