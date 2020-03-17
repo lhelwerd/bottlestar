@@ -227,7 +227,10 @@ class Cards:
             msg += self.get_card_header(card)
             deck = card.deck
         else:
-            msg += f"{card.board_name}: **{card.name}**"
+            if card.board_name == card.name:
+                msg += f"**{card.name}**"
+            else:
+                msg += f"{card.board_name}: **{card.name}**"
             if card.value is not None:
                 skills = self._get_short_skills(card.skills)
                 msg += f" - {card.value[0]}{skills}"
