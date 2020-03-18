@@ -265,6 +265,9 @@ class Cards:
         return message
 
     def find_expansion(self, arguments):
+        if len(arguments) == 1:
+            return ''
+
         lower_arguments = [argument.lower() for argument in arguments]
         for expansion, data in self.expansions.items():
             if expansion in lower_arguments:
