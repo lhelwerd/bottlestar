@@ -127,7 +127,7 @@ boards:
 # y1-y0 = 214
 expansion: pegasus
 boards:
-  - name: Pegaus
+  - name: Pegasus
     path: pegasus
     ext: png
     locations:
