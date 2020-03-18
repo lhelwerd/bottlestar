@@ -770,7 +770,11 @@ async def on_message(message):
         decks = ', '.join(sorted(cards.decks.keys()))
         reply = ("**!search** <text>: Search all decks "
                  "(also **!card**, **!**) - any command may start with **.**\n"
-                 f"**!<deck>** <text>: Search a specific deck ({decks})\n")
+                 f"**!<deck>** <text>: Search a specific deck ({decks})\n"
+                 "**!board** <text> [expansion]: Search a board or location\n"
+                 "**!latest**: Show the latest game post\n"
+                 "**!image**: Show the lastest game state\n"
+                 "**!succession**: Show the line of succession\n")
         if is_byc_enabled(message.guild, message.channel):
             reply += "\n".join([
                 format_command(command, description)
