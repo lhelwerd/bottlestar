@@ -190,10 +190,12 @@ class Cards:
             msg += f" ({card.character_class})"
         if card.value is not None:
             msg += f" - [{'|'.join(str(value) for value in card.value)}]"
-        if card.jump is not None:
-            if card.skills is not None:
+        if card.skills is not None:
+            if len(card.skills) > 1:
                 msg += self._get_short_skills(card.skills)
-
+            else:
+                msg += f" ({card.skills[0]})"
+        if card.jump is not None:
             if card.cylon is not None:
                 activations = ''.join([
                     self.activations.get(cylon, cylon[0])
@@ -205,8 +207,6 @@ class Cards:
             extra = f" ({activations}/{'*' if card.jump else '-'})"
             if extra != " (-/-)" and not card.name.endswith(extra):
                 msg += extra
-        elif card.skills is not None:
-            msg += f" ({card.skills[0]})"
 
         if card.count is not None:
             msg += ",".join(f" {count}\u00d7" for count in card.count)
