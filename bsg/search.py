@@ -26,6 +26,7 @@ class Card(Document):
     allegiance = Keyword()
     ability = Boolean()
     reckless = Boolean()
+    agenda = Keyword()
 
     class Index:
         name = 'card'

@@ -53,6 +53,7 @@ def load_cards(card_names=None):
             jump = meta['decks'][deck].get('jump')
             ability = meta['decks'][deck].get('ability')
             reckless = meta['decks'][deck].get('reckless')
+            agenda = meta['decks'][deck].get('agenda')
             path = data.get('path', meta['decks'][deck].get('path', deck_name))
             # Insert with spaces for better Elastisearch tokenization
             replace = data.get('replace', meta['decks'][deck].get('replace', ' '))
@@ -111,7 +112,8 @@ def load_cards(card_names=None):
                            cag=succession.get('cag', default_succession),
                            allegiance=card.get('allegiance'),
                            ability=card.get('ability', ability),
-                           reckless=card.get('reckless', reckless))
+                           reckless=card.get('reckless', reckless),
+                           agenda=agenda)
                 logging.debug('%r', doc.to_dict())
                 doc.save(using='main')
                 logging.info('Saved %s (%s card from %s)', card['name'],

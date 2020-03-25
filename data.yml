@@ -1662,6 +1662,7 @@ cards:
 ---
 expansion: pegasus
 deck: agenda
+agenda: sympathetic
 cards:
   - name: Convert the Infidels
     url: ''
@@ -1681,6 +1682,11 @@ cards:
   - name: Salvage Their Equipment
     url: ''
     allegiance: Cylon
+---
+expansion: pegasus
+deck: agenda
+agenda: hostile
+cards:
   - name: 'Show Their True Nature'
     url: ''
     allegiance: Cylon

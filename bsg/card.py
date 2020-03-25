@@ -211,8 +211,12 @@ class Cards:
         if card.count is not None:
             msg += ",".join(f" {count}\u00d7" for count in card.count)
 
-        if card.allegiance is not None and card.deck != "loyalty":
-            msg += f"\n**Allegiance: {card.allegiance}**"
+        if card.allegiance is not None:
+            if card.deck == "agenda" and card.text:
+                msg += "\n**You Win the Game if:**"
+                msg += f"\nThe {card.allegiance} have won.\n***and***"
+            elif card.deck != "loyalty":
+                msg += f"\n**Allegiance: {card.allegiance}**"
 
         if card.reckless:
             msg += f"\n**Reckless**"
