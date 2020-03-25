@@ -625,7 +625,8 @@ cards:
     value: 12
     skills: [Politics, Leadership, Tactics]
     cylon: Basestars launch Raiders
-  - name: In The Ring
+  - name: In the Ring
+    path: In The Ring
     value: 12
     skills: [Politics, Leadership, Tactics]
     cylon: Heavy Raiders
@@ -670,7 +671,8 @@ cards:
   - name: Review Camera Footage
     path: Review Footage
     cylon: Basestars fire
-  - name: Set A Trap
+  - name: Set a Trap
+    path: Set A Trap
     value: 10
     skills: [Leadership, Tactics]
     cylon: Raiders
@@ -741,7 +743,8 @@ cards:
     cylon: Raiders
     jump: True
   - name: Blindsided
-  - name: Consult The Hybrid
+  - name: Consult the Hybrid
+    path: Consult The Hybrid
     value: 10
     skills: [Politics, Leadership]
     cylon: Heavy Raiders
@@ -756,12 +759,14 @@ cards:
     value: 9
     skills: [Politics, Tactics]
     cylon: Raiders
-  - name: Earth In Ruins
+  - name: Earth in Ruins
+    path: Earth In Ruins
     value: 9
     skills: [Politics, Leadership, Tactics]
     cylon: Raiders
     jump: True
-  - name: Enemy Of My Enemy
+  - name: Enemy of my Enemy
+    path: Enemy Of My Enemy
     value: 13
     skills: [Politics, Leadership, Piloting]
     cylon: Raiders
@@ -772,19 +777,22 @@ cards:
     skills: [Leadership, Piloting, Engineering]
     cylon: Raiders
     jump: True
-  - name: Give In To Despair
+  - name: Give in to Despair
+    path: Give In To Despair
     value: 14
     skills: [Politics, Leadership]
     cylon: Heavy Raiders
     jump: True
   - name: Hornet's Nest
     path: Hornets Nest
-  - name: Hybrid In Panic
+  - name: Hybrid in Panic
+    path: Hybrid In Panic
     value: 12
     skills: [Tactics, Engineering]
     cylon: Heavy Raiders
     jump: True
-  - name: Incitement To Mutiny
+  - name: Incitement to Mutiny
+    path: Incitement To Mutiny
     value: 13
     skills: [Politics, Leadership, Tactics]
     cylon: Heavy Raiders
@@ -802,7 +810,8 @@ cards:
   - name: Question Procedure
     cylon: Basestars fire
     jump: True
-  - name: Quorum In Uproar
+  - name: Quorum in Uproar
+    path: Quorum In Uproar
     value: 8
     skills: [Leadership, Tactics]
     cylon: Basestars launch Raiders
@@ -826,17 +835,20 @@ cards:
     cylon: Raiders
     jump: True
   - name: Reprisal
-  - name: Requisition For Demetrius
+  - name: Requisition for Demetrius
+    path: Requisition For Demetrius
     cylon: Basestars fire
   - name: Secret Meetings
     value: 9
     skills: [Politics, Tactics, Engineering]
     cylon: Raiders
     jump: True
-  - name: Starvation In Dogsville
+  - name: Starvation in Dogsville
+    path: Starvation In Dogsville
     cylon: Raiders
     jump: True
-  - name: Trial By Fire
+  - name: Trial by Fire
+    path: Trial By Fire
 ---
 expansion: base
 deck: s_crisis
@@ -1426,7 +1438,8 @@ cards:
     value: 0
     count: [2]
     skill: Leadership
-  - name: Change Of Plans
+  - name: Change of Plans
+    path: Change Of Plans
     value: 5
     count: [1]
     skill: Leadership
@@ -1465,7 +1478,8 @@ cards:
     count: [2]
     skill: Engineering
     ability: True
-  - name: Test The Limits
+  - name: Test the Limits
+    path: Test The Limits
     value: 5
     count: [1]
     skill: Engineering
@@ -1498,7 +1512,8 @@ cards:
     count: [3]
     skill: Treachery
     ability: True
-  - name: Exploit A Weakness
+  - name: Exploit a Weakness
+    path: Exploit A Weakness
     value: 5
     count: [3]
     skill: Treachery
@@ -1695,33 +1710,43 @@ deck: motive
 path: BSD Motives
 replace: ''
 cards:
-  - name: 'A False Sense Of Security'
+  - name: 'A False Sense of Security'
+    path: 'A False Sense Of Security'
     allegiance: Cylon
   - name: A Justified Response
     allegiance: Cylon
-  - name: End The Chase
+  - name: End the Chase
+    path: End The Chase
     allegiance: Human
-  - name: Fight With Honor
+  - name: Fight with Honor
+    path: Fight With Honor
     allegiance: Cylon
-  - name: Harvest Their Resources
+  - name: Harvest their Resources
+    path: Harvest Their Resources
     allegiance: Cylon
   - name: Improve Efficiency
     allegiance: Human
   - name: Keep Them Docile
     allegiance: Human
-  - name: Learn To Cherish
+  - name: Learn to Cherish
+    path: Learn To Cherish
     allegiance: Human
-  - name: Make An Ally
+  - name: Make an Ally
+    path: Make An Ally
     allegiance: Human
   - name: No Unnecessary Force
     allegiance: Cylon
-  - name: Pressure Their Leaders
+  - name: Pressure their Leaders
+    path: Pressure Their Leaders
     allegiance: Human
-  - name: Remove The Threat
+  - name: Remove the Threat
+    path: Remove The Threat
     allegiance: Human
-  - name: Savor Their Demise
+  - name: Savor their Demise
+    path: Savor Their Demise
     allegiance: Cylon
-  - name: Subjects For Study
+  - name: Subjects for Study
+    path: Subjects For Study
     allegiance: Cylon
 ---
 expansion: exodus
@@ -1791,20 +1816,24 @@ cards:
 expansion: daybreak
 deck: mission
 cards:
-  - name: Attack On The Colony
+  - name: Attack on the Colony
+    path: Attack On The Colony
     value: 14
     skills: [Tactics, Piloting]
   - name: Cylon Civil War
     value: 21
     skills: [Politics, Leadership, Tactics]
-  - name: Destroy The Hub
+  - name: Destroy the Hub
+    path: Destroy The Hub
     value: 14
     skills: [Leadership, Tactics, Piloting]
-  - name: Digging Up The Past
+  - name: Digging Up the Past
+    path: Digging Up The Past
     value: 14
     skills: [Politics, Leadership]
     distance: 1
-  - name: Needs Of The People
+  - name: Needs of the People
+    path: Needs Of The People
     value: 18
     skills: [Politics, Leadership, Engineering]
   - name: Rescue Hera
@@ -1823,22 +1852,29 @@ expansion: daybreak
 cards:
   - name: Armed Resistance
   - name: Assume Command
-  - name: Bait And Switch
-  - name: Betrayal Of Trust
+  - name: Bait and Switch
+    path: Bait And Switch
+  - name: Betrayal of Trust
+    path: Betrayal Of Trust
   - name: Blackmail
   - name: Clipped Wings
   - name: Controversial Speech
-  - name: Feed The People
+  - name: Feed the People
+    path: Feed The People
   - name: Impeachment
-  - name: Make A Deal
+  - name: Make a Deal
+    path: Make A Deal
   - name: Necessary Risk
   - name: Panic
   - name: Peaceful Resistance
   - name: Ruined Reputation
-  - name: Scavenging For Parts
+  - name: Scavenging for Parts
+    path: Scavenging For Parts
   - name: Selfish Act
-  - name: Send A Message
-  - name: Set The Agenda
+  - name: Send a Message
+    path: Send A Message
+  - name: Set the Agenda
+    path: Set The Agenda
   - name: The Strong Survive
   - name: Unauthorized Usage
   - name: Violent Protest
