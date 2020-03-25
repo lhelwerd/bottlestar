@@ -1607,6 +1607,8 @@ cards:
   - name: Can Make Players Draw Treachery Cards
     path: Cylon
     allegiance: Cylon
+  - name: You Are a Sympathetic Cylon
+    url: ''
 ---
 expansion: exodus
 deck: loyalty
