@@ -53,7 +53,7 @@ def load_cards(card_names=None):
             jump = meta['decks'][deck].get('jump')
             ability = meta['decks'][deck].get('ability')
             reckless = meta['decks'][deck].get('reckless')
-            agenda = meta['decks'][deck].get('agenda')
+            agenda = data.get('agenda')
             path = data.get('path', meta['decks'][deck].get('path', deck_name))
             # Insert with spaces for better Elastisearch tokenization
             replace = data.get('replace', meta['decks'][deck].get('replace', ' '))

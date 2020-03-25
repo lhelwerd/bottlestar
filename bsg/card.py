@@ -186,6 +186,8 @@ class Cards:
             if yaac != card.name:
                 msg += f"**{yaac}**\n"
         msg += f"**{card.name}**"
+        if card.agenda is not None:
+            msg += f" ({card.agenda})"
         if card.character_class is not None:
             msg += f" ({card.character_class})"
         if card.value is not None:
@@ -213,8 +215,9 @@ class Cards:
 
         if card.allegiance is not None:
             if card.deck == "agenda" and card.text:
+                team = "Cylons" if card.allegiance == "Cylon" else "humans"
                 msg += "\n**You Win the Game if:**"
-                msg += f"\nThe {card.allegiance} have won.\n***and***"
+                msg += f"\nThe {team} have won.\n***and***"
             elif card.deck != "loyalty":
                 msg += f"\n**Allegiance: {card.allegiance}**"
 
