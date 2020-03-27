@@ -1769,8 +1769,10 @@ cards:
     path: Anastasia Dualla
   - name: Billy Keikeya
   - name: 'Brendan "Hot Dog" Costanza'
+    path: Brendan Hot Dog Costanza
   - name: Brother Cavil
   - name: 'Callandra "Cally" Tyrol'
+    path: Callandra Cally Tyrol
   - name: Caprica Six
   - name: '"Chief" Galen Tyrol'
   - name: "D'Anna Biers"
@@ -1786,9 +1788,11 @@ cards:
   - name: 'Kara "Starbuck" Thrace'
     path: Kara Thrace
   - name: 'Karl "Helo" Agathon'
+    path: Karl Helo Agathon
   - name: Kendra Shaw
   - name: Laura Roslin
   - name: 'Lee "Apollo" Adama'
+    path: Lee Apollo Adama
   - name: Leoben Conoy
   - name: 'Louanne "Kat" Katraine'
     path: Louanne Katraine
