@@ -229,7 +229,7 @@ class Cards:
     def get_text(self, card):
         expansion = self.expansions.get(card.expansion, {}).get("prefix", "BSG")
         msg = f"{expansion} "
-       
+
         if isinstance(card, Card):
             msg += self.get_card_header(card)
             deck = card.deck
@@ -301,13 +301,24 @@ class Cards:
 
         return line
 
-    def lines_of_succession(self, chars, cylons, locations):
+    def lines_of_succession(self, chars, seed):
+        players = seed.get("players", [])
+        cylons = {
+            player: cylon
+            for player, cylon in zip(players, seed.get("revealedCylons", []))
+        }
+        locations = {
+            player: location
+            for player, location in zip(players, seed.get("playerLocations", []))
+        }
+
         titles = sorted((title for title, data in self.titles.items()
-                         if 'titles' not in data),
+                        if 'titles' not in data and \
+                            seed.get(data.get("condition", "gameSetup"))),
                         key=lambda title: self.titles[title]['priority'])
         report = []
         for title in titles:
-            line = sorted(chars, key=lambda char: getattr(char, title.lower()))
+            line = sorted(chars, key=lambda char: getattr(char, title.lower()) or 99)
             names = "\n".join(
                 self._format_succession(title, index + 1, char, cylons, locations)
                 for index, char in enumerate(line)

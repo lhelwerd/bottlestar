@@ -82,16 +82,7 @@ def main():
             seed = byc.get_game_seed(game_state)
             search = Card.search(using='main').filter("term", deck="char") \
                 .filter("terms", path__raw=seed.get("players", []))
-            cylons = {
-                player: cylon 
-                for player, cylon in zip(seed["players"], seed["revealedCylons"])
-            }
-            locations = {
-                player: location
-                for player, location in zip(seed["players"], seed["playerLocations"])
-            }
-            print(cards.lines_of_succession(list(search.scan()),
-                                            cylons, locations))
+            print(cards.lines_of_succession(list(search.scan()), seed))
             return
 
         choice = ""
@@ -201,16 +192,8 @@ def main():
                         search = Card.search(using='main') \
                             .filter("term", deck="char") \
                             .filter("terms", path__raw=seed.get("players", []))
-                        cylons = {
-                            player: cylon 
-                            for player, cylon in zip(seed["players"], seed["revealedCylons"])
-                        }
-                        locations = {
-                            player: location
-                            for player, location in zip(seed["players"], seed["playerLocations"])
-                        }
-                        print(cards.lines_of_succession(list(search.scan()),
-                                                        cylons, locations))
+                        players = list(search.scan())
+                        print(cards.lines_of_succession(players, seed))
                     else:
                         print(byc.save_game_state_screenshot(state))
                 else:

@@ -133,6 +133,7 @@ character_classes:
   Cylon Leader:
     priority: 12
     color: light_grey
+    condition: cylonLeader
 titles:
   President:
     priority: 3
@@ -159,6 +160,7 @@ titles:
     discord: ":guardsman:"
     unicode: "\U0001F482"
     images: cag_banners
+    condition: CFB
   God:
     priority: 1
     color: purple
@@ -171,6 +173,7 @@ titles:
     titles: [theMutineer]
     discord: ":cowboy:"
     unicode: "\U0001F920"
+    condition: mutineer
 loyalty:
   Cylon:
     priority: 7

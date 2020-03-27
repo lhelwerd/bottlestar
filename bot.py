@@ -841,16 +841,7 @@ async def on_message(message):
                 search = Card.search(using='main') \
                     .filter("term", deck="char") \
                     .filter("terms", path__raw=seed.get("players", []))
-                cylons = {
-                    player: cylon
-                    for player, cylon in zip(seed["players"], seed["revealedCylons"])
-                }
-                locations = {
-                    player: location
-                    for player, location in zip(seed["players"], seed["playerLocations"])
-                }
-                lines = cards.lines_of_succession(list(search.scan()), cylons,
-                                                  locations)
+                lines = cards.lines_of_succession(list(search.scan()), seed)
                 await message.channel.send(replace_roles(lines,
                                                          guild=message.guild,
                                                          seed=seed,
