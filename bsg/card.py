@@ -293,6 +293,9 @@ class Cards:
         if not match:
             name = f"{char.name} ({char.path})"
 
+        if getattr(char, title.lower()) == 99:
+            return f"{name} (Cylon Leader)"
+
         line = f"{index}. {name}"
         if cylons.get(char.path):
             line = f"~~{line}~~"
@@ -313,12 +316,12 @@ class Cards:
         }
 
         titles = sorted((title for title, data in self.titles.items()
-                        if 'titles' not in data and \
+                         if 'titles' not in data and \
                             seed.get(data.get("condition", "gameSetup"))),
                         key=lambda title: self.titles[title]['priority'])
         report = []
         for title in titles:
-            line = sorted(chars, key=lambda char: getattr(char, title.lower()) or 99)
+            line = sorted(chars, key=lambda char: getattr(char, title.lower()))
             names = "\n".join(
                 self._format_succession(title, index + 1, char, cylons, locations)
                 for index, char in enumerate(line)

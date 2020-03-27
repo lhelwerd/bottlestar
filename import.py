@@ -90,7 +90,7 @@ def load_cards(card_names=None):
                 cylon = card.get('cylon')
                 text = json.dumps(card.get('text', {}))
                 succession = card.get('succession', {})
-                default_succession = 99 if 'character_class' in card else None
+                default_succession = 99 if 'class' in card else None
                 doc = Card(name=card['name'],
                            prefix=path,
                            path=card_path.replace(' ', replace),
