@@ -1209,14 +1209,14 @@ cards:
     path: Racetrack
     class: Pilot
     succession:
-      president: 24
+      president: 30.75
       admiral: 14.5
       cag: 4.5
   - name: Kendra Shaw
     path: Shaw
     class: Military Leader
     succession:
-      president: 26
+      president: 20.5
       admiral: 4
       cag: 16
   - name: 'Diana "Hardball" Seelix'
