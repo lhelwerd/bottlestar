@@ -84,6 +84,7 @@ decks:
     path: Boards
     ext: ''
     prefix: ''
+    denote: False
 skills:
   Leadership:
     short: G
