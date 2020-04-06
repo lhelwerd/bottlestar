@@ -25,11 +25,13 @@ decks:
     name: Super Crisis
     path: S_Crisis
     ext: png
-  destination:
-    alias: dest
+  dest:
     name: Destination
     path: Dest
     ext: png
+  destination:
+    alias: dest
+    denote: False
   char:
     name: Chars
     ext: png
