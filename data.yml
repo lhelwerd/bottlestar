@@ -905,7 +905,7 @@ cards:
     skills: [Leadership, Tactics]
 ---
 expansion: base
-deck: destination
+deck: dest
 cards:
   - name: Asteroid Field
     count: 2
@@ -940,7 +940,7 @@ cards:
     destination: 1
 ---
 expansion: pegasus
-deck: destination
+deck: dest
 cards:
   - name: Binary Star
     destination: 2
@@ -955,7 +955,7 @@ cards:
     destination: 0
 ---
 expansion: exodus
-deck: destination
+deck: dest
 cards:
   - name: Algae Planet
     destination: 1
