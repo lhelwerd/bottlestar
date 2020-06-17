@@ -819,7 +819,7 @@ cards:
   - name: Quorum in Uproar
     path: Quorum In Uproar
     value: 8
-    skills: [Leadership, Tactics]
+    skills: [Politics, Tactics]
     cylon: Basestars launch Raiders
   - name: Rallying Support
     value: 8
