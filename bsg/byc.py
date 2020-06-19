@@ -198,7 +198,6 @@ class ByYourCommand:
             except TimeoutException:
                 return self._get_game_state(quote=quote)
 
-        logging.info("Dialog: %s", dialog.element.get_attribute("innerHTML"))
         logging.info("Browser log: %r", self.driver.get_log("browser"))
         return dialog
 
