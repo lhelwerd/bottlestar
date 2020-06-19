@@ -12,6 +12,7 @@ from bsg.byc import ByYourCommand, Dialog
 from bsg.card import Cards
 from bsg.image import Images
 from bsg.search import Card, Location
+from bsg.thread import Thread
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Command-line bot reply')
@@ -44,7 +45,7 @@ def main():
     command = args.command
     arguments = args.arguments
     cards = Cards(config['cards_url'])
-    images = Images(config['image_api_url'])
+    images = Images(config['api_url'])
 
     if command == "bot":
         at = "@"
@@ -154,7 +155,44 @@ def main():
         print(cards.replace_cards(text, args.display))
         return
 
-    if command in ("latest", "all", "update", "succession", "image", "game_seed"):
+    if command in ("latest", "succession", "image", "state"):
+        thread = Thread(config['api_url'])
+        game_id = config['thread_id']
+        post, seed = thread.retrieve(game_id)
+        if post is None:
+            print('No latest post found!')
+            return
+
+        if command == "succession":
+            search = Card.search(using='main') \
+                .filter("term", deck="char") \
+                .filter("terms", path__raw=seed.get("players", []))
+            players = list(search.scan())
+            print(cards.lines_of_succession(players, seed))
+        else:
+            author = thread.get_author(ByYourCommand.get_quote_author(post)[0])
+            if author is None:
+                author = args.user
+            byc = ByYourCommand(game_id, author, config['script_url'])
+            if command in ("state", "image"):
+                choices = []
+                dialog = byc.run_page(choices, post)
+                if "You are not recognized as a player" in dialog.msg:
+                    choices.extend(["\b1", "1"])
+                choices.extend(["2", "\b2", "\b1"])
+                post = byc.run_page(choices, post, num=len(choices),
+                                    quits=True, quote=False)
+
+            bbcode = BBCodeMarkdown(images)
+            text = bbcode.process_bbcode(post)
+            if command == "image":
+                print(byc.save_game_state_screenshot(images, bbcode.game_state))
+            else:
+                print(cards.replace_cards(text, display=args.display))
+
+        return
+
+    if command in ("all", "update"):
         rss = RSS(config['rss_url'], images, config['image_url'],
                   config.get('session_id'))
         if command == "update":
@@ -167,37 +205,13 @@ def main():
             one = False
             if_modified_since = None
 
-        fetch_seed = command in ("succession", "game_seed")
-        fetch_state = command == "image"
-
         result = rss.parse(if_modified_since=if_modified_since, one=one,
                            game_seed=fetch_seed, game_state=fetch_state)
         try:
             ok = True
             while ok:
                 output = next(result)
-                if fetch_state or fetch_seed:
-                    game_id = config["rss_url"].split("/")[-1]
-                    state, player = output
-                    byc = ByYourCommand(game_id, player, config["script_url"])
-                    if command == "game_seed":
-                        seed = byc.make_game_seed(state)
-                        text = byc.run_page(["2", "\b2", "\b1"], seed,
-                                            force=True)
-                        bbcode = BBCodeMarkdown(images)
-                        bbcode.process_bbcode(state)
-                        state = bbcode.game_state
-                    elif command == "succession":
-                        seed = byc.load_game_seed(state)
-                        search = Card.search(using='main') \
-                            .filter("term", deck="char") \
-                            .filter("terms", path__raw=seed.get("players", []))
-                        players = list(search.scan())
-                        print(cards.lines_of_succession(players, seed))
-                    else:
-                        print(byc.save_game_state_screenshot(state))
-                else:
-                    print(cards.replace_cards(output, display=args.display))
+                print(cards.replace_cards(output, display=args.display))
                 if command == "all":
                     print('\n' + '=' * 80 + '\n')
                 else:

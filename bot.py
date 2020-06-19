@@ -13,10 +13,10 @@ import yaml
 from elasticsearch_dsl.connections import connections
 from bsg.bbcode import BBCodeMarkdown
 from bsg.byc import ByYourCommand, Dialog
-from bsg.rss import RSS
 from bsg.card import Cards
 from bsg.image import Images
 from bsg.search import Card, Location
+from bsg.thread import Thread
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Command-line bot reply')
@@ -35,10 +35,9 @@ with open("config.yml") as config_file:
 
 client = discord.Client()
 cards = Cards(config['cards_url'])
-images = Images(config['image_api_url'])
+images = Images(config['api_url'])
 bbcode = BBCodeMarkdown(images)
-rss = RSS(config['rss_url'], images, config['image_url'],
-          config.get('session_id'))
+thread = Thread(config['api_url'])
 connections.create_connection(alias='main',
                               hosts=[config['elasticsearch_host']])
 byc_games = {}
@@ -71,27 +70,6 @@ async def send_message(channel, message, **kwargs):
 
     messages.append(await channel.send(message, **kwargs))
     return messages
-
-async def check_for_updates(client, server_id, channel_id):
-    if server_id is None or channel_id is None:
-        logging.warning('No server ID or channel ID provided')
-        return
-
-    previous_check = datetime.now()
-    timeout = 60 * 5
-    while True:
-        result = rss.parse(previous_check, one=True)
-        try:
-            message = next(result)
-            logging.info('We have a new message in the RSS, posting')
-            guild = client.get_guild(server_id)
-            channel = guild.get_channel(channel_id)
-            await send_message(channel, replace_roles(next(message), guild))
-        except StopIteration:
-            logging.info("No new message")
-
-        previous_check = datetime.now()
-        await asyncio.sleep(timeout)
 
 def replace_roles(message, guild=None, seed=None, users=False, emoji=True,
                   deck=True):
@@ -131,9 +109,6 @@ async def on_ready():
         for role in guild.roles:
             if role.mentionable:
                 logging.info('Role: %s (#%d)', role.name, role.position)
-
-    client.loop.create_task(check_for_updates(client, config.get('server_id'),
-                                              config.get('channel_id')))
 
 def format_private_channel(channel_name, user):
     return f"byc-{channel_name}-{format_username(user)}"
@@ -751,6 +726,42 @@ async def byc_command(message, command, arguments):
 
                 run = False
 
+async def thread_command(message, command):
+    game_id = config['thread_id']
+    post, seed = thread.retrieve(game_id)
+    if post is None:
+        await message.channel.send('No latest post found!')
+
+    if command == "succession":
+        search = Card.search(using='main') \
+            .filter("term", deck="char") \
+            .filter("terms", path__raw=seed.get("players", []))
+        players = list(search.scan())
+        succession = replace_roles(cards.lines_of_succession(players, seed),
+                                   message.guild)
+        await send_message(message.channel, succession)
+        return
+
+    author = thread.get_author(ByYourCommand.get_quote_author(post)[0])
+    byc = ByYourCommand(game_id, author, config['script_url'])
+    if command == "image":
+        choices = []
+        dialog = byc.run_page(choices, post)
+        if "You are not recognized as a player" in dialog.msg:
+            choices.extend(["\b1", "1"])
+        choices.extend(["2", "\b2", "\b1"])
+        post = byc.run_page(choices, post, num=len(choices),
+                            quits=True, quote=False)
+
+    bbcode = BBCodeMarkdown(images)
+    text = bbcode.process_bbcode(post)
+    if command == "image":
+        path = byc.save_game_state_screenshot(images, bbcode.game_state)
+        await message.channel.send(file=discord.File(path))
+        return
+
+    await send_message(message.channel, replace_roles(text, message.guild))
+
 def format_command(command, description):
     if isinstance(description, tuple):
         return f"**!{command}** <{description[0]}>: {description[1]}"
@@ -805,53 +816,13 @@ async def on_message(message):
     if command == "bot":
         await message.channel.send(f'Hello {message.author.mention}!')
         return
-    if command == "latest":
+    if command in ("latest", "succession", "image"):
         try:
-            await send_message(message.channel, replace_roles(next(rss.parse()),
-                                                              message.guild))
-        except StopIteration:
-            await message.channel.send('No post found!')
-        return
-    if command in ("image", "succession"):
-        # Create a game state image based on the most recent game seed; NB: do 
-        # not use the XML or RSS to grab the HTML because it does not contain 
-        # all the tags. Instead run the seed through a BYC instance and take 
-        # a screenshot.
-        try:
-            game_id = config["rss_url"].split("/")[-1]
-            state, player = next(rss.parse(game_seed=True))
-            logging.info("Player: %s", player)
-            byc = ByYourCommand(game_id, player, config["script_url"])
-            if command == "game_seed":
-                game_seed = byc.make_game_seed(state)
-                choices = []
-                dialog = byc.run_page(choices, game_seed)
-                if "You are not recognized as a player" in dialog.msg:
-                    choices.append("\b1")
-                choices.extend(["2", "\b2", "\b1"])
-                logging.info('%r', choices)
-                text = byc.run_page(choices, game_seed, num=len(choices))
-                bbcode.process_bbcode(text)
-                state = bbcode.game_state
-
-                path = byc.save_game_state_screenshot(images, state)
-                await message.channel.send(file=discord.File(path))
-            else:
-                seed = byc.load_game_seed(state)
-                search = Card.search(using='main') \
-                    .filter("term", deck="char") \
-                    .filter("terms", path__raw=seed.get("players", []))
-                lines = cards.lines_of_succession(list(search.scan()), seed)
-                await message.channel.send(replace_roles(lines,
-                                                         guild=message.guild,
-                                                         seed=seed,
-                                                         emoji=False,
-                                                         deck=False))
-        except StopIteration:
-            await message.channel.send('No post found!')
+            async with message.channel.typing():
+                await thread_command(message, command)
         except:
-            logging.exception(f'Could not retrieve game state for {command}')
-            await message.channel.send('Uh oh')
+            logging.exception(f"Thread {command} error")
+            await message.channel.send(f"Uh oh")
         return
 
     if command in ('card', 'search', ''):

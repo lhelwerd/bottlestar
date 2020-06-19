@@ -44,7 +44,7 @@ class Images:
             return None
 
         # Retrieve the API data for the image.
-        request = self.session.get(f"{self.api_url}{image_id}")
+        request = self.session.get(f"{self.api_url}/images/{image_id}")
         try:
             request.raise_for_status()
             result = request.json()

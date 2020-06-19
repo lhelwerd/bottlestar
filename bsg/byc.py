@@ -74,6 +74,7 @@ class ByYourCommand:
     SCRIPT_PATH = Path("byc.js")
     STYLE_PATH = Path("game_state.css")
     GAME_SEED_REGEX = re.compile(r"(?:\[c\])?\[size=(?:1|0)\]\[color=#(?:F4F4FF|FFFFFF)\]New seed: (\S+)\[/color\]\[/size](?:\[/c\])?")
+    QUOTE_REGEX = re.compile(r'\[q="([^"]+)"\](.*)\[/q\]', re.S)
 
     def __init__(self, game_id, user, script_url):
         self.driver = None
@@ -123,7 +124,8 @@ class ByYourCommand:
         except NoSuchElementException:
             raise ValueError("Context switched (state)")
 
-    def run_page(self, choices, game_state, force=False, num=1):
+    def run_page(self, choices, game_state, force=False, quits=False,
+                 quote=True, num=1):
         """
         Perform action(s) for a user through script dialogs to bring the game
         to a certain state.
@@ -158,17 +160,17 @@ class ByYourCommand:
         try:
             dialog = Dialog(self._wait_for_dialog())
         except TimeoutException:
-            return self._get_game_state()
+            return self._get_game_state(quote=quote)
 
         # Check for BYC updates
         if self._check_script_update():
             try:
                 dialog = Dialog(self._wait_for_dialog())
             except TimeoutException:
-                return self._get_game_state()
+                return self._get_game_state(quote=quote)
 
-        for choice in choices:
-            logging.info("Handling choice: %s", choice.lstrip("\b"))
+        for index, choice in enumerate(choices):
+            logging.info("Handling choice #%d: %s", index, choice.lstrip("\b"))
             if dialog.input and not choice.startswith("\b"): # Non-button input
                 dialog.input.send_keys(choice)
                 button = dialog.element.find_element_by_class_name("ok")
@@ -186,10 +188,15 @@ class ByYourCommand:
             except TimeoutException:
                 raise RuntimeError("Dialog did not disappear")
 
+            if quits and index == len(choices) - 1:
+                # Don't wait for dialog if we know this is supposed to
+                # Save and Quit, so we don't need to wait for a new dialog
+                return self._get_game_state(quote=quote)
+
             try:
                 dialog = Dialog(self._wait_for_dialog())
             except TimeoutException:
-                return self._get_game_state()
+                return self._get_game_state(quote=quote)
 
         logging.info("Dialog: %s", dialog.element.get_attribute("innerHTML"))
         logging.info("Browser log: %r", self.driver.get_log("browser"))
@@ -200,18 +207,31 @@ class ByYourCommand:
             wait = visibility_of_element_located((By.CLASS_NAME, "dialog"))
         return WebDriverWait(self.driver, 2).until(wait)
 
-    def _get_game_state(self):
+    def _get_game_state(self, quote=True):
         textarea = self.driver.find_element_by_tag_name("textarea")
         value = textarea.get_attribute("value").encode("iso-8859-1").decode()
-        return f'[q="{self.user}"]{value}[/q]'
+        if quote:
+            return f'[q="{self.user}"]{value}[/q]'
 
-    def load_game_seed(self, seed):
+        return value
+
+    @classmethod
+    def get_quote_author(cls, state):
+        match = cls.QUOTE_REGEX.search(state)
+        if match:
+            return match.group(1), match.group(2)
+
+        return None, state
+
+    @classmethod
+    def load_game_seed(cls, seed):
         return json.loads(b64decode(seed.replace("-", "")).decode())
 
-    def get_game_seed(self, game_state):
-        match = self.GAME_SEED_REGEX.search(game_state)
+    @classmethod
+    def get_game_seed(cls, game_state):
+        match = cls.GAME_SEED_REGEX.search(game_state)
         if match:
-            return self.load_game_seed(match.group(1))
+            return cls.load_game_seed(match.group(1))
 
         return {}
 

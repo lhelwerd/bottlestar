@@ -316,8 +316,9 @@ class Cards:
         }
 
         titles = sorted((title for title, data in self.titles.items()
-                         if 'titles' not in data and \
-                            seed.get(data.get("condition", "gameSetup"))),
+                         if 'titles' not in data and (
+                             'condition' not in data or seed.get(data['condition'])
+                        )),
                         key=lambda title: self.titles[title]['priority'])
         report = []
         for title in titles:
