@@ -350,12 +350,18 @@ class Cards:
 
             indexes = seed[data['seed']][:-data['analyze']-1:-1]
             search = Card.search(using='main') \
-                .source(["index", "name", "count"]) \
+                .source(["index", "name", "count", "skills", "expansion"]) \
                 .filter("term", deck=deck) \
                 .filter("terms", index=list(range(0, max(indexes) + 1)))
 
             lookup = {}
             for card in search.scan():
+                if deck == "skill" and "Treachery" in card.skills and \
+                    ((card.expansion == "pegasus" and seed.get('daybreak')) or \
+                    (card.expansion == "daybreak" and not seed.get('daybreak'))):
+                        # Pegasus/Daybreak Treachery decks
+                        continue
+
                 if card.count is not None:
                     lookup.update({index: card.name for index in range(card.index, card.index + card.count[0])})
                 else:
