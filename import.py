@@ -99,6 +99,7 @@ def load_cards(card_names=None):
                            deck=deck,
                            expansion=expansion,
                            ext=card.get('ext', ext),
+                           index=card.get('index'),
                            count=count,
                            value=value,
                            destination=card.get('destination'),

@@ -304,8 +304,13 @@ class Cards:
 
         return line
 
-    def lines_of_succession(self, chars, seed):
+    def lines_of_succession(self, seed):
         players = seed.get("players", [])
+        search = Card.search(using='main') \
+            .filter("term", deck="char") \
+            .filter("terms", path__raw=players)
+        chars = list(search.scan())
+            
         cylons = {
             player: cylon
             for player, cylon in zip(players, seed.get("revealedCylons", []))
@@ -328,5 +333,43 @@ class Cards:
                 for index, char in enumerate(line)
             )
             report.append(f"{title}:\n{names}")
+
+        return "\n\n".join(report)
+
+    def analyze(self, seed):
+        report = []
+        for deck, data in self.decks.items():
+            if 'seed' not in data or 'analyze' not in data:
+                # Seed does not support analysis of this deck
+                continue
+
+            if data['seed'] not in seed:
+                # Game does not contain this deck (expansion/variant)
+                logging.info("%s not in seed", data['seed'])
+                continue
+
+            indexes = seed[data['seed']][:-data['analyze']-1:-1]
+            search = Card.search(using='main') \
+                .source(["index", "name", "count"]) \
+                .filter("term", deck=deck) \
+                .filter("terms", index=list(range(0, max(indexes) + 1)))
+
+            lookup = {}
+            for card in search.scan():
+                if card.count is not None:
+                    lookup.update({index: card.name for index in range(card.index, card.index + card.count[0])})
+                else:
+                    lookup[card.index] = card.name
+
+            if all(index not in lookup for index in indexes):
+                # Could not find any cards from the seed in our data
+                # This can happen when crisis deck is replaced with NC crisis
+                logging.info("None of the %s indexes found: %r", deck, indexes)
+                continue
+
+            count = len(indexes)
+            name = data.get("analysis_title", data['name'])
+            names = ", ".join(lookup.get(index, "???") for index in indexes)
+            report.append(f"The top {count} cards of the {name} deck:\n{names}\n{indexes}")
 
         return "\n\n".join(report)

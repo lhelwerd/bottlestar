@@ -21,14 +21,20 @@ decks:
     name: Crisis
     ext: png
     jump: False
+    seed: crisisDeck
+    analyze: 10
   s_crisis:
     name: Super Crisis
     path: S_Crisis
     ext: png
+    seed: superCrisisDeck
+    analyze: 2
   dest:
     name: Destination
     path: Dest
     ext: png
+    seed: destinationDeck
+    analyze: 5
   destination:
     alias: dest
     denote: False
@@ -43,19 +49,26 @@ decks:
   loyalty:
     name: Loyalty
     ext: png
+    #seed: loyaltyDeck
   quorum:
     name: Quorum
     ext: png
+    seed: quorumDeck
+    analyze: 4
   skill:
     name: Skill
     ext: png
     reckless: False
     ability: False
     denote: False
+    seed: destiny # skillCardDecks
+    analysis_title: Destiny
+    analyze: 12
   motive:
     name: Motive
     path: Motives
     ext: jpg
+    #seed: motiveDeck
   agenda:
     name: Agenda
   ally:
@@ -72,15 +85,21 @@ decks:
     path: Missions
     ext: jpg
     replace: ''
+    seed: missionDeck
+    analyze: 5
   mutiny:
     name: Mutiny
     ext: jpg
     replace: ''
+    seed: mutinyDeck
+    analyze: 5
   nc_crisis:
     name: New Caprica Crisis
     path: NC_Crisis
     ext: gif
     jump: False
+    seed: crisisDeck
+    analyze: 10
   board:
     name: Boards
     path: Boards

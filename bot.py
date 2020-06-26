@@ -733,13 +733,15 @@ async def thread_command(message, command):
         await message.channel.send('No latest post found!')
 
     if command == "succession":
-        search = Card.search(using='main') \
-            .filter("term", deck="char") \
-            .filter("terms", path__raw=seed.get("players", []))
-        players = list(search.scan())
-        succession = replace_roles(cards.lines_of_succession(players, seed),
+        succession = replace_roles(cards.lines_of_succession(seed),
                                    message.guild)
         await send_message(message.channel, succession)
+        return
+    if command == "analyze":
+        if not seed.get('gameOver'):
+            await message.channel.send('Game is not yet over!')
+        else:
+            await send_message(cards.analyze(seed))
         return
 
     author = thread.get_author(ByYourCommand.get_quote_author(post)[0])
@@ -802,7 +804,9 @@ async def on_message(message):
     #
     # Undocumented commands:
     # !bot      | test command
-    # !latest   | retrieve BGG message from RSS feed
+    #
+    # TODO:
+    # !analyze  | show next X cards of each deck if gameOver
 
     if command in byc_commands:
         try:

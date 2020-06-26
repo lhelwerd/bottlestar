@@ -12,6 +12,7 @@ class Card(Document):
     deck = Keyword(normalizer=lowercase)
     expansion = Keyword(normalizer=lowercase)
     ext = Keyword()
+    index = Integer()
     count = Integer()
     value = Integer()
     destination = Integer()

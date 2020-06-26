@@ -7,7 +7,6 @@ import dateutil.parser
 import yaml
 from elasticsearch_dsl.connections import connections
 from bsg.bbcode import BBCodeMarkdown
-from bsg.rss import RSS
 from bsg.byc import ByYourCommand, Dialog
 from bsg.card import Cards
 from bsg.image import Images
@@ -81,9 +80,7 @@ def main():
 
         if user == "succession":
             seed = byc.get_game_seed(game_state)
-            search = Card.search(using='main').filter("term", deck="char") \
-                .filter("terms", path__raw=seed.get("players", []))
-            print(cards.lines_of_succession(list(search.scan()), seed))
+            print(cards.lines_of_succession(seed))
             return
 
         choice = ""
@@ -155,7 +152,7 @@ def main():
         print(cards.replace_cards(text, args.display))
         return
 
-    if command in ("latest", "succession", "image", "state"):
+    if command in ("latest", "succession", "analyze", "image", "state"):
         thread = Thread(config['api_url'])
         game_id = config['thread_id']
         post, seed = thread.retrieve(game_id)
@@ -164,11 +161,9 @@ def main():
             return
 
         if command == "succession":
-            search = Card.search(using='main') \
-                .filter("term", deck="char") \
-                .filter("terms", path__raw=seed.get("players", []))
-            players = list(search.scan())
-            print(cards.lines_of_succession(players, seed))
+            print(cards.lines_of_succession(seed))
+        elif command == "analyze":
+            print(cards.analyze(seed))
         else:
             author = thread.get_author(ByYourCommand.get_quote_author(post)[0])
             if author is None:
@@ -192,33 +187,6 @@ def main():
 
         return
 
-    if command in ("all", "update"):
-        rss = RSS(config['rss_url'], images, config['image_url'],
-                  config.get('session_id'))
-        if command == "update":
-            one = True
-            if arguments:
-                if_modified_since = dateutil.parser.parse(" ".join(arguments))
-            else:
-                if_modified_since = datetime.now()
-        else:
-            one = False
-            if_modified_since = None
-
-        result = rss.parse(if_modified_since=if_modified_since, one=one,
-                           game_seed=fetch_seed, game_state=fetch_state)
-        try:
-            ok = True
-            while ok:
-                output = next(result)
-                print(cards.replace_cards(output, display=args.display))
-                if command == "all":
-                    print('\n' + '=' * 80 + '\n')
-                else:
-                    ok = False
-        except StopIteration:
-            print('No latest message found!')
-        return
     if command == "replace":
         print(cards.replace_cards(' '.join(arguments),
               display=args.display))
