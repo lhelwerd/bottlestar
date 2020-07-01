@@ -44,9 +44,10 @@
 token: # Discord API token from the application in the developer portal
 cards_url: # URL to index of various BSG card images
 rss_url: # URL to RSS feed on BGG to track for updates
+thread_id: # ID of the BGG thread to retrieve game state from
+api_url: # URL of the BGG API for image/thread/author lookup
 session_id: # Session ID to log in to BGG
 image_url: # URL prefix of images on BGG
-image_api_url: # URL of the BGG API for image lookup
 server_id: # Discord ID of the server on which to send update information
 channel_id: # Discord ID of the channel on which to send update information
 elasticsearch_host: # Hostname where the ElasticSearch endpoint is hosts
