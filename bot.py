@@ -888,7 +888,7 @@ async def on_message(message):
 
     try:
         async with message.channel.typing():
-            search_command(message.channel, deck, arguments)
+            await search_command(message.channel, deck, arguments)
     except:
         logging.exception(f"Search {deck} error")
         await message.channel.send(f"Please try again later.")
