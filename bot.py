@@ -836,7 +836,8 @@ async def on_message(message):
                  "**!board** <text> [expansion]: Search a board or location\n"
                  "**!latest**: Show the latest game post\n"
                  "**!image**: Show the lastest game state\n"
-                 "**!succession**: Show the line of succession\n")
+                 "**!succession**: Show the line of succession\n"
+                 "**!analyze**: Show the top cards of decks after game over\n")
         if is_byc_enabled(message.guild, message.channel):
             reply += "\n".join([
                 format_command(command, description)
@@ -850,13 +851,6 @@ async def on_message(message):
     # Required permissions: Manage Roles, Manage Channels, Manage Nicknames,
     # View Channels, Send Messages, Manage Messages, Embed Links, Attach Files,
     # Read Message History, Mention Everyone (402910224)
-    #
-    # Undocumented commands:
-    # !bot      | test command
-    #
-    # TODO:
-    # !analyze  | show next X cards of each deck if gameOver
-
     if command in byc_commands:
         try:
             async with message.channel.typing():
@@ -866,10 +860,14 @@ async def on_message(message):
             await message.channel.send(f"Uh oh")
         return
 
+    # Undocumented commands:
+    # !bot: test command
     if command == "bot":
         await message.channel.send(f'Hello {message.author.mention}!')
         return
-    if command in ("latest", "succession", "image"):
+
+    # Thread lookup commands
+    if command in ("latest", "image", "succession", "analyze"):
         try:
             async with message.channel.typing():
                 await thread_command(message, command)
@@ -878,6 +876,7 @@ async def on_message(message):
             await message.channel.send(f"Uh oh")
         return
 
+    # Search cards/board locations
     if command in ('card', 'search', ''):
         deck = ''
     elif command not in cards.decks:
