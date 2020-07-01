@@ -1425,6 +1425,7 @@ cards:
   - name: Billy Keikeya
     path: Billy
     class: Political Leader
+    image: 5306577
     succession:
       president: 6.5
       admiral: 30.5
@@ -1432,6 +1433,7 @@ cards:
   - name: 'Margaret "Racetrack" Edmondson'
     path: Racetrack
     class: Pilot
+    image: 5306575
     succession:
       president: 30.75
       admiral: 14.5
@@ -1439,14 +1441,15 @@ cards:
   - name: Kendra Shaw
     path: Shaw
     class: Military Leader
+    image: 5306602
     succession:
       president: 20.5
       admiral: 4
       cag: 16
   - name: 'Diana "Hardball" Seelix'
     path: Seelix
-    url: ""
-    class: Pilot
+    image: 5441856
+    class: Support
     succession:
       president: 17
       admiral: 19

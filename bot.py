@@ -853,7 +853,7 @@ async def on_message(message):
     else:
         for hit in response:
             url = cards.get_url(hit.to_dict())
-            if hit.bbox:
+            if hit.bbox or hit.image:
                 filename = f"{hit.path}.{hit.ext}"
                 path = Path(f"images/{filename}")
                 if command == 'board' and hit.bbox:
@@ -864,11 +864,20 @@ async def on_message(message):
 
                 if not target_path.exists():
                     if not path.exists():
-                        path = images.download(url, filename)
-                    try:
-                        images.crop(path, target_path=target_path, bbox=hit.bbox)
-                    except:
-                        path = target_path
+                        if hit.image:
+                            path = images.retrieve(hit.image)
+                        else:
+                            path = images.download(url, filename)
+
+                    if hit.bbox:
+                        try:
+                            images.crop(path, target_path=target_path,
+                                        bbox=hit.bbox)
+                        except:
+                            target_path = path
+                    else:
+                        target_path = path
+
                 image = discord.File(target_path)
                 url = ''
             else:

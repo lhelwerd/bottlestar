@@ -8,6 +8,7 @@ class Card(Document):
     name = Text(analyzer='snowball', fields={'raw': Keyword()})
     path = Text(analyzer='snowball', fields={'raw': Keyword()})
     url = Keyword()
+    image = Integer()
     bbox = Integer()
     deck = Keyword(normalizer=lowercase)
     expansion = Keyword(normalizer=lowercase)

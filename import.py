@@ -95,6 +95,7 @@ def load_cards(card_names=None):
                            prefix=path,
                            path=card_path.replace(' ', replace),
                            url=card.get('url'),
+                           image=card.get('image'),
                            bbox=card.get('bbox'),
                            deck=deck,
                            expansion=expansion,

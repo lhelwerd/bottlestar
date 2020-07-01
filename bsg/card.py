@@ -101,6 +101,11 @@ class Cards:
         if url is not None:
             return url
 
+        image_id = card.get('image')
+        if image_id is not None:
+            # We cannot generate a stable URL to the image itself without API
+            return ""
+
         card_deck = card.get('deck', 'board')
         default_deck = {
             'name': card_deck,
