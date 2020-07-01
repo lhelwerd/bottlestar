@@ -1,5 +1,4 @@
 import argparse
-import asyncio
 from contextlib import contextmanager
 from datetime import datetime
 from glob import glob
@@ -142,7 +141,7 @@ async def byc_cleanup(guild, channel, game_id, user, game_state_path):
     await update_title_roles(guild, roles, game_seed, empty_game_seed,
                              banner_priority)
     if "Cylon" in roles:
-        for user in seed["usernames"]:
+        for user in game_seed["usernames"]:
             member = guild.get_member_named(user)
             if member is not None:
                 await member.remove_roles(roles["Cylon"])
@@ -768,6 +767,52 @@ async def thread_command(message, command):
 
     await send_message(message.channel, replace_roles(text, message.guild))
 
+async def search_command(channel, deck, arguments):
+    if deck == 'board':
+        expansion = cards.find_expansion(arguments)
+        response, count = Location.search_freetext(' '.join(arguments),
+                                                   expansion=expansion)
+    else:
+        response, count = Card.search_freetext(' '.join(arguments), deck=deck)
+    if count == 0:
+        await channel.send('No card found')
+        return
+
+    for hit in response:
+        url = cards.get_url(hit.to_dict())
+        if hit.bbox or hit.image:
+            filename = f"{hit.path}.{hit.ext}"
+            path = Path(f"images/{filename}")
+            if deck == 'board' and hit.bbox:
+                name = hit.name.replace(' ', '_')
+                target_path = Path(f"images/{hit.path}_{name}.{hit.ext}")
+            else:
+                target_path = path
+
+            if not target_path.exists():
+                if not path.exists():
+                    if hit.image:
+                        path = images.retrieve(hit.image)
+                    else:
+                        path = images.download(url, filename)
+
+                if hit.bbox:
+                    try:
+                        images.crop(path, target_path=target_path,
+                                    bbox=hit.bbox)
+                    except:
+                        target_path = path
+                else:
+                    target_path = path
+
+            image = discord.File(target_path)
+            url = ''
+        else:
+            image = None
+
+        await channel.send(f'{cards.get_text(hit)}\n{url} (score: {hit.meta.score:.3f}, {count} hits)', file=image)
+        break
+
 def format_command(command, description):
     if isinstance(description, tuple):
         return f"**!{command}** <{description[0]}>: {description[1]}"
@@ -842,49 +887,12 @@ async def on_message(message):
     else:
         deck = command
 
-    if command == 'board':
-        expansion = cards.find_expansion(arguments)
-        response, count = Location.search_freetext(' '.join(arguments),
-                                                   expansion=expansion)
-    else:
-        response, count = Card.search_freetext(' '.join(arguments), deck=deck)
-    if count == 0:
-        await message.channel.send('No card found')
-    else:
-        for hit in response:
-            url = cards.get_url(hit.to_dict())
-            if hit.bbox or hit.image:
-                filename = f"{hit.path}.{hit.ext}"
-                path = Path(f"images/{filename}")
-                if command == 'board' and hit.bbox:
-                    name = hit.name.replace(' ', '_')
-                    target_path = Path(f"images/{hit.path}_{name}.{hit.ext}")
-                else:
-                    target_path = path
-
-                if not target_path.exists():
-                    if not path.exists():
-                        if hit.image:
-                            path = images.retrieve(hit.image)
-                        else:
-                            path = images.download(url, filename)
-
-                    if hit.bbox:
-                        try:
-                            images.crop(path, target_path=target_path,
-                                        bbox=hit.bbox)
-                        except:
-                            target_path = path
-                    else:
-                        target_path = path
-
-                image = discord.File(target_path)
-                url = ''
-            else:
-                image = None
-
-            await message.channel.send(f'{cards.get_text(hit)}\n{url} (score: {hit.meta.score:.3f}, {count} hits)', file=image)
-            break
+    try:
+        async with message.channel.typing():
+            search_command(message.channel, deck, arguments)
+    except:
+        logging.exception(f"Search {deck} error")
+        await message.channel.send(f"Please try again later.")
 
 if __name__ == "__main__":
     client.run(config['token'])
