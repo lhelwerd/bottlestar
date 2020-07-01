@@ -741,7 +741,11 @@ async def thread_command(message, command):
         if not seed.get('gameOver'):
             await message.channel.send('Game is not yet over!')
         else:
-            await send_message(cards.analyze(seed))
+            analysis = cards.analyze(seed)
+            if analysis == '':
+                analysis = 'No decks found in the game!'
+
+            await send_message(analysis)
         return
 
     author = thread.get_author(ByYourCommand.get_quote_author(post)[0])

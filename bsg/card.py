@@ -175,23 +175,17 @@ class Cards:
             for skill in skills
         ])
 
-    def get_card_header(self, card):
-        deck = self.decks.get(card.deck, {})
-        msg = f"{deck.get('name', card.deck)}: "
-        if card.allegiance is not None and card.deck == "loyalty":
-            if card.allegiance == "Cylon":
-                yaac = "You Are a Cylon"
-            else:
-                yaac = "You Are Not a Cylon"
-            if yaac != card.name:
-                msg += f"**{yaac}**\n"
-        msg += f"**{card.name}**"
+    def get_card_title(self, card):
+        msg = f"**{card.name}**"
         if card.agenda is not None:
             msg += f" ({card.agenda})"
         if card.character_class is not None:
             msg += f" ({card.character_class})"
         if card.value is not None:
-            msg += f" - [{'|'.join(str(value) for value in card.value)}]"
+            if len(card.value) > 1:
+                msg += f" - [{'|'.join(str(value) for value in card.value)}]"
+            else:
+                msg += f" - {card.value[0]}"
         if card.skills is not None:
             if len(card.skills) > 1:
                 msg += self._get_short_skills(card.skills)
@@ -210,6 +204,20 @@ class Cards:
             if extra != " (-/-)" and not card.name.endswith(extra):
                 msg += extra
 
+        return msg
+
+    def get_card_header(self, card):
+        deck = self.decks.get(card.deck, {})
+        msg = f"{deck.get('name', card.deck)}: "
+        if card.allegiance is not None and card.deck == "loyalty":
+            if card.allegiance == "Cylon":
+                yaac = "You Are a Cylon"
+            else:
+                yaac = "You Are Not a Cylon"
+            if yaac != card.name:
+                msg += f"**{yaac}**\n"
+
+        msg += self.get_card_title(card)
         if card.count is not None:
             msg += ",".join(f" {count}\u00d7" for count in card.count)
 
@@ -350,7 +358,6 @@ class Cards:
 
             indexes = seed[data['seed']][:-data['analyze']-1:-1]
             search = Card.search(using='main') \
-                .source(["index", "name", "count", "skills", "expansion"]) \
                 .filter("term", deck=deck) \
                 .filter("terms", index=list(range(0, max(indexes) + 1)))
 
@@ -362,10 +369,17 @@ class Cards:
                         # Pegasus/Daybreak Treachery decks
                         continue
 
-                if card.count is not None:
-                    lookup.update({index: card.name for index in range(card.index, card.index + card.count[0])})
+                name = self.get_card_title(card)
+                if card.count is not None and card.value is not None:
+                    # Skill deck
+                    offset = card.index
+                    for value, count in zip(card.value, card.count):
+                        lookup.update({index: f"**{value} - {card.name}**" for index in range(offset, offset + count)})
+                        offset += count
+                elif card.count is not None:
+                    lookup.update({index: name for index in range(card.index, card.index + card.count[0])})
                 else:
-                    lookup[card.index] = card.name
+                    lookup[card.index] = name
 
             if all(index not in lookup for index in indexes):
                 # Could not find any cards from the seed in our data
@@ -376,6 +390,6 @@ class Cards:
             count = len(indexes)
             name = data.get("analysis_title", data['name'])
             names = ", ".join(lookup.get(index, "???") for index in indexes)
-            report.append(f"The top {count} cards of the {name} deck:\n{names}\n{indexes}")
+            report.append(f"The top {count} cards of the {name} deck:\n{names}")
 
         return "\n\n".join(report)
