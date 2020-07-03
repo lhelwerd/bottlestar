@@ -12,8 +12,12 @@ def parse_args():
                         help='log level')
     parser.add_argument('--host', default='localhost',
                         help='ElasticSearch host')
+    parser.add_argument('--deck', default=None,
+                        help='Only replace this deck (no renames)')
+    parser.add_argument('--expansion', default=None,
+                        help='Only replace this expansion (no renames)')
     parser.add_argument('cards', nargs='*',
-                        help='Only replace these cards (must not be renamed)')
+                        help='Only replace these cards (no renames)')
     args = parser.parse_args()
     return args
 
@@ -25,18 +29,18 @@ def main():
     # Define a default Elasticsearch client
     connections.create_connection(alias='main', hosts=[args.host])
 
-    if not args.cards:
+    if not args.cards and not args.deck and not args.expansion:
         logging.info('Cleaning up entire index')
         Card._index.delete(using='main', ignore=404)
         Card.init(using='main')
 
-    load_cards(args.cards)
+    load_cards(args)
 
     Location._index.delete(using='main', ignore=404)
     Location.init(using='main')
     load_locations()
 
-def load_cards(card_names=None):
+def load_cards(args):
     meta = {}
     with open("data.yml", "r") as data_file:
         for data in yaml.safe_load_all(data_file):
@@ -48,21 +52,32 @@ def load_cards(card_names=None):
 
             expansion = data['expansion']
             expansion_name = meta['expansions'].get(expansion, {}).get('name', expansion)
+
+            if args.expansion is not None and expansion != args.expansion:
+                continue
+
             deck = data['deck']
             deck_name = meta['decks'][deck]['name']
+
+            if args.deck is not None and deck != args.deck:
+                continue
+
+            # Deck properties
             jump = meta['decks'][deck].get('jump')
             ability = meta['decks'][deck].get('ability')
             reckless = meta['decks'][deck].get('reckless')
             agenda = data.get('agenda')
             path = data.get('path', meta['decks'][deck].get('path', deck_name))
+
             # Insert with spaces for better Elastisearch tokenization
             replace = data.get('replace', meta['decks'][deck].get('replace', ' '))
             ext = data.get('ext', meta['decks'][deck].get('ext'))
-            for card in data['cards']:
-                if card_names:
-                    if card['name'] not in card_names:
-                        continue
 
+            for card in data['cards']:
+                if args.cards and card['name'] not in args.cards:
+                    continue
+
+                if args.cards or args.deck or args.expansion:
                     try:
                         old = Card.search(using='main') \
                             .filter("term", deck=deck) \

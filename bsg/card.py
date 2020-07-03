@@ -163,7 +163,7 @@ class Cards:
                 else:
                     text = "\n".join(text)
 
-            if key != "" and key[0].isupper():
+            if key != "" and (key[0].isupper() or key.isnumeric()):
                 separator = self.decks.get(deck, {}).get("separator", ":")
                 result = f"\n**{key}{separator}** {text}"
             else:
@@ -233,6 +233,9 @@ class Cards:
                 msg += f"\nThe {team} have won.\n***and***"
             elif card.deck != "loyalty":
                 msg += f"\n**Allegiance: {card.allegiance}**"
+
+        if card.deck == "objective":
+            msg += "\nResolve when the following distance is traveled:"
 
         if card.reckless:
             msg += f"\n**Reckless**"

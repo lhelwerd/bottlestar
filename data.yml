@@ -106,6 +106,9 @@ decks:
     ext: ''
     prefix: ''
     denote: False
+  objective:
+    name: Objectives
+    denote: False
 skills:
   Leadership:
     short: G
@@ -2458,3 +2461,27 @@ cards:
     skills: [Politics, Leadership]
     cylon: [Basestars fire, Occupation Forces]
     jump: True
+---
+expansion: base
+deck: objective
+cards:
+  - name: Kobol
+    url: 'https://images-cdn.fantasyflightgames.com/ffg_content/Battlestar_Galactica/Battlestar_Intro/kobol-front.png'
+---
+expansion: pegasus
+deck: objective
+cards:
+  - name: New Caprica
+    url: 'https://images-cdn.fantasyflightgames.com/ffg_content/Battlestar_Galactica/BSG_Preview_3/newcaprica-objective-card-1.png'
+---
+expansion: exodus
+deck: objective
+cards:
+  - name: Ionian Nebula
+    url: 'https://images-cdn.fantasyflightgames.com/ffg_content/Battlestar_Galactica/exodus/preview3/exodus-ionian-nebula-objective.png'
+---
+expansion: daybreak
+deck: objective
+cards:
+  - name: Earth
+    url: 'https://images-cdn.fantasyflightgames.com/ffg_content/Battlestar_Galactica/daybreak/BSG04_Card_Objective-Earth.png'
