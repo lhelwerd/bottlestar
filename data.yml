@@ -108,9 +108,11 @@ decks:
     denote: False
   objective:
     name: Objective
+    ext: png
     denote: False
   title:
     name: Title
+    ext: jpg
     denote: False # Handled through titles meta
 skills:
   Leadership:

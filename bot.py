@@ -781,7 +781,7 @@ async def search_command(channel, deck, arguments):
     for hit in response:
         url = cards.get_url(hit.to_dict())
         if hit.bbox or hit.image:
-            filename = f"{hit.path}.{hit.ext}"
+            filename = f"{hit.expansion}_{hit.path}.{hit.ext}"
             path = Path(f"images/{filename}")
             if deck == 'board' and hit.bbox:
                 name = hit.name.replace(' ', '_')
