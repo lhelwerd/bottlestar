@@ -138,6 +138,16 @@ class Cards:
 
         return f'{self.url}/{deck_path}/{prefix}{path}{ext}'
 
+    def _parse_list(self, text, key="", deck="default"):
+        result = []
+        for subtext in text:
+            subtext = self._parse_text(subtext, '- ', deck).lstrip('\n')
+            if key != "" and not key[0].isupper():
+                subtext = f"{key}{subtext}"
+            result.append(subtext)
+
+        return "\n".join(result)
+
     def _parse_text(self, text, key="", deck="default"):
         parser = None
         if key in self.TEXT_PARSERS:
@@ -156,9 +166,7 @@ class Cards:
         else:
             if isinstance(text, list):
                 if deck in ("board", "title"):
-                    text = "".join([
-                        self._parse_text(subtext, "", deck) for subtext in text
-                    ]).lstrip("\n")
+                    text = self._parse_list(text, key, deck)
                 elif len(text) == 2 and deck != "location":
                     text = f"**{text[0]}:** {text[1]}"
                 else:
@@ -232,6 +240,8 @@ class Cards:
                 team = "Cylons" if card.allegiance == "Cylon" else "humans"
                 msg += "\n**You Win the Game if:**"
                 msg += f"\nThe {team} have won.\n***and***"
+            elif card.deck == "title" and card.allegiance == "Infiltrator":
+                msg += "\n**You are Infiltrating**"
             elif card.deck != "loyalty":
                 msg += f"\n**Allegiance: {card.allegiance}**"
 

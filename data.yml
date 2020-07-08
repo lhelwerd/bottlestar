@@ -2510,6 +2510,10 @@ cards:
   - name: Admiral
     url: https://forum.quartertothree.com/uploads/default/original/3X/c/6/c68f0987d233f38e2c596c8a8e9c3671a3e7447c.jpeg
     bbox: [0, 0, 234, 350]
+  - name: Infiltration
+    url: https://i.imgur.com/lrsbo0V.jpg
+    bbox: [732, 454, 1104, 1006]
+    allegiance: Infiltrator
 ---
 expansion: exodus
 deck: title
@@ -2518,3 +2522,12 @@ cards:
     image: 872990
   - name: CAG
     image: 847195
+---
+expansion: daybreak
+deck: title
+cards:
+  - name: Infiltration
+    url: https://forum.quartertothree.com/uploads/default/original/2X/4/432e2ec85d14235f80a5b8c961800b8060f2097c.png
+    ext: png
+    bbox: [580, 4, 860, 437]
+    allegiance: Infiltrator
