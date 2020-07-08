@@ -81,6 +81,7 @@ def load_cards(args):
                     try:
                         old = Card.search(using='main') \
                             .filter("term", deck=deck) \
+                            .filter("term", expansion=expansion) \
                             .query("match", name=card['name']).execute().hits[0]
                         old.delete(using='main')
                     except IndexError:
