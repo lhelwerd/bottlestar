@@ -7,6 +7,7 @@ from .search import Card
 
 class Cards:
     TEXT_PARSERS = {
+        'flavor': lambda text: f"\n*{text}*",
         'choice': lambda text: f"\n**{text} Chooses:** ",
         'top': lambda text: text,
         'bottom': lambda text: f"\n**OR:** {text}",
@@ -154,7 +155,7 @@ class Cards:
             ])
         else:
             if isinstance(text, list):
-                if deck == "board":
+                if deck in ("board", "title"):
                     text = "".join([
                         self._parse_text(subtext, "", deck) for subtext in text
                     ]).lstrip("\n")

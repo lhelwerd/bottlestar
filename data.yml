@@ -107,8 +107,11 @@ decks:
     prefix: ''
     denote: False
   objective:
-    name: Objectives
+    name: Objective
     denote: False
+  title:
+    name: Title
+    denote: False # Handled through titles meta
 skills:
   Leadership:
     short: G
@@ -2485,3 +2488,31 @@ deck: objective
 cards:
   - name: Earth
     url: 'https://images-cdn.fantasyflightgames.com/ffg_content/Battlestar_Galactica/daybreak/BSG04_Card_Objective-Earth.png'
+---
+expansion: base
+deck: title
+cards:
+  - name: President
+    url: https://i.imgur.com/hLqhqPU.jpg
+    bbox: [612, 0, 1203, 935]
+  - name: Admiral
+    url: https://i.imgur.com/hLqhqPU.jpg
+    bbox: [0, 0, 612, 935]
+---
+expansion: pegasus
+deck: title
+cards:
+  - name: President
+    url: https://forum.quartertothree.com/uploads/default/original/3X/c/6/c68f0987d233f38e2c596c8a8e9c3671a3e7447c.jpeg
+    bbox: [234, 0, 468, 350]
+  - name: Admiral
+    url: https://forum.quartertothree.com/uploads/default/original/3X/c/6/c68f0987d233f38e2c596c8a8e9c3671a3e7447c.jpeg
+    bbox: [0, 0, 234, 350]
+---
+expansion: exodus
+deck: title
+cards:
+  - name: Admiral
+    image: 872990
+  - name: CAG
+    image: 847195
