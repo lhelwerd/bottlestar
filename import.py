@@ -18,6 +18,8 @@ def parse_args():
                         help='Only replace this expansion (no renames)')
     parser.add_argument('cards', nargs='*',
                         help='Only replace these cards (no renames)')
+    parser.add_argument('--no-locations', action='store_false', default=True,
+                        dest='locations', help='Skip importing board locations')
     args = parser.parse_args()
     return args
 
@@ -36,9 +38,10 @@ def main():
 
     load_cards(args)
 
-    Location._index.delete(using='main', ignore=404)
-    Location.init(using='main')
-    load_locations()
+    if args.locations:
+        Location._index.delete(using='main', ignore=404)
+        Location.init(using='main')
+        load_locations()
 
 def load_cards(args):
     meta = {}
