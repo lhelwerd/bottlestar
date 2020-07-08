@@ -241,7 +241,7 @@ class Cards:
                 msg += "\n**You Win the Game if:**"
                 msg += f"\nThe {team} have won.\n***and***"
             elif card.deck == "title" and card.allegiance == "Infiltrator":
-                msg += "\n**You are Infiltrating**"
+                msg += "\n**You Are Infiltrating**"
             elif card.deck != "loyalty":
                 msg += f"\n**Allegiance: {card.allegiance}**"
 

@@ -767,13 +767,13 @@ async def thread_command(message, command):
 
     await send_message(message.channel, replace_roles(text, message.guild))
 
-async def search_command(channel, deck, arguments):
+async def search_command(channel, deck, expansion, text):
     if deck == 'board':
-        expansion = cards.find_expansion(arguments)
-        response, count = Location.search_freetext(' '.join(arguments),
-                                                   expansion=expansion)
+        response, count = Location.search_freetext(text, expansion=expansion,
+                                                   limit=1)
     else:
-        response, count = Card.search_freetext(' '.join(arguments), deck=deck)
+        response, count = Card.search_freetext(text, deck=deck,
+                                               expansion=expansion, limit=1)
     if count == 0:
         await channel.send('No card found')
         return
@@ -879,16 +879,24 @@ async def on_message(message):
     # Search cards/board locations
     if command in ('card', 'search', ''):
         deck = ''
+        expansion = ''
     elif command not in cards.decks:
         return
-    elif "alias" in cards.decks[command]:
-        deck = cards.decks[command]["alias"]
     else:
-        deck = command
+        if "alias" in cards.decks[command]:
+            deck = cards.decks[command]["alias"]
+        else:
+            deck = command
+
+        if cards.decks[command].get("expansion"):
+            expansion = cards.find_expansion(arguments)
+        else:
+            expansion = ''
 
     try:
         async with message.channel.typing():
-            await search_command(message.channel, deck, arguments)
+            await search_command(message.channel, deck, expansion,
+                                 ' '.join(arguments))
     except:
         logging.exception(f"Search {deck} error")
         await message.channel.send(f"Please try again later.")

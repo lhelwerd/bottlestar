@@ -202,20 +202,27 @@ def main():
 
     if command in ('card', 'search'):
         deck = ''
+        expansion = ''
     elif command not in cards.decks:
         return
-    elif "alias" in cards.decks[command]:
-        deck = cards.decks[command]["alias"]
     else:
-        deck = command
+        if "alias" in cards.decks[command]:
+            deck = cards.decks[command]["alias"]
+        else:
+            deck = command
+
+        if cards.decks[command].get("expansion"):
+            expansion = cards.find_expansion(arguments)
+        else:
+            expansion = ''
 
     if command == 'board':
-        expansion = cards.find_expansion(arguments)
         response, count = Location.search_freetext(' '.join(arguments),
                                                    expansion=expansion,
                                                    limit=args.limit)
     else:
         response, count = Card.search_freetext(' '.join(arguments), deck=deck,
+                                               expansion=expansion,
                                                limit=args.limit)
     print(f'{count} hits (at most {args.limit} are shown):')
     for hit in response:

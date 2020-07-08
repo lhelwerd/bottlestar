@@ -34,13 +34,15 @@ class Card(Document):
         name = 'card'
 
     @classmethod
-    def search_freetext(cls, text, deck='', limit=10):
+    def search_freetext(cls, text, deck='', expansion='', limit=10):
         search = cls.search(using='main')
         query = Q('multi_match', query=text, fields=cls.SEARCH_FIELDS) | \
                 Q('fuzzy', name=text) | \
                 Q('fuzzy', text=text)
         if deck != '':
             search = search.filter('term', deck=deck)
+        if expansion != '':
+            search = search.filter('term', expansion=expansion)
         search_query = search[:limit].query(query)
         return search_query.execute(), search_query.count()['value']
 

@@ -106,6 +106,7 @@ decks:
     ext: ''
     prefix: ''
     denote: False
+    expansion: True
   objective:
     name: Objective
     ext: png
@@ -114,6 +115,7 @@ decks:
     name: Title
     ext: jpg
     denote: False # Handled through titles meta
+    expansion: True
 skills:
   Leadership:
     short: G
