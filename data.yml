@@ -107,6 +107,9 @@ decks:
     prefix: ''
     denote: False
     expansion: True
+  location:
+    alias: board
+    denote: False
   objective:
     name: Objective
     ext: png
@@ -1475,6 +1478,9 @@ cards:
     skill: Politics
     path: Con Power
   - name: Investigative Committee
+    url: https://raw.githubusercontent.com/jbiatek/BSGRulebook/gh-pages/images/ic.png
+    seed:
+      pegasusIC: false
     value: [3, 4, 5]
     index: 14
     count: [4, 2, 1]
@@ -1532,6 +1538,14 @@ cards:
 expansion: pegasus
 deck: skill
 cards:
+  - name: Investigative Committee
+    seed:
+      pegasusIC: true
+    value: [3, 4, 5]
+    index: 14
+    count: [4, 2, 1]
+    skill: Politics
+    path: Inv Committee
   - name: Support the People
     path: Support
     value: [1, 2]
@@ -2515,6 +2529,9 @@ cards:
   - name: Infiltration
     url: https://i.imgur.com/lrsbo0V.jpg
     bbox: [732, 454, 1104, 1006]
+    seed:
+      daybreak: false
+      cylonLeader: true
     allegiance: Infiltrator
 ---
 expansion: exodus
@@ -2532,4 +2549,7 @@ cards:
     url: https://forum.quartertothree.com/uploads/default/original/2X/4/432e2ec85d14235f80a5b8c961800b8060f2097c.png
     ext: png
     bbox: [580, 4, 860, 437]
+    seed:
+      daybreak: true
+      cylonLeader: true
     allegiance: Infiltrator

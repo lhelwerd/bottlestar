@@ -78,6 +78,8 @@ boards:
     path: BSG_board
     ext: jpg
     bbox: [400, 408, 1738, 816]
+    seed:
+        daybreak: false
     locations:
       - name: Press Room
         bbox: [686, 466, 894, 760]
@@ -97,6 +99,8 @@ boards:
     path: BSG_board
     ext: jpg
     bbox: [1768, 440, 2572, 816]
+    seed:
+        daybreak: false
     cylon: True
     locations:
       - name: Caprica
@@ -130,6 +134,8 @@ boards:
   - name: Pegasus
     path: pegasus
     ext: png
+    seed:
+        pegasus: true
     locations:
       - name: Pegasus CIC
         bbox: [32, 272, 186, 486]
@@ -161,6 +167,8 @@ boards:
   - name: New Caprica
     path: new_caprica
     ext: png
+    seed:
+        destination: New Caprica
     locations:
       - name: Medical Center
         bbox: [36, 28, 178, 218]
@@ -206,6 +214,8 @@ boards:
   - name: Cylon Fleet
     path: basestar_bridge
     ext: png
+    seed:
+        CFB: true
     locations:
       - name: Basestar Bridge
         text:
@@ -217,9 +227,13 @@ boards:
             - 'Roll a die. If the result is less than the number of raiders on the main game board, draw 2 Galactica damage tokens and choose 1 to resolve.'
 ---
 expansion: daybreak
+seed:
+    daybreak: true
 boards:
     - name: Demetrius
       path: demetrius
+      seed:
+          destination: Earth
       ext: png
       locations:
         - name: Bridge
@@ -237,6 +251,8 @@ boards:
               Action: 'Choose a skill type (it may be from outside your skill set). Each player, including Cylon players, draws 1 Skill Card of that type.'
     - name: Rebel Basestar
       path: rebel_basestar
+      seed:
+          destination: Earth
       ext: png
       locations:
         - name: Hybrid Tank

@@ -211,12 +211,12 @@ def main():
         else:
             deck = command
 
-        if cards.decks[command].get("expansion"):
+        if cards.decks[deck].get("expansion"):
             expansion = cards.find_expansion(arguments)
         else:
             expansion = ''
 
-    if command == 'board':
+    if deck == 'board':
         response, count = Location.search_freetext(' '.join(arguments),
                                                    expansion=expansion,
                                                    limit=args.limit)
@@ -225,10 +225,24 @@ def main():
                                                expansion=expansion,
                                                limit=args.limit)
     print(f'{count} hits (at most {args.limit} are shown):')
-    for hit in response:
+
+    seed = None
+    for index, hit in enumerate(response):
         url = cards.get_url(hit.to_dict())
         print(f'{hit.name}: {url} (score: {hit.meta.score:.3f})')
         print(cards.get_text(hit))
+        if hit.seed:
+            if seed is None:
+                seed = Thread(config['api_url']).retrieve(config['thread_id'],
+                                                          download=False)[1]
+            if seed is not None:
+                for key, value in hit.seed.to_dict().items():
+                    if seed.get(key, value) != value:
+                        print('Result would be hidden due to seed constraints.')
+                        break
+
+        if index < args.limit - 1:
+            print('-' * 15)
 
 if __name__ == "__main__":
     main()

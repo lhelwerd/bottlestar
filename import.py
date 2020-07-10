@@ -119,6 +119,7 @@ def load_cards(args):
                            deck=deck,
                            expansion=expansion,
                            ext=card.get('ext', ext),
+                           seed=card.get('seed', {}),
                            index=card.get('index'),
                            count=count,
                            value=value,
@@ -144,15 +145,18 @@ def load_locations():
     with open("locations.yml", "r") as locations_file:
         for data in yaml.safe_load_all(locations_file):
             expansion = data['expansion']
+            expansion_seed = data.get('seed', {})
             for board in data['boards']:
                 board_name = board['name']
                 path = board['path']
                 ext = board['ext']
+                seed = board.get('seed', expansion_seed)
                 doc = Location(board_name=board_name,
                                path=path,
                                ext=ext,
                                name=board_name,
                                expansion=expansion,
+                               seed=seed,
                                bbox=board.get('bbox'),
                                text=json.dumps({}))
                 doc.save(using='main')
@@ -167,6 +171,7 @@ def load_locations():
                                    ext=ext,
                                    name=location['name'],
                                    expansion=expansion,
+                                   seed=seed,
                                    hazardous=location.get('hazardous', False),
                                    bbox=location.get('bbox'),
                                    value=value,

@@ -1,4 +1,5 @@
-from elasticsearch_dsl import Document, Boolean, Integer, Keyword, normalizer, Q, Text
+from elasticsearch_dsl import Document, Boolean, Integer, Keyword, Object, \
+    normalizer, Q, Text
 
 lowercase = normalizer('lower', filter=['lowercase'])
 
@@ -13,6 +14,7 @@ class Card(Document):
     deck = Keyword(normalizer=lowercase)
     expansion = Keyword(normalizer=lowercase)
     ext = Keyword()
+    seed = Object()
     index = Integer()
     count = Integer()
     value = Integer()
@@ -51,9 +53,11 @@ class Location(Document):
 
     board_name = Text(analyzer='snowball', fields={'raw': Keyword()})
     path = Text(analyzer='snowball', fields={'raw': Keyword()})
+    image = Integer()
     ext = Keyword()
     name = Text(analyzer='snowball', fields={'raw': Keyword()})
     expansion = Keyword(normalizer=lowercase)
+    seed = Object()
     hazardous = Boolean()
     bbox = Integer()
     value = Integer()
