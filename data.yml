@@ -251,6 +251,8 @@ cards:
     jump: True
   - name: Ambush
     index: 2
+    seed:
+      CFB: False
   - name: Analyze Enemy Fighter
     path: Analyze Fighter
     index: 3
@@ -260,8 +262,12 @@ cards:
     jump: True
   - name: Besieged
     index: 4
+    seed:
+      CFB: False
   - name: Boarding Parties
     index: 5
+    seed:
+      CFB: False
   - name: Bomb Threat
     index: 6
     value: 13
@@ -300,6 +306,8 @@ cards:
     cylon: Raiders
   - name: Cylon Swarm
     index: 13
+    seed:
+      CFB: False
   - name: Cylon Virus
     value: 15
     skills: [Tactics, Engineering]
@@ -353,6 +361,8 @@ cards:
     jump: True
   - name: Heavy Assault
     index: 27
+    seed:
+      CFB: False
   - name: Informing the Public
     path: Informing Public
     index: 28
@@ -362,6 +372,8 @@ cards:
     jump: True
   - name: Jammed Assault
     index: 29
+    seed:
+      CFB: False
   - name: Jump Computer Failure
     path: Jump Comp Fail
     index: 30
@@ -425,6 +437,8 @@ cards:
     jump: True
   - name: Raiding Party
     index: 40
+    seed:
+      CFB: False
   - name: Requested Resignation
     path: Request Resignation
     index: 41
@@ -497,8 +511,12 @@ cards:
     jump: True
   - name: Surrounded
     index: 54
+    seed:
+      CFB: False
   - name: Tactical Strike
     index: 55
+    seed:
+      CFB: False
   - name: Terrorist Bomber
     index: 56
     value: 9
@@ -522,6 +540,8 @@ cards:
   - name: Thirty-Three
     path: Thirty Three
     index: 59
+    seed:
+      CFB: False
   - name: Cylon Tracking Device
     path: Tracking Device
     index: 14
@@ -611,6 +631,8 @@ cards:
     jump: True
   - name: Dogfight
     index: 76
+    seed:
+      CFB: False
   - name: Food Hoarding in the Fleet
     path: Food Hoarding
     index: 77
@@ -647,6 +669,8 @@ cards:
     jump: True
   - name: Scar
     index: 83
+    seed:
+      CFB: False
   - name: Standoff with Pegasus
     path: Standoff Pegasus
     index: 84
@@ -665,6 +689,8 @@ cards:
     jump: True
   - name: The Guardians
     index: 87
+    seed:
+      CFB: False
   - name: Training Snafu
     index: 88
     value: 8
@@ -717,6 +743,8 @@ cards:
   - name: Détente
     path: Detente
     index: 97
+    seed:
+      CFB: True
     cylon: Basestars launch Raiders
   - name: Divisive Behavior
     index: 98
@@ -805,6 +833,8 @@ cards:
     cylon: Heavy Raiders
   - name: Raiders Inbound
     index: 113
+    seed:
+      CFB: True
     cylon: Heavy Raiders
   - name: Raptor Malfunction
     index: 114
@@ -815,10 +845,14 @@ cards:
   - name: Return to Duty
     path: Return Duty
     index: 115
+    seed:
+      CFB: True
     cylon: Raiders
   - name: Review Camera Footage
     path: Review Footage
     index: 116
+    seed:
+      CFB: True
     cylon: Basestars fire
   - name: Set a Trap
     path: Set A Trap
@@ -857,10 +891,14 @@ cards:
   - name: Tracked by Radiation
     path: Tracked Radiation
     index: 123
+    seed:
+      CFB: True
     cylon: Basestars fire
   - name: Training a Rookie
     path: Training Rookie
     index: 124
+    seed:
+      CFB: True
     cylon: Basestars launch Raiders
   - name: Truth and Reconciliation
     path: Truth Reconcile
@@ -909,6 +947,8 @@ cards:
     jump: True
   - name: Blindsided
     index: 133
+    seed:
+      CFB: False
   - name: Consult the Hybrid
     path: Consult The Hybrid
     index: 134
@@ -945,6 +985,8 @@ cards:
     jump: True
   - name: Event Horizon
     index: 140
+    seed:
+      CFB: False
   - name: Galactica Falling Apart
     index: 141
     value: 8
@@ -961,6 +1003,8 @@ cards:
   - name: Hornet's Nest
     path: Hornets Nest
     index: 143
+    seed:
+      CFB: False
   - name: Hybrid in Panic
     path: Hybrid In Panic
     index: 144
@@ -982,6 +1026,8 @@ cards:
     cylon: Raiders
   - name: Lockdown
     index: 147
+    seed:
+      CFB: False
   - name: One Last Cocktail
     index: 148
     value: 7
@@ -1023,6 +1069,8 @@ cards:
     jump: True
   - name: Reprisal
     index: 155
+    seed:
+      CFB: False
   - name: Requisition for Demetrius
     path: Requisition For Demetrius
     index: 156
@@ -1041,6 +1089,8 @@ cards:
   - name: Trial by Fire
     path: Trial By Fire
     index: 159
+    seed:
+      CFB: False
 ---
 expansion: base
 deck: s_crisis
@@ -1066,6 +1116,8 @@ cards:
     skills: [Leadership, Tactics]
   - name: Massive Assault
     index: 164
+    seed:
+      CFB: False
 ---
 expansion: pegasus
 deck: s_crisis
@@ -1081,6 +1133,8 @@ cards:
   - name: Lured into a Trap
     path: Lured Trap
     index: 167
+    seed:
+      CFB: False
   - name: Psychological Warfare
     path: Psy Warfare
     index: 168
@@ -1095,6 +1149,8 @@ cards:
   - name: Fighting Blind
     url: ''
     index: 170
+    seed:
+      CFB: True
   - name: Fire All Missiles
     index: 171
     value: 22
@@ -1169,6 +1225,9 @@ cards:
   - name: Mining Asteroid
     index: 25
     count: 1
+    seed:
+      pegasus: True
+      CFB: False
     destination: 2
   - name: Misjump
     index: 26
@@ -1480,7 +1539,7 @@ cards:
   - name: Investigative Committee
     url: https://raw.githubusercontent.com/jbiatek/BSGRulebook/gh-pages/images/ic.png
     seed:
-      pegasusIC: false
+      pegasusIC: False
     value: [3, 4, 5]
     index: 14
     count: [4, 2, 1]
@@ -1540,7 +1599,7 @@ deck: skill
 cards:
   - name: Investigative Committee
     seed:
-      pegasusIC: true
+      pegasusIC: True
     value: [3, 4, 5]
     index: 14
     count: [4, 2, 1]
@@ -1881,7 +1940,7 @@ cards:
     path: Assign Staff
     index: 17
   - name: Civilian Self Defense
-    path: Civ Self Defense
+    path: Civ Self Defence
     index: 18
   - name: Consult the Oracle
     path: Consult Oracle
@@ -2516,6 +2575,8 @@ cards:
   - name: Admiral
     url: https://i.imgur.com/hLqhqPU.jpg
     bbox: [0, 0, 612, 935]
+    seed:
+      CFB: False
 ---
 expansion: pegasus
 deck: title
@@ -2523,15 +2584,19 @@ cards:
   - name: President
     url: https://forum.quartertothree.com/uploads/default/original/3X/c/6/c68f0987d233f38e2c596c8a8e9c3671a3e7447c.jpeg
     bbox: [234, 0, 468, 350]
+    seed:
+      destination: New Caprica
   - name: Admiral
     url: https://forum.quartertothree.com/uploads/default/original/3X/c/6/c68f0987d233f38e2c596c8a8e9c3671a3e7447c.jpeg
     bbox: [0, 0, 234, 350]
+    seed:
+      destination: New Caprica
   - name: Infiltration
     url: https://i.imgur.com/lrsbo0V.jpg
     bbox: [732, 454, 1104, 1006]
     seed:
-      daybreak: false
-      cylonLeader: true
+      daybreak: False
+      cylonLeader: True
     allegiance: Infiltrator
 ---
 expansion: exodus
@@ -2539,8 +2604,12 @@ deck: title
 cards:
   - name: Admiral
     image: 872990
+    seed:
+      CFB: True
   - name: CAG
     image: 847195
+    seed:
+      CFB: True
 ---
 expansion: daybreak
 deck: title
@@ -2550,6 +2619,6 @@ cards:
     ext: png
     bbox: [580, 4, 860, 437]
     seed:
-      daybreak: true
-      cylonLeader: true
+      daybreak: True
+      cylonLeader: True
     allegiance: Infiltrator

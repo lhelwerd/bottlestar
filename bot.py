@@ -800,14 +800,15 @@ async def show_search_result(channel, hit, deck, count, hidden):
     else:
         image = None
 
-    await channel.send(f'{cards.get_text(hit)}\n{url} (score: {hit.meta.score:.3f}, {count} hits, {hidden} hidden)', file=image)
+    await channel.send(f'{cards.get_text(hit)}\n{url} (score: {hit.meta.score:.3f}, {count} hits, {len(hidden)} hidden)', file=image)
 
 async def search_command(channel, deck, expansion, text):
     # Collect three results; if some of them has a seed constraint then usually
     # another relevant one does not, or has the opposite constraint. However
     # avoid low-quality results that may make hidden results unfindable
     limit = 3
-    hidden = 0
+    hidden = []
+    lower_text = text.lower()
     if deck == 'board':
         response, count = Location.search_freetext(text, expansion=expansion,
                                                    limit=limit)
@@ -829,10 +830,17 @@ async def search_command(channel, deck, expansion, text):
                 for key, value in hit.seed.to_dict().items():
                     if seed.get(key, value) != value:
                         # Hide due to seed constraints
-                        hidden += 1
+                        hidden.append(hit)
                         break
 
-        if hidden <= index:
+        if hit not in hidden:
+            if hit.name.lower() != lower_text:
+                for hid in hidden:
+                    if hid.name.lower() == lower_text:
+                        await show_search_result(channel, hid, deck, count,
+                                                 hidden)
+                        return
+
             await show_search_result(channel, hit, deck, count, hidden)
             return
 

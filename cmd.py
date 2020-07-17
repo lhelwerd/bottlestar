@@ -216,17 +216,19 @@ def main():
         else:
             expansion = ''
 
+    text = ' '.join(arguments)
+    lower_text = text.lower()
     if deck == 'board':
-        response, count = Location.search_freetext(' '.join(arguments),
-                                                   expansion=expansion,
+        response, count = Location.search_freetext(text, expansion=expansion,
                                                    limit=args.limit)
     else:
-        response, count = Card.search_freetext(' '.join(arguments), deck=deck,
+        response, count = Card.search_freetext(text, deck=deck,
                                                expansion=expansion,
                                                limit=args.limit)
     print(f'{count} hits (at most {args.limit} are shown):')
 
     seed = None
+    hidden = []
     for index, hit in enumerate(response):
         url = cards.get_url(hit.to_dict())
         print(f'{hit.name}: {url} (score: {hit.meta.score:.3f})')
@@ -238,11 +240,24 @@ def main():
             if seed is not None:
                 for key, value in hit.seed.to_dict().items():
                     if seed.get(key, value) != value:
-                        print('Result would be hidden due to seed constraints.')
+                        print('! Result would be hidden due to seed constraint')
+                        hidden.append(hit)
+                        if hit.name.lower() == lower_text:
+                            print('! Exact title match')
                         break
 
-        if index < args.limit - 1:
+        # len(hidden) <= index
+        if hit not in hidden and hit.name.lower() != lower_text:
+            for hid in hidden:
+                if hid.name.lower() == lower_text:
+                    print(f'! Previous hidden {hid.name} ({hid.expansion}) would be shown due to exact title match instead of this non-exact hit')
+                    break
+
+        if index < count - 1:
             print('-' * 15)
+
+    if len(hidden) == count and count > 0:
+        print(f'! The first hidden {hidden[0].name} ({hidden[0].expansion}) would be shown since all results are hidden')
 
 if __name__ == "__main__":
     main()
