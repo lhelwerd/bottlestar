@@ -24,7 +24,7 @@
 expansion: base
 boards:
   - name: Galactica
-    path: BSG_board
+    path: BSG board
     ext: jpg
     bbox: [700, 1340, 2820, 2260]
     locations:
@@ -75,7 +75,7 @@ boards:
           - 'You may not move, draw Crisis Cards, or add more than 1 card to skill checks.'
           - Action: 'Pass this skill check to move to any location.'
   - name: Colonial One
-    path: BSG_board
+    path: BSG board
     ext: jpg
     bbox: [400, 408, 1738, 816]
     seed:
@@ -96,7 +96,7 @@ boards:
         text:
             Action: 'Choose a character, then pass this skill check to give him the President title.'
   - name: Cylon Locations
-    path: BSG_board
+    path: BSG board
     ext: jpg
     bbox: [1768, 440, 2572, 816]
     seed:
@@ -165,7 +165,7 @@ boards:
         text:
             Action: 'Discard 2 Skill Cards to treat the next Crisis Card drawn this turn as if it had a "prepare for jump" icon.'
   - name: New Caprica
-    path: new_caprica
+    path: new caprica
     ext: png
     seed:
         destination: New Caprica
@@ -212,7 +212,7 @@ boards:
 expansion: exodus
 boards:
   - name: Cylon Fleet
-    path: basestar_bridge
+    path: basestar bridge
     ext: png
     seed:
         CFB: true
@@ -252,7 +252,7 @@ boards:
           text:
               Action: 'Choose a skill type (it may be from outside your skill set). Each player, including Cylon players, draws 1 Skill Card of that type.'
     - name: Rebel Basestar
-      path: rebel_basestar
+      path: rebel basestar
       seed:
           destination: Earth
       ext: png
@@ -270,7 +270,7 @@ boards:
           text:
               Action: 'Discard a miracle token or a Super Crisis Card to choose a space area. Place either 2 raiders or 4 unmanned vipers in this area and immediately activate them.'
     - name: Colonial One
-      path: colonial_one_daybreak
+      path: colonial one daybreak
       ext: png
       locations:
         - name: Quorum Chamber
@@ -290,7 +290,7 @@ boards:
           text:
               Action: 'Draw 1 Mutiny Card. If the President has any Mutiny Cards, choose a player to gain the President title. If the "Accept Prophecy" card is in play, the President may discard it to keep his title.'
     - name: Cylon Locations
-      path: cylon_overlay_daybreak
+      path: cylon overlay daybreak
       ext: png
       locations:
         - name: Caprica

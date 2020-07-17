@@ -71,9 +71,10 @@ def load_cards(args):
             reckless = meta['decks'][deck].get('reckless')
             agenda = data.get('agenda')
             path = data.get('path', meta['decks'][deck].get('path', deck_name))
+            seed = data.get('seed', {})
 
             # Insert with spaces for better Elastisearch tokenization
-            replace = data.get('replace', meta['decks'][deck].get('replace', ' '))
+            replace = data.get('replace', meta['decks'][deck].get('replace', '_'))
             ext = data.get('ext', meta['decks'][deck].get('ext'))
 
             for card in data['cards']:
@@ -112,14 +113,15 @@ def load_cards(args):
                 default_succession = 99 if 'class' in card else None
                 doc = Card(name=card['name'],
                            prefix=path,
-                           path=card_path.replace(' ', replace),
+                           path=card_path,
+                           replace=card.get('replace', replace),
                            url=card.get('url'),
                            image=card.get('image'),
                            bbox=card.get('bbox'),
                            deck=deck,
                            expansion=expansion,
                            ext=card.get('ext', ext),
-                           seed=card.get('seed', {}),
+                           seed=card.get('seed', seed),
                            index=card.get('index'),
                            count=count,
                            value=value,

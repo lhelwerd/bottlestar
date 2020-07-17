@@ -108,17 +108,13 @@ class Cards:
             return ""
 
         card_deck = card.get('deck', 'board')
-        default_deck = {
-            'name': card_deck,
-            'ext': 'png'
-        }
-        deck = self.decks.get(card_deck, default_deck)
-        deck_name = deck['name']
-        deck_path = deck.get('path', deck_name).replace(' ', '_')
-        ext = card.get('ext', deck['ext'])
+        deck = self.decks.get(card_deck, {})
+        deck_name = deck.get('name', card_deck)
+        replace = deck.get('replace', '_')
+        deck_path = deck.get('path', deck_name).replace(' ', replace)
+        ext = card.get('ext', deck.get('ext', 'png'))
         if ext != '':
             ext = f".{ext}"
-        replacement = deck.get('replace', '_')
         path = card.get('path', card['name'])
         if 'skills' in card and len(card['skills']) == 1:
             skill = self.skills.get(card['skills'][0], {})
@@ -129,14 +125,23 @@ class Cards:
 
             path = f"{skill_path}_{path}"
 
-        path = path.replace(' ', replacement)
+        path = path.replace(' ', card.get('replace', replace))
 
         # Usually the deck path is repeated in each file name, but not always
-        prefix = card.get('prefix', deck.get('prefix', deck_path))
+        prefix = deck.get('prefix', deck_path)
         if prefix != '':
             prefix = prefix.replace(' ', '_') + '_'
 
         return f'{self.url}/{deck_path}/{prefix}{path}{ext}'
+
+    @classmethod
+    def is_exact_match(cls, card, lower_text):
+        """
+        Test if the card is an "exact match" to the provided lowercase text.
+        """
+
+        return card.name.lower() == lower_text or \
+            card.path.lower() == lower_text
 
     def _parse_list(self, text, key="", deck="default"):
         result = []

@@ -834,9 +834,9 @@ async def search_command(channel, deck, expansion, text):
                         break
 
         if hit not in hidden:
-            if hit.name.lower() != lower_text:
+            if not cards.is_exact_match(hit, lower_text):
                 for hid in hidden:
-                    if hid.name.lower() == lower_text:
+                    if cards.is_exact_match(hid, lower_text):
                         await show_search_result(channel, hid, deck, count,
                                                  hidden)
                         return

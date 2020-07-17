@@ -594,6 +594,8 @@ cards:
 ---
 expansion: pegasus
 deck: crisis
+seed:
+  pegasus: True
 cards:
   - name: A Verdict of Guilty
     path: A Verdict Guilty
@@ -632,6 +634,7 @@ cards:
   - name: Dogfight
     index: 76
     seed:
+      pegasus: True
       CFB: False
   - name: Food Hoarding in the Fleet
     path: Food Hoarding
@@ -670,6 +673,7 @@ cards:
   - name: Scar
     index: 83
     seed:
+      pegasus: True
       CFB: False
   - name: Standoff with Pegasus
     path: Standoff Pegasus
@@ -690,6 +694,7 @@ cards:
   - name: The Guardians
     index: 87
     seed:
+      pegasus: True
       CFB: False
   - name: Training Snafu
     index: 88
@@ -706,6 +711,8 @@ cards:
 ---
 deck: crisis
 expansion: exodus
+seed:
+  exodus: True
 cards:
   - name: Airlock Leak
     index: 90
@@ -744,6 +751,7 @@ cards:
     path: Detente
     index: 97
     seed:
+      exodus: True
       CFB: True
     cylon: Basestars launch Raiders
   - name: Divisive Behavior
@@ -834,6 +842,7 @@ cards:
   - name: Raiders Inbound
     index: 113
     seed:
+      exodus: True
       CFB: True
     cylon: Heavy Raiders
   - name: Raptor Malfunction
@@ -846,12 +855,14 @@ cards:
     path: Return Duty
     index: 115
     seed:
+      exodus: True
       CFB: True
     cylon: Raiders
   - name: Review Camera Footage
     path: Review Footage
     index: 116
     seed:
+      exodus: True
       CFB: True
     cylon: Basestars fire
   - name: Set a Trap
@@ -892,12 +903,14 @@ cards:
     path: Tracked Radiation
     index: 123
     seed:
+      exodus: True
       CFB: True
     cylon: Basestars fire
   - name: Training a Rookie
     path: Training Rookie
     index: 124
     seed:
+      exodus: True
       CFB: True
     cylon: Basestars launch Raiders
   - name: Truth and Reconciliation
@@ -931,6 +944,8 @@ expansion: daybreak
 deck: crisis
 ext: jpg
 replace: ''
+seed:
+  daybreak: True
 cards:
   - name: Abandon Galactica
     index: 131
@@ -948,6 +963,7 @@ cards:
   - name: Blindsided
     index: 133
     seed:
+      daybreak: True
       CFB: False
   - name: Consult the Hybrid
     path: Consult The Hybrid
@@ -986,6 +1002,7 @@ cards:
   - name: Event Horizon
     index: 140
     seed:
+      daybreak: True
       CFB: False
   - name: Galactica Falling Apart
     index: 141
@@ -1004,6 +1021,7 @@ cards:
     path: Hornets Nest
     index: 143
     seed:
+      daybreak: True
       CFB: False
   - name: Hybrid in Panic
     path: Hybrid In Panic
@@ -1027,6 +1045,7 @@ cards:
   - name: Lockdown
     index: 147
     seed:
+      daybreak: True
       CFB: False
   - name: One Last Cocktail
     index: 148
@@ -1061,7 +1080,7 @@ cards:
     skills: [Leadership, Politics]
     cylon: Raiders
   - name: Religious Turmoil
-    path: Religious_Turmoil
+    replace: '_'
     index: 154
     value: 7
     skills: [Leadership, Tactics]
@@ -1070,6 +1089,7 @@ cards:
   - name: Reprisal
     index: 155
     seed:
+      daybreak: True
       CFB: False
   - name: Requisition for Demetrius
     path: Requisition For Demetrius
@@ -1090,6 +1110,7 @@ cards:
     path: Trial By Fire
     index: 159
     seed:
+      daybreak: True
       CFB: False
 ---
 expansion: base
@@ -1121,6 +1142,8 @@ cards:
 ---
 expansion: pegasus
 deck: s_crisis
+seed:
+  pegasus: True
 cards:
   - name: '"Demand Peace" Manifesto'
     path: Demand Peace
@@ -1134,6 +1157,7 @@ cards:
     path: Lured Trap
     index: 167
     seed:
+      pegasus: True
       CFB: False
   - name: Psychological Warfare
     path: Psy Warfare
@@ -1145,11 +1169,14 @@ cards:
 ---
 expansion: exodus
 deck: s_crisis
+seed:
+  exodus: True
 cards:
   - name: Fighting Blind
     url: ''
     index: 170
     seed:
+      exodus: True
       CFB: True
   - name: Fire All Missiles
     index: 171
@@ -1208,6 +1235,8 @@ cards:
 ---
 expansion: pegasus
 deck: dest
+seed:
+  pegasus: True
 cards:
   - name: Binary Star
     index: 23
@@ -1236,6 +1265,8 @@ cards:
 ---
 expansion: exodus
 deck: dest
+seed:
+  exodus: True
 cards:
   - name: Algae Planet
     index: 27
@@ -1493,6 +1524,8 @@ cards:
 ---
 expansion: unofficial
 deck: char
+seed:
+  vAllCharacters: True
 cards:
   - name: Billy Keikeya
     path: Billy
@@ -1596,10 +1629,12 @@ cards:
 ---
 expansion: pegasus
 deck: skill
+seed:
+  pegasus: True
 cards:
   - name: Investigative Committee
     seed:
-      pegasusIC: True
+      pegasusIC: True # Added even to base if "Use Pegasus IC" is enabled
     value: [3, 4, 5]
     index: 14
     count: [4, 2, 1]
@@ -1667,12 +1702,18 @@ cards:
     reckless: True
   - name: Broadcast Location
     path: Broadcast
+    seed:
+      pegasus: True
+      daybreak: False
     value: [1]
     index: 175
     count: [8]
     skill: Treachery
     ability: True
   - name: By Your Command
+    seed:
+      pegasus: True
+      daybreak: False
     value: [1]
     index: 183
     count: [4]
@@ -1680,12 +1721,18 @@ cards:
     ability: True
     reckless: True
   - name: "God's Plan"
+    seed:
+      pegasus: True
+      daybreak: False
     path: Gods Plan
     value: [2]
     index: 192
     count: [3]
     skill: Treachery
   - name: Special Destiny
+    seed:
+      pegasus: True
+      daybreak: False
     value: [2]
     index: 187
     count: [5]
@@ -1693,11 +1740,17 @@ cards:
     ability: True
   - name: Human Weakness
     path: Human Weak
+    seed:
+      pegasus: True
+      daybreak: False
     value: [3]
     index: 199
     count: [2]
     skill: Treachery
   - name: Sabotage
+    seed:
+      pegasus: True
+      daybreak: False
     value: [3]
     index: 195
     count: [4]
@@ -1705,6 +1758,8 @@ cards:
 ---
 expansion: exodus
 deck: skill
+seed:
+  exodus: True
 cards:
   - name: Red Tape
     value: [0]
@@ -1770,6 +1825,8 @@ cards:
 expansion: daybreak
 deck: skill
 replace: ''
+seed:
+  daybreak: True
 cards:
   - name: Force Their Hand
     value: 0
@@ -1935,6 +1992,8 @@ cards:
 ---
 expansion: pegasus
 deck: quorum
+seed:
+  pegasus: True
 cards:
   - name: Assign Chief of Staff
     path: Assign Staff
@@ -1962,6 +2021,8 @@ cards:
 ---
 expansion: exodus
 deck: quorum
+seed:
+  exodus: True
 cards:
   - name: Establish Dogsville
     index: 26
@@ -2003,6 +2064,8 @@ cards:
 expansion: pegasus
 deck: loyalty
 path: BSP Loyalty
+seed:
+  pegasus: True
 cards:
   - name: You Are Not a Cylon
     index: 16
@@ -2013,12 +2076,16 @@ cards:
     index: 18
     allegiance: Cylon
   - name: You Are a Sympathetic Cylon
+    seed:
+      sympatheticCylon: True
     url: ''
     index: 17
 ---
 expansion: exodus
 deck: loyalty
 path: BSE Loyalty
+seed:
+  exodus: true
 cards:
   - name: You Are Not a Cylon
     index: 19
@@ -2035,59 +2102,88 @@ cards:
     allegiance: Cylon
   - name: 'The Final Five: Whoever Examines this Card is Executed'
     path: FinalFive1
+    seed:
+      finalFives: True
     index: 32
     allegiance: Human
   - name: 'The Final Five: If this Card is Examined, Cylon Ships are Activated'
     path: FinalFive2
+    seed:
+      finalFives: True
     index: 33
     allegiance: Human
   - name: 'The Final Five: If this Card is Examined, Galactica is Damaged Twice'
     path: FinalFive3
+    seed:
+      finalFives: True
     index: 34
     allegiance: Human
   - name: 'The Final Five: If this Card is Examined, you are Executed'
     path: FinalFive4
+    seed:
+      finalFives: True
     index: 35
     allegiance: Human
   - name: 'The Final Five: Whoever Examines this Card is Sent to the "Brig"'
     path: FinalFive5
+    seed:
+      finalFives: True
     index: 36
     allegiance: Human
   - name: 'Personal Goal: Acquire Power: 2 or more Title Cards at the Same Time'
     path: PG Aquire Power
+    seed:
+      personalGoals: True
     index: 28
     allegiance: Human
   - name: 'Personal Goal: Devastation: Admiral has no Remaining Nuke Tokens'
     path: PG Devastation
+    seed:
+      personalGoals: True
     index: 26
     allegiance: Human
   - name: 'Personal Goal: Political Intrigue: The President is in the "Brig"'
     path: PG Pol Intrigue
+    seed:
+      personalGoals: True
     index: 29
     allegiance: Human
   - name: 'Personal Goal: Sacrifice: 6 Vipers Damaged or Destroyed'
     path: PG Sacrifice
+    seed:
+      personalGoals: True
     index: 25
     allegiance: Human
   - name: 'Personal Goal: Self-Destruction: In the "Brig" or "Sickbay"'
     path: PG Self Destruct
+    seed:
+      personalGoals: True
     index: 31
     allegiance: Human
   - name: 'Personal Goal: Selfish: Discard Skill Cards Equal to 20 Strength'
     path: PG Selfish
+    seed:
+      personalGoals: True
     index: 30
     allegiance: Human
   - name: 'Personal Goal: Stand and Fight: 10 or More Raiders'
     path: PG Stand Fight
+    seed:
+      personalGoals: True
     index: 24
     allegiance: Human
   - name: 'Personal Goal: Use Caution: The Fleet has Made a 1-Distance Jump'
     path: PG Use Caution
+    seed:
+      personalGoals: True
     index: 27
     allegiance: Human
 ---
 expansion: pegasus
 deck: agenda
+seed:
+  cylonLeader: True
+  daybreak: False
 agenda: sympathetic
 cards:
   - name: Convert the Infidels
@@ -2117,6 +2213,9 @@ cards:
 ---
 expansion: pegasus
 deck: agenda
+seed:
+  cylonLeader: True
+  daybreak: False
 agenda: hostile
 cards:
   - name: 'Show Their True Nature'
@@ -2147,18 +2246,25 @@ cards:
 expansion: daybreak
 deck: loyalty
 path: BSD Loyalty
+seed:
+  daybreak: True
 cards:
   - name: You Are Not a Cylon
     index: 39
     url: https://www.ultraboardgames.com/battlestar-galactica/gfx/determining-cylon.jpg
     bbox: [202, 0, 406, 320]
   - name: You Are The Mutineer
+    seed:
+      mutineer: True
     index: 40
     url: https://images-cdn.fantasyflightgames.com/ffg_content/Battlestar_Galactica/daybreak/BSG04_Card_Loyalty-YouAreTheMutineer.png
 ---
 expansion: daybreak
 deck: motive
 path: BSD Motives
+seed:
+  cylonLeader: True
+  daybreak: True
 replace: ''
 cards:
   - name: 'A False Sense of Security'
@@ -2216,6 +2322,9 @@ cards:
 ---
 expansion: exodus
 deck: ally
+seed:
+  destination: Ionian Nebula
+  #preCrossroads: True
 cards:
   - name: Aaron Doral
   - name: Aaron Kelly
@@ -2273,6 +2382,8 @@ cards:
 deck: crossroads
 expansion: exodus
 path: BSE Crossroads
+seed:
+  destination: Ionian Nebula
 cards:
   - name: Disturbing Vision
   - name: Miraculous Return
@@ -2284,6 +2395,8 @@ cards:
 ---
 expansion: daybreak
 deck: mission
+seed:
+  destination: Earth
 cards:
   - name: Attack on the Colony
     path: Attack On The Colony
@@ -2326,6 +2439,8 @@ cards:
 ---
 deck: mutiny
 expansion: daybreak
+seed:
+  daybreak: True
 cards:
   - name: Armed Resistance
     index: 0
@@ -2382,6 +2497,8 @@ cards:
 expansion: pegasus
 deck: nc_crisis
 path: ''
+seed:
+  destination: New Caprica
 cards:
   - name: A Cylon Ally
     index: 173
@@ -2547,17 +2664,23 @@ deck: objective
 cards:
   - name: Kobol
     url: 'https://images-cdn.fantasyflightgames.com/ffg_content/Battlestar_Galactica/Battlestar_Intro/kobol-front.png'
+    seed:
+      destination: Kobol
 ---
 expansion: pegasus
 deck: objective
 cards:
   - name: New Caprica
     url: 'https://images-cdn.fantasyflightgames.com/ffg_content/Battlestar_Galactica/BSG_Preview_3/newcaprica-objective-card-1.png'
+    seed:
+      destination: New Caprica
 ---
 expansion: exodus
 deck: objective
 cards:
   - name: Ionian Nebula
+    seed:
+      destination: Ionian Nebula
     url: 'https://images-cdn.fantasyflightgames.com/ffg_content/Battlestar_Galactica/exodus/preview3/exodus-ionian-nebula-objective.png'
 ---
 expansion: daybreak
@@ -2565,6 +2688,8 @@ deck: objective
 cards:
   - name: Earth
     url: 'https://images-cdn.fantasyflightgames.com/ffg_content/Battlestar_Galactica/daybreak/BSG04_Card_Objective-Earth.png'
+    seed:
+      destination: Earth
 ---
 expansion: base
 deck: title

@@ -242,14 +242,14 @@ def main():
                     if seed.get(key, value) != value:
                         print('! Result would be hidden due to seed constraint')
                         hidden.append(hit)
-                        if hit.name.lower() == lower_text:
+                        if cards.is_exact_match(hit, lower_text):
                             print('! Exact title match')
                         break
 
         # len(hidden) <= index
-        if hit not in hidden and hit.name.lower() != lower_text:
+        if hit not in hidden and not cards.is_exact_match(hit, lower_text):
             for hid in hidden:
-                if hid.name.lower() == lower_text:
+                if cards.is_exact_match(hid, lower_text):
                     print(f'! Previous hidden {hid.name} ({hid.expansion}) would be shown due to exact title match instead of this non-exact hit')
                     break
 
