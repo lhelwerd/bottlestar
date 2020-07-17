@@ -223,7 +223,9 @@ boards:
             - 'Choose 2 of the following abilities:'
             - 'The CAG must place 1 civilian ship (following all placement rules)'
             - 'Place 1 Basestar or 3 Raiders in any 1 area on this game board.'
-            - ['Roll a die:', '1-3: Decrease the jump track by 1', '4-8: Increase the pursuit track by 1']
+            - 'Roll a die:'
+            - - '1-3: Decrease the jump track by 1'
+            - - '4-8: Increase the pursuit track by 1'
             - 'Roll a die. If the result is less than the number of raiders on the main game board, draw 2 Galactica damage tokens and choose 1 to resolve.'
 ---
 expansion: daybreak
