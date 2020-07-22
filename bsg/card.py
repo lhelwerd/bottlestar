@@ -128,7 +128,7 @@ class Cards:
         path = path.replace(' ', card.get('replace', replace))
 
         # Usually the deck path is repeated in each file name, but not always
-        prefix = deck.get('prefix', deck_path)
+        prefix = card.get('prefix', deck.get('prefix', deck_path))
         if prefix != '':
             prefix = prefix.replace(' ', '_') + '_'
 
