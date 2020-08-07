@@ -1066,7 +1066,7 @@ cards:
   - name: Rallying Support
     index: 151
     value: 8
-    skills: [Leadership, Tactics]
+    skills: [Politics, Tactics]
     cylon: Raiders
     jump: True
   - name: Reactor Critical
