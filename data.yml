@@ -1077,13 +1077,13 @@ cards:
   - name: Rebuild Trust
     index: 153
     value: 9
-    skills: [Leadership, Politics]
+    skills: [Politics, Leadership]
     cylon: Raiders
   - name: Religious Turmoil
     replace: '_'
     index: 154
     value: 7
-    skills: [Leadership, Tactics]
+    skills: [Politics, Tactics]
     cylon: Raiders
     jump: True
   - name: Reprisal
