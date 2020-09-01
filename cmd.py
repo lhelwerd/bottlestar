@@ -149,7 +149,7 @@ def main():
     if command == "bbcode":
         bbcode = BBCodeMarkdown(images)
         text = bbcode.process_bbcode(' '.join(arguments))
-        print(cards.replace_cards(text, args.display))
+        print(cards.replace_cards(text, display=args.display))
         return
 
     if command in ("latest", "succession", "analyze", "image", "state"):
@@ -163,7 +163,7 @@ def main():
         if command == "succession":
             print(cards.lines_of_succession(seed))
         elif command == "analyze":
-            print(cards.analyze(seed))
+            print(cards.analyze(seed, display=args.display))
         else:
             author = thread.get_author(ByYourCommand.get_quote_author(post)[0])
             if author is None:

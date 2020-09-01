@@ -368,7 +368,11 @@ class Cards:
 
         return "\n\n".join(report)
 
-    def analyze(self, seed):
+    def analyze(self, seed, display='discord'):
+        replacements = {
+            "discord": "\\*"
+        }
+        replacement = replacements.get(display, '*')
         report = []
         for deck, data in self.decks.items():
             if 'seed' not in data or 'analyze' not in data:
@@ -393,12 +397,13 @@ class Cards:
                         # Pegasus/Daybreak Treachery decks
                         continue
 
-                name = self.get_card_title(card)
+                name = self.get_card_title(card).replace('**', '') \
+                    .replace('*', replacement)
                 if card.count is not None and card.value is not None:
                     # Skill deck
                     offset = card.index
                     for value, count in zip(card.value, card.count):
-                        lookup.update({index: f"**{value} - {card.name}**" for index in range(offset, offset + count)})
+                        lookup.update({index: f"{value} - {card.name}" for index in range(offset, offset + count)})
                         offset += count
                 elif card.count is not None:
                     lookup.update({index: name for index in range(card.index, card.index + card.count[0])})
