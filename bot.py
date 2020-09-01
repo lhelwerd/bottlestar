@@ -744,7 +744,7 @@ async def thread_command(message, command):
             if analysis == '':
                 analysis = 'No decks found in the game!'
 
-            await send_message(analysis)
+            await send_message(message.channel, analysis)
         return
 
     author = thread.get_author(ByYourCommand.get_quote_author(post)[0])
