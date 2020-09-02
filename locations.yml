@@ -313,3 +313,16 @@ boards:
           text:
               - 'Draw only 1 Skill Card during your Draw Skill Cards step.'
               - Action: 'Draw 1 Super Crisis Card.'
+    - name: Cylon Locations (Hub Destroyed)
+      image: 2274810
+      ext: png
+      bbox: [14, 1058, 1678, 1862]
+      seed:
+          destination: Earth
+      locations:
+        - name: Hub Destroyed
+          hazardous: True
+          bbox: [1230, 1172, 1636, 1822]
+          text:
+              - 'During your Draw Skills step, discard all of your Super Crisis Cards and do not draw Skill Cards.'
+              - Action: 'Discard 3 Skill Cards to draw 1 Super Crisis Card and move to the "Cylon Fleet" location.'

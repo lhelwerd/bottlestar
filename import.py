@@ -150,11 +150,13 @@ def load_locations():
             expansion_seed = data.get('seed', {})
             for board in data['boards']:
                 board_name = board['name']
-                path = board['path']
+                path = board.get('path', board_name)
+                image = board.get('image')
                 ext = board['ext']
                 seed = board.get('seed', expansion_seed)
                 doc = Location(board_name=board_name,
                                path=path,
+                               image=image,
                                ext=ext,
                                name=board_name,
                                expansion=expansion,
@@ -170,6 +172,7 @@ def load_locations():
                         value = [value]
                     loc = Location(board_name=board_name,
                                    path=path,
+                                   image=image,
                                    ext=ext,
                                    name=location['name'],
                                    expansion=expansion,
