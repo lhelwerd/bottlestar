@@ -1411,6 +1411,9 @@ deck: char
 cards:
   - name: Samuel T. Anders
     path: Anders
+    image: 847210
+    ext: jpg
+    bbox: [18, 0, 572, 400]
     class: Pilot
     succession:
       president: 30
