@@ -1,6 +1,6 @@
 beautifulsoup4
 lxml
-discord.py
+discord.py>=1.4.0
 PyYAML
 requests
 python-dateutil

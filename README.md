@@ -47,6 +47,7 @@ thread_id: # ID of the BGG thread to retrieve game state from
 api_url: # URL of the BGG API for image/thread/author lookup
 elasticsearch_host: # Hostname where the ElasticSearch endpoint is hosts
 script_url: # URL from which to download the BYC script
+usernames: # Object where keys are BGG usernames and values discord user IDs
 ```
 
 # Usage

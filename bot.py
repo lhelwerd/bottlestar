@@ -60,17 +60,20 @@ byc_role_text = {
     "loyalty": (" reveals ", " becomes a Cylon.", " is a [color=red]Cylon[/color]!")
 }
 
-async def send_message(channel, message, **kwargs):
+async def send_message(channel, message, allowed_mentions=None, **kwargs):
     messages = []
     while len(message) > 2000:
         pos = message.rfind('\n', 0, 2000 - 1)
-        messages.append(await channel.send(message[:pos]))
+        messages.append(await channel.send(message[:pos],
+                                           allowed_mentions=allowed_mentions))
         message = message[pos+1:]
 
-    messages.append(await channel.send(message, **kwargs))
+    messages.append(await channel.send(message,
+                                       allowed_mentions=allowed_mentions,
+                                       **kwargs))
     return messages
 
-def replace_roles(message, guild=None, seed=None, users=False, emoji=True,
+def replace_roles(message, guild=None, seed=None, users=None, emoji=True,
                   deck=True):
     if emoji or deck:
         message = cards.replace_cards(message,
@@ -78,25 +81,38 @@ def replace_roles(message, guild=None, seed=None, users=False, emoji=True,
                                       deck=deck)
 
     if guild is None:
-        return message
+        none = discord.AllowedMentions(everyone=False, users=False, roles=False)
+        return message, none
 
     titles = cards.titles.keys()
+    roles = []
+    names = []
     for role in guild.roles:
         # Optionally only replace roles belonging to BYC
         if not role.mentionable:
             continue
         if seed is None or role.name in seed["players"] or role.name in titles:
-            message = re.sub(rf"\b{role.name}\b(?!['-])", role.mention,
-                             message)
+            message, subs = re.subn(rf"\b{role.name}\b(?!['-])", role.mention,
+                                    message)
+            if subs > 0:
+                roles.append(role)
 
     if seed is not None and users:
         logging.info("Usernames to replace: %r", seed["usernames"])
         for username in seed["usernames"]:
-            member = guild.get_member_named(username)
-            if member is not None:
-                message = re.sub(rf"\b{username}\b", member.mention, message)
+            if "usernames" in config and username in config["usernames"]:
+                member = guild.get_member(config["usernames"][username])
+            else:
+                member = guild.get_member_named(username)
 
-    return message
+            if member is not None:
+                message, subs = re.subn(rf"\b{username}\b", member.mention,
+                                        message)
+                if subs > 0:
+                    names.append(member)
+
+    mentions = discord.AllowedMentions(everyone=False, users=names, roles=roles)
+    return message, mentions
 
 @client.event
 async def on_ready():
@@ -476,8 +492,8 @@ async def byc_public_result(byc, guild, main_channel, game_state_path=None,
 
     # Process the game state (BBCode -> Markdown and HTML game state)
     game_state_markdown = bbcode.process_bbcode(game_state)
-    public_message = replace_roles(game_state_markdown, guild,
-                                   seed=seed, users=users, deck=False)
+    public_message, mentions = replace_roles(game_state_markdown, guild,
+                                             seed=seed, users=users, deck=False)
 
     if bbcode.game_state != "":
         path = byc.save_game_state_screenshot(images, bbcode.game_state)
@@ -485,7 +501,8 @@ async def byc_public_result(byc, guild, main_channel, game_state_path=None,
     else:
         image = None
 
-    new_messages = await send_message(main_channel, public_message, file=image)
+    new_messages = await send_message(main_channel, public_message, mentions,
+                                      file=image)
 
     # Pin the message if it has a screenshot - unpin others
     if image is not None:
@@ -732,9 +749,9 @@ async def thread_command(message, command):
         await message.channel.send('No latest post found!')
 
     if command == "succession":
-        succession = replace_roles(cards.lines_of_succession(seed),
-                                   message.guild)
-        await send_message(message.channel, succession)
+        succession, mentions = replace_roles(cards.lines_of_succession(seed),
+                                             message.guild)
+        await send_message(message.channel, succession, mentions)
         return
     if command == "analyze":
         if not seed.get('gameOver'):
@@ -765,7 +782,10 @@ async def thread_command(message, command):
         await message.channel.send(file=discord.File(path))
         return
 
-    await send_message(message.channel, replace_roles(text, message.guild))
+    users = any(user_text in text for user_text in byc_role_text["character"])
+    response, mentions = replace_roles(text, message.guild, seed=seed,
+                                       users=users)
+    await send_message(message.channel, response, mentions)
 
 async def show_search_result(channel, hit, deck, count, hidden):
     # Retrieve URL or (cropped) image attachment
