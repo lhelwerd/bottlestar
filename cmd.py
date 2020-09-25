@@ -53,14 +53,16 @@ def main():
 
     if command == "byc":
         game_state = ""
-        game_state_path = Path("game/game-0.txt")
         if len(arguments) >= 1:
             game_state_path = Path(arguments[0])
-            try:
-                with game_state_path.open('r') as game_state_file:
-                    game_state = game_state_file.read()
-            except IOError:
-                logging.exception("Could not read game state, starting new")
+        else:
+            game_state_path = Path("game/game-0.txt")
+
+        try:
+            with game_state_path.open('r') as game_state_file:
+                game_state = game_state_file.read()
+        except IOError:
+            logging.exception("Could not read game state, starting new")
 
         if len(arguments) >= 2:
             user = arguments[1]

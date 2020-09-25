@@ -72,7 +72,7 @@ class BBCodeMarkdown(BBCode):
         self.parser.add_simple_formatter('c', '')
         self.parser.add_simple_formatter('o', '')
         # Drop external URLs
-        self.parser.add_simple_formatter('url', '')
+        self.parser.add_simple_formatter('url', '%(value)s')
         self.parser.add_simple_formatter('article', '%(value)s')
         # Other tags
         self.parser.add_simple_formatter('clear', '', standalone=True)
