@@ -73,8 +73,8 @@ async def send_message(channel, message, allowed_mentions=None, **kwargs):
                                        **kwargs))
     return messages
 
-def replace_roles(message, guild=None, seed=None, users=None, emoji=True,
-                  deck=True):
+def replace_roles(message, guild=None, seed=None, roles=None, users=None,
+                  emoji=True, deck=True):
     if emoji or deck:
         message = cards.replace_cards(message,
                                       display='discord' if emoji else '',
@@ -83,11 +83,13 @@ def replace_roles(message, guild=None, seed=None, users=None, emoji=True,
     if guild is None:
         none = discord.AllowedMentions(everyone=False, users=False, roles=False)
         return message, none
+    if roles is None:
+        roles = guild.roles
 
     titles = cards.titles.keys()
-    roles = []
-    names = []
-    for role in guild.roles:
+    players = []
+    usernames = []
+    for role in roles:
         # Optionally only replace roles belonging to BYC
         if not role.mentionable:
             continue
@@ -95,7 +97,7 @@ def replace_roles(message, guild=None, seed=None, users=None, emoji=True,
             message, subs = re.subn(rf"\b{role.name}\b(?!['-])", role.mention,
                                     message)
             if subs > 0:
-                roles.append(role)
+                players.append(role)
 
     if seed is not None and users:
         logging.info("Usernames to replace: %r", seed["usernames"])
@@ -109,9 +111,10 @@ def replace_roles(message, guild=None, seed=None, users=None, emoji=True,
                 message, subs = re.subn(rf"\b{username}\b", member.mention,
                                         message)
                 if subs > 0:
-                    names.append(member)
+                    usernames.append(member)
 
-    mentions = discord.AllowedMentions(everyone=False, users=names, roles=roles)
+    mentions = discord.AllowedMentions(everyone=False, users=usernames,
+                                       roles=players)
     return message, mentions
 
 @client.event
@@ -742,7 +745,30 @@ async def byc_command(message, command, arguments):
 
                 run = False
 
-async def thread_command(message, command):
+def ping_command(guild, seed, author, bbcode, mentions):
+    pings = []
+    role_mentions = []
+    try:
+        author_role = seed["players"][seed["usernames"].index(author)]
+    except (KeyError, IndexError, ValueError):
+        author_role = ""
+
+    for role in mentions.roles:
+        if role.name == author_role:
+            continue
+        for bold in bbcode.bold_text:
+            if role.name in bold:
+                ping, mention = replace_roles(bold, guild, seed=seed,
+                                              roles=[role])
+                pings.append(ping)
+                role_mentions.extend(mention.roles)
+
+    response = "\n".join(pings)
+    mentions = discord.AllowedMentions(everyone=False, users=False,
+                                       roles=role_mentions)
+    return response, mentions
+
+async def thread_command(message, guild, command):
     game_id = config['thread_id']
     post, seed = thread.retrieve(game_id)
     if post is None:
@@ -750,7 +776,7 @@ async def thread_command(message, command):
 
     if command == "succession":
         succession, mentions = replace_roles(cards.lines_of_succession(seed),
-                                             message.guild)
+                                             guild)
         await send_message(message.channel, succession, mentions)
         return
     if command == "analyze":
@@ -783,8 +809,22 @@ async def thread_command(message, command):
         return
 
     users = any(user_text in text for user_text in byc_role_text["character"])
-    response, mentions = replace_roles(text, message.guild, seed=seed,
-                                       users=users)
+    response, mentions = replace_roles(text, guild, seed=seed, users=users)
+    if command == "ping":
+        if not mentions.roles:
+            await message.channel.send("I did not find anyone, what are you trying to do here? :robot:")
+            return
+
+        response, mentions = ping_command(guild, seed, author, bbcode, mentions)
+        if response == "":
+            await message.channel.send("I did not find anyone, what are you trying to do here? :robot:")
+            return
+
+    if message.guild != guild:
+        # Useful for debugging but otherwise never do that
+        mentions.roles = False
+        response = discord.utils.escape_mentions(response)
+
     await send_message(message.channel, response, mentions)
 
 async def show_search_result(channel, hit, deck, count, hidden):
@@ -891,6 +931,7 @@ async def on_message(message):
                  "**!board** <text> [expansion]: Search a board or location\n"
                  "**!latest**: Show the latest game post\n"
                  "**!image**: Show the lastest game state\n"
+                 "**!ping**: Show who needs to do something\n"
                  "**!succession**: Show the line of succession\n"
                  "**!analyze**: Show the top cards of decks after game over\n")
         if is_byc_enabled(message.guild, message.channel):
@@ -922,10 +963,18 @@ async def on_message(message):
         return
 
     # Thread lookup commands
-    if command in ("latest", "image", "succession", "analyze"):
+    if command in ("latest", "image", "ping", "succession", "analyze"):
+        # Optionally can take a guild ID as argument, but doing so will not 
+        # cause usable mentions and is for debugging only
+        guild = None
+        if len(arguments) >= 1 and arguments[0].isnumeric():
+            guild = client.get_guild(int(arguments[0]))
+        if guild is None:
+            guild = message.guild
+
         try:
             async with message.channel.typing():
-                await thread_command(message, command)
+                await thread_command(message, guild, command)
         except:
             logging.exception(f"Thread {command} error")
             await message.channel.send(f"Uh oh")

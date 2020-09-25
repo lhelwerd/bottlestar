@@ -10,6 +10,7 @@ class BBCode:
     def __init__(self, images):
         self.images = images
         self.game_state = ""
+        self.bold_text = []
         self.parser = None
         self._load_parser()
 
@@ -29,12 +30,17 @@ class BBCode:
         """
 
         self.game_state = ""
+        self.bold_text = []
         return self.parser.format(text)
 
 class BBCodeMarkdown(BBCode):
     """
     Markdown output for BGG BYC BBCode.
     """
+
+    def _parse_bold(self, tag_name, value, options, parent, context):
+        self.bold_text.append(value)
+        return f"**{value}**"
 
     def _parse_color(self, tag_name, value, options, parent, context):
         color = super()._parse_color(tag_name, value, options, parent, context)
@@ -67,7 +73,7 @@ class BBCodeMarkdown(BBCode):
         self.parser = Parser(newline="\n", install_defaults=False,
                              escape_html=False, replace_links=False,
                              replace_cosmetic=False, drop_unrecognized=False)
-        self.parser.add_simple_formatter('b', '**%(value)s**')
+        self.parser.add_formatter('b', self._parse_bold)
         # Drop code and spoilers
         self.parser.add_simple_formatter('c', '')
         self.parser.add_simple_formatter('o', '')
