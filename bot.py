@@ -745,6 +745,12 @@ async def byc_command(message, command, arguments):
 
                 run = False
 
+def add_ping(text, guild, pings, role_mentions, **kwargs):
+    ping, mention = replace_roles(text, guild=guild, emoji=False, deck=False,
+                                  **kwargs)
+    pings.append(ping)
+    role_mentions.extend(mention.roles)
+
 def ping_command(guild, seed, author, bbcode, mentions):
     pings = []
     role_mentions = []
@@ -753,15 +759,34 @@ def ping_command(guild, seed, author, bbcode, mentions):
     except (KeyError, IndexError, ValueError):
         author_role = ""
 
-    for role in mentions.roles:
-        if role.name == author_role:
-            continue
-        for bold in bbcode.bold_text:
+    for interrupt in bbcode.interrupts:
+        names = [
+            player['name'] for player in interrupt['players']
+            if player['action'] == ''
+        ]
+        if names:
+            add_ping(f"Interrupts for {interrupt['topic']}: {' '.join(names)}",
+                     guild, pings, role_mentions)
+
+    for skill_check in bbcode.skill_checks:
+        names = [
+            player['name'] for player in skill_check['players']
+            if player['bold'] != ''
+        ]
+        if names:
+            add_ping(f"{skill_check['topic']}: {names[0]}", guild, pings,
+                     role_mentions)
+
+    for bold in bbcode.bold_text:
+        bold_roles = []
+        for role in mentions.roles:
+            if role.name == author_role or role in role_mentions:
+                continue
             if role.name in bold:
-                ping, mention = replace_roles(bold, guild, seed=seed,
-                                              roles=[role])
-                pings.append(ping)
-                role_mentions.extend(mention.roles)
+                bold_roles.append(role)
+
+        if bold_roles:
+            add_ping(bold, guild, pings, role_mentions, roles=bold_roles)
 
     response = "\n".join(pings)
     mentions = discord.AllowedMentions(everyone=False, users=False,

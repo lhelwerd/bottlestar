@@ -1,4 +1,5 @@
 import logging
+import re
 from pathlib import PurePath
 from bbcode import Parser
 
@@ -9,10 +10,17 @@ class BBCode:
 
     def __init__(self, images):
         self.images = images
-        self.game_state = ""
-        self.bold_text = []
         self.parser = None
         self._load_parser()
+
+    def _reset(self):
+        self._quotes = {
+            "game_state": "",
+            "interrupts": [],
+            "skill_checks": [],
+            "state_of_emergency": []
+        }
+        self.bold_text = []
 
     def _load_parser(self):
         raise NotImplementedError("Must be implemented by subclass")
@@ -29,14 +37,35 @@ class BBCode:
         for example Discord.
         """
 
-        self.game_state = ""
-        self.bold_text = []
+        self._reset()
         return self.parser.format(text)
+
+    @property
+    def game_state(self):
+        return self._quotes["game_state"]
+
+    @property
+    def interrupts(self):
+        return self._quotes["interrupts"]
+
+    @property
+    def skill_checks(self):
+        return self._quotes["skill_checks"]
+
+    @property
+    def state_of_emergency(self):
+        return self._quotes["state_of_emergency"]
 
 class BBCodeMarkdown(BBCode):
     """
     Markdown output for BGG BYC BBCode.
     """
+
+    _token_patterns = {
+        "topic": re.compile(r"^\*\*(?:Interrupts for )?\**(?P<topic>[^\*]+)\*\*$"),
+        "possibilities": re.compile(r"^(?:Looking for|and/or .* the following:) (?P<possibilities>.*)$"),
+        "player": re.compile(r"^(?P<bold>\**)?(?P<name>[^(]+)(?P=bold) \((?P<count>\d+)\) -\s*(?P<action>.*)$")
+    }
 
     def _parse_bold(self, tag_name, value, options, parent, context):
         self.bold_text.append(value)
@@ -59,14 +88,43 @@ class BBCodeMarkdown(BBCode):
         logging.info('Found unknown image: %s', image_id)
         return ''
 
+    def _parse_quote_token(self, text, group):
+        token = {
+            "topic": "",
+            "possibilities": "",
+            "players": []
+        }
+        for line in text.split('\n'):
+            for pattern in self._token_patterns.values():
+                match = pattern.match(line)
+                if match:
+                    groups = match.groupdict()
+                    if len(groups) == 1:
+                        key, value = groups.popitem()
+                        token[key] += value
+                    else:
+                        token["players"].append(groups)
+
+                    break
+
+        self._quotes[group].append(token)
+
     def _parse_quote(self, tag_name, value, options, parent, context):
         quote_user = options.get(tag_name, '')
         if "BYC: Game State" in quote_user:
             parser = BBCodeHTML(self.images)
-            self.game_state += parser.process_bbcode(value)
+            self._quotes["game_state"] += parser.process_bbcode(value)
             return ''
 
-        return self.parser.format(value)
+        text = self.parser.format(value)
+        if "BYC: Interrupts for" in quote_user or "BYC: Declare Emergency" in quote_user:
+            self._parse_quote_token(text, "interrupts")
+        elif "BYC: State of Emergency" in quote_user:
+            self._parse_quote_token(text, "state_of_emergency")
+        elif "BYC: " in quote_user:
+            self._parse_quote_token(text, "skill_checks")
+
+        return text
 
     def _load_parser(self):
         # Create a BBCode to discord-like Markdown parser.
