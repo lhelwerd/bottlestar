@@ -778,13 +778,11 @@ def ping_command(guild, seed, author, bbcode, mentions):
                      role_mentions)
 
     for bold in bbcode.bold_text:
-        bold_roles = []
-        for role in mentions.roles:
-            if role.name == author_role or role in role_mentions:
-                continue
-            if role.name in bold:
-                bold_roles.append(role)
-
+        bold_roles = [
+            role for role in mentions.roles
+            if role.name != author_role and role not in role_mentions and \
+                role.name in bold
+        ]
         if bold_roles:
             add_ping(bold, guild, pings, role_mentions, roles=bold_roles)
 
