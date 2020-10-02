@@ -4,7 +4,7 @@ from datetime import datetime
 from glob import glob
 from itertools import chain, zip_longest
 import logging
-from pathlib import Path
+from pathlib import Path, PurePath
 import re
 import shutil
 import discord
@@ -757,7 +757,10 @@ def ping_command(guild, seed, author, bbcode, mentions):
     try:
         author_role = seed["players"][seed["usernames"].index(author)]
     except (KeyError, IndexError, ValueError):
-        author_role = ""
+        try:
+            author_role = bbcode.image_text[0]
+        except IndexError:
+            author_role = ""
 
     for interrupt in bbcode.interrupts:
         names = [
@@ -866,6 +869,8 @@ async def show_search_result(channel, hit, deck, count, hidden):
             if not path.exists():
                 if hit.image:
                     path = images.retrieve(hit.image)
+                    if not isinstance(path, PurePath):
+                        raise ValueError(f'Could not retrieve image {hit.image}')
                 else:
                     path = images.download(url, filename)
 

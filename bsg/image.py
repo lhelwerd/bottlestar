@@ -23,9 +23,9 @@ class Images:
                         for image_id, name in data["images"].items()
                     }
 
+                text_format = data.get("format", "{}")
                 for image_id, text in data["images"].items():
-                    text_format = data.get("format", "{}")
-                    self.images[image_id] = text_format.format(text)
+                    self.images[image_id] = (text_format.format(text), text)
 
     def retrieve(self, image_id, download=True):
         """

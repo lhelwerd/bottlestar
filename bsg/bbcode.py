@@ -12,6 +12,7 @@ class BBCode:
         self.images = images
         self.parser = None
         self._load_parser()
+        self._reset()
 
     def _reset(self):
         self._quotes = {
@@ -20,6 +21,7 @@ class BBCode:
             "skill_checks": [],
             "state_of_emergency": []
         }
+        self.image_text = []
         self.bold_text = []
 
     def _load_parser(self):
@@ -81,9 +83,10 @@ class BBCodeMarkdown(BBCode):
     def _parse_imageid(self, tag_name, value, options, parent, context):
         image_id = super()._parse_imageid(tag_name, value, options, parent,
                                           context)
-        text = self.images.retrieve(image_id, download=False)
-        if text is not None and not isinstance(text, PurePath):
-            return text
+        image = self.images.retrieve(image_id, download=False)
+        if image is not None and isinstance(image, tuple):
+            self.image_text.append(image[1])
+            return image[0]
 
         logging.info('Found unknown image: %s', image_id)
         return ''
@@ -190,10 +193,10 @@ class BBCodeHTML(BBCode):
         path = self.images.retrieve(image_id)
         if isinstance(path, PurePath):
             return f'<div class="img"><img src="{path.resolve().as_uri()}"></div>'
-        if path is None:
+        if not isinstance(path, tuple):
             return f'<div class="img">{image_id}</div>'
 
-        return path
+        return path[0]
 
     def _parse_size(self, tag_name, value, options, parent, context):
         size = round(float(options.get(tag_name, 10)) * 1.4, 1)
