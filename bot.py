@@ -777,12 +777,12 @@ def ping_command(guild, seed, author, bbcode, mentions):
             add_ping(f"{skill_check['topic']}: {names[0]}", guild, pings,
                      role_mentions)
 
+    remaining_roles = [
+        role for role in mentions.roles
+        if role.name != author_role and role not in role_mentions
+    ]
     for bold in bbcode.bold_text:
-        bold_roles = [
-            role for role in mentions.roles
-            if role.name != author_role and role not in role_mentions and \
-                role.name in bold
-        ]
+        bold_roles = [role for role in remaining_roles if role.name in bold]
         if bold_roles:
             add_ping(bold, guild, pings, role_mentions, roles=bold_roles)
 
