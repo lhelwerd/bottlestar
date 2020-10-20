@@ -749,11 +749,11 @@ def add_ping(text, guild, pings, role_mentions, **kwargs):
     ping, mention = replace_roles(text, guild=guild, emoji=False, deck=False,
                                   **kwargs)
     pings.append(ping)
-    role_mentions.extend(mention.roles)
+    role_mentions.update(mention.roles)
 
 def ping_command(guild, seed, author, bbcode, mentions):
     pings = []
-    role_mentions = []
+    role_mentions = set([])
     try:
         author_role = seed["players"][seed["usernames"].index(author)]
     except (KeyError, IndexError, ValueError):
@@ -791,7 +791,7 @@ def ping_command(guild, seed, author, bbcode, mentions):
 
     response = "\n".join(pings)
     mentions = discord.AllowedMentions(everyone=False, users=False,
-                                       roles=role_mentions)
+                                       roles=list(role_mentions))
     return response, mentions
 
 async def thread_command(message, guild, command):
