@@ -25,9 +25,12 @@
 - Install the [requirements](#requirements) (which may be available through 
   package managers for your operating system or Python environment, or through 
   the links).
+- Ensure the ElasticSearch service is running, usually via `systemctl enable 
+  elasticsearch`
 - Set up a Python environment in this directory: `virtualenv -p python3 env`
 - Activate the Python environment: `source env/bin/activate`
 - Install the Python packages: `pip install -r requirements.txt`
+- Populate the cards and locations using `python import.py --log INFO`
 - Using the developer portal of Discord, create a new, aptly-named
   [Application](https://discordapp.com/developers/applications). To add it to 
   a server of which you are not the owner, it must be public in the Bot 
