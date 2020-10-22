@@ -47,7 +47,11 @@ class Card(Document):
         if expansion != '':
             search = search.filter('term', expansion=expansion)
         search_query = search[:limit].query(query)
-        return search_query.execute(), search_query.count()['value']
+        result = search_query.execute()
+        count = search_query.count()
+        if not isinstance(count, int):
+            count = count['value']
+        return result, count
 
 class Location(Document):
     SEARCH_FIELDS = ['name', 'text', 'expansion', 'skills']
@@ -78,4 +82,8 @@ class Location(Document):
         if expansion != '':
             search = search.filter('term', expansion=expansion)
         search_query = search[:limit].query(query)
-        return search_query.execute(), search_query.count()['value']
+        result = search_query.execute()
+        count = search_query.count()
+        if not isinstance(count, int):
+            count = count['value']
+        return result, count
