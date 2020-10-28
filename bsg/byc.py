@@ -160,6 +160,8 @@ class ByYourCommand:
         try:
             dialog = Dialog(self._wait_for_dialog())
         except TimeoutException:
+            logging.debug("Browser log (initial timeout): %r",
+                          self.driver.get_log("browser"))
             return self._get_game_state(quote=quote)
 
         # Check for BYC updates
@@ -167,6 +169,8 @@ class ByYourCommand:
             try:
                 dialog = Dialog(self._wait_for_dialog())
             except TimeoutException:
+                logging.debug("Browser log (timeout after update): %r",
+                              self.driver.get_log("browser"))
                 return self._get_game_state(quote=quote)
 
         for index, choice in enumerate(choices):
@@ -191,14 +195,18 @@ class ByYourCommand:
             if quits and index == len(choices) - 1:
                 # Don't wait for dialog if we know this is supposed to
                 # Save and Quit, so we don't need to wait for a new dialog
+                logging.debug("Browser log (quitting): %r",
+                              self.driver.get_log("browser"))
                 return self._get_game_state(quote=quote)
 
             try:
                 dialog = Dialog(self._wait_for_dialog())
             except TimeoutException:
+                logging.debug("Browser log (ending timeout): %r",
+                              self.driver.get_log("browser"))
                 return self._get_game_state(quote=quote)
 
-        logging.info("Browser log: %r", self.driver.get_log("browser"))
+        logging.debug("Browser log: %r", self.driver.get_log("browser"))
         return dialog
 
     def _wait_for_dialog(self, wait=None):
