@@ -8,11 +8,11 @@ from pathlib import Path, PurePath
 import re
 import shutil
 import discord
-import yaml
 from elasticsearch_dsl.connections import connections
 from bsg.bbcode import BBCodeMarkdown
 from bsg.byc import ByYourCommand, Dialog
 from bsg.card import Cards
+from bsg.config import Config
 from bsg.image import Images
 from bsg.search import Card, Location
 from bsg.thread import Thread
@@ -29,8 +29,7 @@ if __name__ == "__main__":
     logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',
                         level=getattr(logging, args.log, None))
 
-with open("config.yml") as config_file:
-    config = yaml.safe_load(config_file)
+config = Config("config.yml")
 
 client = discord.Client()
 cards = Cards(config['cards_url'])

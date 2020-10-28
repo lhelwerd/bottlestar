@@ -4,11 +4,11 @@ import logging
 from pathlib import Path
 import re
 import dateutil.parser
-import yaml
 from elasticsearch_dsl.connections import connections
 from bsg.bbcode import BBCodeMarkdown
 from bsg.byc import ByYourCommand, Dialog
 from bsg.card import Cards
+from bsg.config import Config
 from bsg.image import Images
 from bsg.search import Card, Location
 from bsg.thread import Thread
@@ -34,8 +34,7 @@ def main():
     logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',
                         level=getattr(logging, args.log, None))
 
-    with open("config.yml") as config_file:
-        config = yaml.safe_load(config_file)
+    config = Config("config.yml")
 
     # Define a default Elasticsearch client
     connections.create_connection(alias='main',
