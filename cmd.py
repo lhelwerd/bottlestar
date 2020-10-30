@@ -9,6 +9,8 @@ from bsg.bbcode import BBCodeMarkdown
 from bsg.byc import ByYourCommand, Dialog
 from bsg.card import Cards
 from bsg.config import Config
+from bsg.command import Command
+from bsg.context import CommandLineContext
 from bsg.image import Images
 from bsg.search import Card, Location
 from bsg.thread import Thread
@@ -45,9 +47,8 @@ def main():
     cards = Cards(config['cards_url'])
     images = Images(config['api_url'])
 
-    if command == "bot":
-        at = "@"
-        print(f"Hello, {at}{args.user}!")
+    context = CommandLineContext(args)
+    if Command.execute(context, command, arguments):
         return
 
     if command == "byc":
