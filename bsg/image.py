@@ -10,22 +10,30 @@ class Images:
     Handler for downloading images from BGG.
     """
 
-    def __init__(self, api_url):
-        self.api_url = api_url
-        self.session = requests.Session()
-        self.images = {}
-        self.banners = {}
+    images = {}
+    banners = {}
+
+    @classmethod
+    def load(cls):
+        if cls.images:
+            return
+
         with open("images.yml") as images_file:
             for data in yaml.safe_load_all(images_file):
                 if data["type"].endswith("banners"):
-                    self.banners[data["type"]] = {
+                    cls.banners[data["type"]] = {
                         name: image_id
                         for image_id, name in data["images"].items()
                     }
 
                 text_format = data.get("format", "{}")
                 for image_id, text in data["images"].items():
-                    self.images[image_id] = (text_format.format(text), text)
+                    cls.images[image_id] = (text_format.format(text), text)
+
+    def __init__(self, api_url):
+        self.api_url = api_url
+        self.session = requests.Session()
+        self.load()
 
     def retrieve(self, image_id, download=True):
         """

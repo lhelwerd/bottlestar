@@ -47,7 +47,7 @@ def main():
     cards = Cards(config['cards_url'])
     images = Images(config['api_url'])
 
-    context = CommandLineContext(args)
+    context = CommandLineContext(args, config)
     if Command.execute(context, command, arguments):
         return
 
@@ -154,7 +154,7 @@ def main():
         print(cards.replace_cards(text, display=args.display))
         return
 
-    if command in ("latest", "succession", "analyze", "image", "state"):
+    if command == "state":
         thread = Thread(config['api_url'])
         game_id = config['thread_id']
         post, seed = thread.retrieve(game_id)
@@ -162,30 +162,22 @@ def main():
             print('No latest post found!')
             return
 
-        if command == "succession":
-            print(cards.lines_of_succession(seed))
-        elif command == "analyze":
-            print(cards.analyze(seed, display=args.display))
-        else:
-            author = thread.get_author(ByYourCommand.get_quote_author(post)[0])
-            if author is None:
-                author = args.user
-            byc = ByYourCommand(game_id, author, config['script_url'])
-            if command in ("state", "image"):
-                choices = []
-                dialog = byc.run_page(choices, post)
-                if "You are not recognized as a player" in dialog.msg:
-                    choices.extend(["\b1", "1"])
-                choices.extend(["2", "\b2", "\b1"])
-                post = byc.run_page(choices, post, num=len(choices),
-                                    quits=True, quote=False)
+        author = thread.get_author(ByYourCommand.get_quote_author(post)[0])
+        if author is None:
+            author = args.user
+        byc = ByYourCommand(game_id, author, config['script_url'])
 
-            bbcode = BBCodeMarkdown(images)
-            text = bbcode.process_bbcode(post)
-            if command == "image":
-                print(byc.save_game_state_screenshot(images, bbcode.game_state))
-            else:
-                print(cards.replace_cards(text, display=args.display))
+        choices = []
+        dialog = byc.run_page(choices, post)
+        if "You are not recognized as a player" in dialog.msg:
+            choices.extend(["\b1", "1"])
+        choices.extend(["2", "\b2", "\b1"])
+        post = byc.run_page(choices, post, num=len(choices),
+                            quits=True, quote=False)
+
+        bbcode = BBCodeMarkdown(images)
+        text = bbcode.process_bbcode(post)
+        print(cards.replace_cards(text, display=args.display))
 
         return
 

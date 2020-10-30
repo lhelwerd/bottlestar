@@ -10,8 +10,10 @@ import shutil
 import discord
 from elasticsearch_dsl.connections import connections
 from bsg.bbcode import BBCodeMarkdown
-from bsg.byc import ByYourCommand, Dialog
+from bsg.byc import ByYourCommand, Dialog, ROLE_TEXT
 from bsg.card import Cards
+from bsg.command import Command
+from bsg.context import DiscordContext
 from bsg.config import Config
 from bsg.image import Images
 from bsg.search import Card, Location
@@ -52,11 +54,6 @@ byc_commands = {
     "reset": "Go back to the start of the series of actions (like **!byc**)",
     "cleanup": ("channel", "Delete all items related to the current game"),
     "refresh": "Perform updates for the current game (role positions)"
-}
-byc_role_text = {
-    "character": (" chooses to play ", " returns as ", " pick a new character"),
-    "title": (" is now the ", " the Mutineer.", " receives the Mutineer card "),
-    "loyalty": (" reveals ", " becomes a Cylon.", " is a [color=red]Cylon[/color]!")
 }
 
 async def send_message(channel, message, allowed_mentions=None, **kwargs):
@@ -459,7 +456,7 @@ async def byc_public_result(byc, guild, main_channel, game_state_path=None,
     role_texts = {}
     roles = {}
     banner_priority = [float('inf')] * len(seed["usernames"])
-    for role_group, role_text in byc_role_text.items():
+    for role_group, role_text in ROLE_TEXT.items():
         role_texts[role_group] = any(text in game_state for text in role_text)
         if role_texts[role_group] and old_seed is None:
             old_seed = byc.get_game_seed(old_game_state)
@@ -744,114 +741,6 @@ async def byc_command(message, command, arguments):
 
                 run = False
 
-def add_ping(text, guild, pings, role_mentions, **kwargs):
-    ping, mention = replace_roles(text, guild=guild, emoji=False, deck=False,
-                                  **kwargs)
-    pings.append(ping)
-    role_mentions.update(mention.roles)
-
-def ping_command(guild, seed, author, bbcode, mentions):
-    pings = []
-    role_mentions = set([])
-    try:
-        author_role = seed["players"][seed["usernames"].index(author)]
-    except (KeyError, IndexError, ValueError):
-        try:
-            author_role = bbcode.image_text[0]
-        except IndexError:
-            author_role = ""
-
-    for interrupt in bbcode.interrupts:
-        names = [
-            player['name'] for player in interrupt['players']
-            if player['action'] == ''
-        ]
-        if names:
-            add_ping(f"Interrupts for {interrupt['topic']}: {' '.join(names)}",
-                     guild, pings, role_mentions)
-
-    for skill_check in bbcode.skill_checks:
-        names = [
-            player['name'] for player in skill_check['players']
-            if player['bold'] != ''
-        ]
-        if names:
-            add_ping(f"{skill_check['topic']}: {names[0]}", guild, pings,
-                     role_mentions)
-
-    remaining_roles = [
-        role for role in mentions.roles
-        if role.name != author_role and role not in role_mentions
-    ]
-    for bold in bbcode.bold_text:
-        bold_roles = [role for role in remaining_roles if role.name in bold]
-        if bold_roles:
-            add_ping(bold, guild, pings, role_mentions, roles=bold_roles)
-
-    response = "\n".join(pings)
-    mentions = discord.AllowedMentions(everyone=False, users=False,
-                                       roles=list(role_mentions))
-    return response, mentions
-
-async def thread_command(message, guild, command):
-    game_id = config['thread_id']
-    post, seed = thread.retrieve(game_id)
-    if post is None:
-        await message.channel.send('No latest post found!')
-
-    if command == "succession":
-        succession, mentions = replace_roles(cards.lines_of_succession(seed),
-                                             guild)
-        await send_message(message.channel, succession, mentions)
-        return
-    if command == "analyze":
-        if not seed.get('gameOver'):
-            await message.channel.send('Game is not yet over!')
-        else:
-            analysis = cards.analyze(seed)
-            if analysis == '':
-                analysis = 'No decks found in the game!'
-
-            await send_message(message.channel, analysis)
-        return
-
-    author = thread.get_author(ByYourCommand.get_quote_author(post)[0])
-    byc = ByYourCommand(game_id, author, config['script_url'])
-    if command == "image":
-        choices = []
-        dialog = byc.run_page(choices, post)
-        if "You are not recognized as a player" in dialog.msg:
-            choices.extend(["\b1", "1"])
-        choices.extend(["2", "\b2", "\b1"])
-        post = byc.run_page(choices, post, num=len(choices),
-                            quits=True, quote=False)
-
-    bbcode = BBCodeMarkdown(images)
-    text = bbcode.process_bbcode(post)
-    if command == "image":
-        path = byc.save_game_state_screenshot(images, bbcode.game_state)
-        await message.channel.send(file=discord.File(path))
-        return
-
-    users = any(user_text in text for user_text in byc_role_text["character"])
-    response, mentions = replace_roles(text, guild, seed=seed, users=users)
-    if command == "ping":
-        if not mentions.roles:
-            await message.channel.send("I did not find anyone, what are you trying to do here? :robot:")
-            return
-
-        response, mentions = ping_command(guild, seed, author, bbcode, mentions)
-        if response == "":
-            await message.channel.send("I did not find anyone, what are you trying to do here? :robot:")
-            return
-
-    if message.guild != guild:
-        # Useful for debugging but otherwise never do that
-        mentions.roles = False
-        response = discord.utils.escape_mentions(response)
-
-    await send_message(message.channel, response, mentions)
-
 async def show_search_result(channel, hit, deck, count, hidden):
     # Retrieve URL or (cropped) image attachment
     url = cards.get_url(hit.to_dict())
@@ -949,6 +838,7 @@ async def on_message(message):
 
     arguments = message.content.rstrip(' ').split(' ')
     command = arguments.pop(0)[1:]
+    context = DiscordContext(message, config)
 
     if command == "help":
         decks = ', '.join(sorted(cards.decks.keys()))
@@ -970,6 +860,9 @@ async def on_message(message):
         await send_message(message.channel, reply)
         return
 
+    if Command.execute(context, command, arguments):
+        return
+
     # BYC commands
     # Required permissions: Manage Roles, Manage Channels, Manage Nicknames,
     # View Channels, Send Messages, Manage Messages, Embed Links, Attach Files,
@@ -980,30 +873,6 @@ async def on_message(message):
                 await byc_command(message, command, arguments)
         except:
             logging.exception("BYC error")
-            await message.channel.send(f"Uh oh")
-        return
-
-    # Undocumented commands:
-    # !bot: test command
-    if command == "bot":
-        await message.channel.send(f'Hello {message.author.mention}!')
-        return
-
-    # Thread lookup commands
-    if command in ("latest", "image", "ping", "succession", "analyze"):
-        # Optionally can take a guild ID as argument, but doing so will not 
-        # cause usable mentions and is for debugging only
-        guild = None
-        if len(arguments) >= 1 and arguments[0].isnumeric():
-            guild = client.get_guild(int(arguments[0]))
-        if guild is None:
-            guild = message.guild
-
-        try:
-            async with message.channel.typing():
-                await thread_command(message, guild, command)
-        except:
-            logging.exception(f"Thread {command} error")
             await message.channel.send(f"Uh oh")
         return
 

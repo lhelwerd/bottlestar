@@ -2,10 +2,24 @@
 Command context.
 """
 
+import logging
+import re
+import discord
+from .card import Cards
+from .config import ServerConfig
+
 class Context:
     """
     Context for a command.
     """
+
+    @property
+    def typing(self):
+        """
+        Indicate to the context that the bot is processing a command.
+        """
+
+        return None
 
     async def send(self, message, **kw):
         """
@@ -13,6 +27,12 @@ class Context:
         """
 
         raise NotImplementedError("Must be implemented by subclasses")
+
+    def replace_roles(self, message, **kw):
+        return message, None
+
+    def make_mentions(self, **kw):
+        return None
 
     @property
     def prefix(self):
@@ -49,11 +69,14 @@ class CommandLineContext(Context):
     A command being handled on the command line.
     """
 
-    def __init__(self, args):
+    def __init__(self, args, config):
         self.args = args
+        self.config = config
 
-    async def send(self, message):
+    async def send(self, message, file=None, **kw):
         print(message)
+        if file is not None:
+            print(f"Associated file can be found in {file}")
 
     @property
     def user(self):
@@ -71,10 +94,18 @@ class DiscordContext(Context):
 
     MESSAGE_LENGTH = 2000
 
-    def __init__(self, message):
+    def __init__(self, message, config):
         self.message = message
+        if self.message.guild is None:
+            self.config = config
+        else:
+            self.config = ServerConfig(config, self.message.guild.id)
 
-    async def send(self, message, allowed_mentions=None, **kw):
+    @property
+    def typing(self):
+        return self.message.channel.typing
+
+    async def send(self, message, file=None, allowed_mentions=None, **kw):
         channel = self.message.channel
         tasks = []
         while len(message) > self.MESSAGE_LENGTH:
@@ -86,10 +117,76 @@ class DiscordContext(Context):
                                             allowed_mentions=allowed_mentions))
             message = message[pos+1:]
 
+        discord_file = discord.File(file) if file is not None else None
         tasks.append(await channel.send(message,
                                         allowed_mentions=allowed_mentions,
+                                        file=discord_file,
                                         **kw))
         return tasks
+
+    def _replace_role(self, message, role, seed, titles, players):
+        # Optionally only replace roles belonging to BYC
+        if not role.mentionable:
+            return message
+
+        if seed is None or role.name in seed["players"] or role.name in titles:
+            message, subs = re.subn(rf"\b{role.name}\b(?!['-])",
+                                    role.mention, message)
+            if subs > 0:
+                players.append(role)
+
+        return message
+
+    def _replace_user(self, message, user, guild, usernames):
+        if "usernames" in self.config and username in self.config["usernames"]:
+            member = guild.get_member(self.config["usernames"][user])
+        else:
+            member = guild.get_member_named(user)
+
+        if member is not None:
+            message, subs = re.subn(rf"\b{user}\b", member.mention, message)
+            if subs > 0:
+                usernames.append(member)
+
+        return message
+
+    def replace_roles(self, message, **kw):
+        cards = kw.get("cards")
+        seed = kw.get("seed")
+        roles = kw.get("roles")
+        users = kw.get("users")
+        emoji = kw.get("emoji", True)
+        deck = kw.get("deck", True)
+
+        if cards and (emoji or deck):
+            message = cards.replace_cards(message,
+                                          display='discord' if emoji else '',
+                                          deck=deck)
+
+        guild = self.message.guild
+        if guild is None:
+            return message, discord.AllowedMentions.none()
+
+        if roles is None:
+            roles = guild.roles
+
+        titles = cards.titles.keys() if cards else Cards.load().titles.keys()
+        players = []
+        usernames = []
+        for role in roles:
+            message = self._replace_role(message, role, seed, titles, players)
+
+        if seed is not None and users:
+            logging.info("Usernames to replace: %r", seed["usernames"])
+            for user in seed["usernames"]:
+                message = self._replace_user(message, user, guild, usernames)
+
+        mentions = self.make_mentions(everyone=False, users=usernames,
+                                      roles=players)
+        return message, mentions
+
+    def make_mentions(self, **kw):
+        return discord.AllowedMentions(**kw)
 
     @property
     def prefix(self):

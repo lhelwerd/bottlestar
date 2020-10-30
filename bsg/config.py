@@ -50,7 +50,10 @@ class Config(MutableMapping):
 class ServerConfig(MutableMapping):
     def __init__(self, config, server=None):
         self.config = config
-        self.server_config = self.config.setdefault(server, {})
+        if server is None:
+            self.server_config = self.config
+        else:
+            self.server_config = self.config.setdefault(server, {})
 
     def __getitem__(self, key):
         return self.server_config.get(key, self.config[key])

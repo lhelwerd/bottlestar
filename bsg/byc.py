@@ -18,6 +18,15 @@ from selenium.webdriver.support.expected_conditions import \
     visibility_of_element_located, invisibility_of_element
 from selenium.webdriver.support.wait import WebDriverWait
 
+ROLE_TEXT = {
+    "character":
+        (" chooses to play ", " returns as ", " pick a new character"),
+    "title":
+        (" is now the ", " the Mutineer.", " receives the Mutineer card "),
+    "loyalty":
+        (" reveals ", " becomes a Cylon.", " is a [color=red]Cylon[/color]!")
+}
+
 def unique_hash(user):
     """
     Convert a username to a unique hash in order to make it safe for filenames.

@@ -32,29 +32,41 @@ class Cards:
         ])}""")
     }
 
-    def __init__(self, url):
-        self.url = url
-        self.decks = {}
-        self.skills = {}
-        self.expansions = {}
-        self.character_classes = {}
-        self.titles = {}
-        self.loyalty = {}
-        self.activations = {}
+    loaded = False
+
+    @classmethod
+    def load(cls):
+        if cls.loaded:
+            return cls
+
+        cls.loaded = True
+        cls.decks = {}
+        cls.skills = {}
+        cls.expansions = {}
+        cls.character_classes = {}
+        cls.titles = {}
+        cls.loyalty = {}
+        cls.activations = {}
 
         with open("data.yml") as data_file:
             for data in yaml.safe_load_all(data_file):
                 if data.get('meta'):
-                    self.expansions = data['expansions']
-                    self.decks = data['decks']
-                    self.skills = data['skills']
-                    self.character_classes = data['character_classes']
-                    self.titles = data['titles']
-                    self.loyalty = data['loyalty']
-                    self.activations = data['activations']
+                    cls.expansions = data['expansions']
+                    cls.decks = data['decks']
+                    cls.skills = data['skills']
+                    cls.character_classes = data['character_classes']
+                    cls.titles = data['titles']
+                    cls.loyalty = data['loyalty']
+                    cls.activations = data['activations']
                     break
                 else:
                     raise ValueError('Meta must be first component')
+
+        return cls
+
+    def __init__(self, url):
+        self.url = url
+        self.load()
 
         self._skill_colors = None
         self._deck_cards = None
