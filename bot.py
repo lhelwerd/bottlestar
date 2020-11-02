@@ -4,7 +4,7 @@ from datetime import datetime
 from glob import glob
 from itertools import chain, zip_longest
 import logging
-from pathlib import Path, PurePath
+from pathlib import Path
 import re
 import shutil
 import discord
@@ -741,89 +741,6 @@ async def byc_command(message, command, arguments):
 
                 run = False
 
-async def show_search_result(channel, hit, deck, count, hidden):
-    # Retrieve URL or (cropped) image attachment
-    url = cards.get_url(hit.to_dict())
-    if hit.bbox or hit.image:
-        filename = f"{hit.expansion}_{hit.path}.{hit.ext}"
-        path = Path(f"images/{filename}")
-        if deck == 'board' and hit.bbox:
-            name = hit.name.replace(' ', '_')
-            target_path = Path(f"images/{hit.path}_{name}.{hit.ext}")
-        else:
-            target_path = path
-
-        if not target_path.exists():
-            if not path.exists():
-                if hit.image:
-                    path = images.retrieve(hit.image)
-                    if not isinstance(path, PurePath):
-                        raise ValueError(f'Could not retrieve image {hit.image}')
-                else:
-                    path = images.download(url, filename)
-
-            if hit.bbox:
-                try:
-                    images.crop(path, target_path=target_path,
-                                bbox=hit.bbox)
-                except:
-                    target_path = path
-            else:
-                target_path = path
-
-        image = discord.File(target_path)
-        url = ''
-    else:
-        image = None
-
-    await channel.send(f'{cards.get_text(hit)}\n{url} (score: {hit.meta.score:.3f}, {count} hits, {len(hidden)} hidden)', file=image)
-
-async def search_command(channel, deck, expansion, text):
-    # Collect three results; if some of them has a seed constraint then usually
-    # another relevant one does not, or has the opposite constraint. However
-    # avoid low-quality results that may make hidden results unfindable
-    limit = 3
-    hidden = []
-    lower_text = text.lower()
-    if deck == 'board':
-        response, count = Location.search_freetext(text, expansion=expansion,
-                                                   limit=limit)
-    else:
-        response, count = Card.search_freetext(text, deck=deck,
-                                               expansion=expansion, limit=limit)
-    if count == 0:
-        await channel.send('No card found')
-        return
-
-    seed = None
-    for index, hit in enumerate(response):
-        # Check if the seed constraints may hide this result
-        if hit.seed:
-            if seed is None:
-                seed = thread.retrieve(config['thread_id'], download=False)[1]
-            # Seed may not be locally available at this point
-            if seed is not None:
-                for key, value in hit.seed.to_dict().items():
-                    if seed.get(key, value) != value:
-                        # Hide due to seed constraints
-                        hidden.append(hit)
-                        break
-
-        if hit not in hidden:
-            if not cards.is_exact_match(hit, lower_text):
-                for hid in hidden:
-                    if cards.is_exact_match(hid, lower_text):
-                        await show_search_result(channel, hid, deck, count,
-                                                 hidden)
-                        return
-
-            await show_search_result(channel, hit, deck, count, hidden)
-            return
-
-    # Always show a result even if seed constraints has hidden all of them;
-    # prefer top result in that case
-    await show_search_result(channel, response[0], deck, count, hidden)
-
 def format_command(command, description):
     if isinstance(description, tuple):
         return f"**!{command}** <{description[0]}>: {description[1]}"
@@ -875,31 +792,6 @@ async def on_message(message):
             logging.exception("BYC error")
             await message.channel.send(f"Uh oh")
         return
-
-    # Search cards/board locations
-    if command in ('card', 'search', ''):
-        deck = ''
-        expansion = ''
-    elif command not in cards.decks:
-        return
-    else:
-        if "alias" in cards.decks[command]:
-            deck = cards.decks[command]["alias"]
-        else:
-            deck = command
-
-        if cards.decks[deck].get("expansion"):
-            expansion = cards.find_expansion(arguments)
-        else:
-            expansion = ''
-
-    try:
-        async with message.channel.typing():
-            await search_command(message.channel, deck, expansion,
-                                 ' '.join(arguments))
-    except:
-        logging.exception(f"Search {deck} error")
-        await message.channel.send(f"Please try again later.")
 
 if __name__ == "__main__":
     client.run(config['token'])

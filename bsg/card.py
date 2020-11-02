@@ -315,20 +315,21 @@ class Cards:
 
         return message
 
-    def find_expansion(self, arguments):
+    def find_expansion(self, text):
+        arguments = text.split(' ')
         if len(arguments) == 1:
-            return ''
+            return text, ''
 
         lower_arguments = [argument.lower() for argument in arguments]
         for expansion, data in self.expansions.items():
             if expansion in lower_arguments:
                 arguments.pop(lower_arguments.index(expansion))
-                return expansion
+                return ' '.join(arguments), expansion
             if data['prefix'].lower() in lower_arguments:
                 arguments.pop(lower_arguments.index(data['prefix'].lower()))
-                return expansion
+                return ' '.join(arguments), expansion
 
-        return ''
+        return text, ''
 
     @staticmethod
     def _format_succession(title, index, char, cylons, locations):

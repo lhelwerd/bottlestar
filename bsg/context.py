@@ -45,6 +45,15 @@ class Context:
         return ""
 
     @property
+    def arguments(self):
+        """
+        Provide a dictionary of additional options that may be provided to
+        commands dependent on context.
+        """
+
+        return {}
+
+    @property
     def user(self):
         """
         Return an object describing the original sender that caused the bot to
@@ -77,6 +86,10 @@ class CommandLineContext(Context):
         print(message)
         if file is not None:
             print(f"Associated file can be found in {file}")
+
+    @property
+    def arguments(self):
+        return self.args.__dict__
 
     @property
     def user(self):
