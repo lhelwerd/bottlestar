@@ -55,15 +55,7 @@ class Command:
         keywords.update(extra_arguments)
 
         loop = asyncio.get_event_loop()
-        try:
-            if info.get("slow"):
-                loop.run_until_complete(command.run_with_typing(**keywords))
-            else:
-                loop.run_until_complete(command.run(**keywords))
-        except:
-            logging.exception("Command %s (called with %r)", name, arguments)
-            loop.run_until_complete(context.send("Uh oh"))
-
+        loop.run_until_complete(command.select(info.get("slow"), keywords))
         loop.close()
         return True
 
@@ -74,8 +66,18 @@ class Command:
     async def run(self, **kw):
         raise NotImplementedError("Must be implemented by subclasses")
 
+    async def select(self, slow, keywords):
+        try:
+            if slow:
+                await self.run_with_typing(**keywords)
+            else:
+                await self.run(**keywords)
+        except:
+            logging.exception("Command %s called with %r", self.name, keywords)
+            await self.context.send("Uh oh")
+
     async def run_with_typing(self, **kw):
-        typing = context.typing
+        typing = self.context.typing
         if typing:
             async with typing:
                 await self.run(**kw)
