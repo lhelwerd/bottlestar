@@ -33,14 +33,15 @@ class GameStateCommand(Command):
     async def analyze(self, post, seed, **kw):
         raise NotImplementedError("Must be implemented by subclasses")
 
-@Command.register("succession", description="Show the line of succession")
+@Command.register("succession", slow=True,
+                  description="Show the line of succession")
 class SuccessionCommand(GameStateCommand):
     async def analyze(self, post, seed, **kw):
         succession = self.cards.lines_of_succession(seed)
         message, mentions = self.context.replace_roles(succession)
         await self.context.send(message, allowed_mentions=mentions)
 
-@Command.register("analyze",
+@Command.register("analyze", slow=True,
                   description="Show the top cards of decks after game is over")
 class AnalyzeCommand(GameStateCommand):
     async def analyze(self, post, seed, **kw):
@@ -53,7 +54,8 @@ class AnalyzeCommand(GameStateCommand):
 
             await self.context.send(analysis)
 
-@Command.register("image", description="Show the lastest game board state")
+@Command.register("image", slow=True,
+                  description="Show the lastest game board state")
 class ImageCommand(GameStateCommand):
     async def analyze(self, post, seed, **kw):
         author = self.thread.get_author(ByYourCommand.get_quote_author(post)[0])
@@ -75,7 +77,7 @@ class ImageCommand(GameStateCommand):
                                               self.bbcode.game_state)
         await self.context.send("", file=path)
 
-@Command.register("latest", description="Show the latest game post")
+@Command.register("latest", slow=True, description="Show the latest game post")
 class LatestCommand(GameStateCommand):
     async def analyze(self, post, seed, **kw):
         text = self.bbcode.process_bbcode(post)
@@ -86,7 +88,8 @@ class LatestCommand(GameStateCommand):
 
         await self.context.send(response, allowed_mentions=mentions)
 
-@Command.register("ping", description="Show who needs to do something")
+@Command.register("ping", slow=True,
+                  description="Show who needs to do something")
 class PingCommand(GameStateCommand):
     async def analyze(self, post, seed, **kw):
         author = self.thread.get_author(ByYourCommand.get_quote_author(post)[0])
@@ -108,7 +111,7 @@ class PingCommand(GameStateCommand):
 
         await self.context.send(response, allowed_mentions=mentions)
 
-    def add_ping(text, pings, role_mentions, **kwargs):
+    def add_ping(self, text, pings, role_mentions, **kwargs):
         ping, mention = self.context.replace_roles(text, emoji=False,
                                                    deck=False, **kwargs)
         pings.append(ping)

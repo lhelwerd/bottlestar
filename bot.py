@@ -777,7 +777,7 @@ async def on_message(message):
         await send_message(message.channel, reply)
         return
 
-    if Command.execute(context, command, arguments):
+    if await Command.execute(context, command, arguments):
         return
 
     # BYC commands

@@ -1,4 +1,5 @@
 import argparse
+import asyncio
 from datetime import datetime
 import logging
 from pathlib import Path
@@ -48,8 +49,12 @@ def main():
     images = Images(config['api_url'])
 
     context = CommandLineContext(args, config)
-    if Command.execute(context, command, arguments):
+    loop = asyncio.get_event_loop()
+    if loop.run_until_complete(Command.execute(context, command, arguments)):
+        loop.close()
         return
+
+    loop.close()
 
     if command == "byc":
         game_state = ""

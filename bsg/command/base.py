@@ -2,7 +2,6 @@
 Base command interface.
 """
 
-import asyncio
 from collections import OrderedDict
 import logging
 
@@ -35,9 +34,9 @@ class Command:
         return decorator
 
     @classmethod
-    def execute(cls, context, name, arguments):
+    def get_command(cls, context, name, arguments):
         if name not in cls.COMMANDS:
-            return False
+            raise KeyError(name)
 
         info = cls.COMMANDS[name]
         command = info["class"](name, context)
@@ -54,9 +53,24 @@ class Command:
         keywords = dict(zip(info["arguments"], arguments))
         keywords.update(extra_arguments)
 
-        loop = asyncio.get_event_loop()
-        loop.run_until_complete(command.select(info.get("slow"), keywords))
-        loop.close()
+        return command, keywords, info.get("slow")
+
+    @classmethod
+    async def execute(cls, context, name, arguments):
+        try:
+            command, keywords, slow = cls.get_command(context, name, arguments)
+        except KeyError:
+            return False
+
+        try:
+            if slow:
+                await command.run_with_typing(**keywords)
+            else:
+                await command.run(**keywords)
+        except:
+            logging.exception("Command %s (called with %r)", name, arguments)
+            await context.send("Uh oh")
+
         return True
 
     def __init__(self, name, context):
@@ -66,20 +80,10 @@ class Command:
     async def run(self, **kw):
         raise NotImplementedError("Must be implemented by subclasses")
 
-    async def select(self, slow, keywords):
-        try:
-            if slow:
-                await self.run_with_typing(**keywords)
-            else:
-                await self.run(**keywords)
-        except:
-            logging.exception("Command %s called with %r", self.name, keywords)
-            await self.context.send("Uh oh")
-
     async def run_with_typing(self, **kw):
         typing = self.context.typing
         if typing:
-            async with typing:
+            async with typing():
                 await self.run(**kw)
         else:
             await self.run(**kw)
