@@ -17,7 +17,6 @@ from bsg.context import DiscordContext
 from bsg.config import Config
 from bsg.image import Images
 from bsg.search import Card, Location
-from bsg.thread import Thread
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Command-line bot reply')
@@ -37,23 +36,22 @@ client = discord.Client()
 cards = Cards(config['cards_url'])
 images = Images(config['api_url'])
 bbcode = BBCodeMarkdown(images)
-thread = Thread(config['api_url'])
 connections.create_connection(alias='main',
                               hosts=[config['elasticsearch_host']])
 byc_games = {}
 byc_commands = {
     "byc": "Start a BYC game or a series of actions",
-    "ok": "Confirm performing an action",
-    "cancel": "Reject perform an action",
-    "choose": ("input", "Select a numeric value or input text (during setup)"),
-    "commit": "Show result of series of actions in public",
-    "state": "Display game state in public (must **!commit** afterward)",
+    "ok": "Confirm performing a BYC action",
+    "cancel": "Reject performing a BYC action",
+    "choose": ("input", "Select a numeric value or input text (during BYC setup)"),
+    "commit": "Show result of series of BYC actions in public",
+    "state": "Display game state in public",
     "hand": "Display hand in private",
-    "undo": ("step", "Go back step(s) in the actions/states (expensive)"),
-    "redo": "Perform the series of actions again (expensive), for bot restarts",
-    "reset": "Go back to the start of the series of actions (like **!byc**)",
-    "cleanup": ("channel", "Delete all items related to the current game"),
-    "refresh": "Perform updates for the current game (role positions)"
+    "undo": ("step", "Go back step(s) in the BYC actions/states (expensive)"),
+    "redo": "Perform the series of BYC actions again (expensive), for restarts",
+    "reset": "Go back to the start of the series of BYC actions",
+    "cleanup": ("channel", "Delete all items related to the current BYC game"),
+    "refresh": "Perform updates for the current BYC game (role positions)"
 }
 
 async def send_message(channel, message, allowed_mentions=None, **kwargs):
