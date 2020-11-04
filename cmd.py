@@ -42,16 +42,30 @@ def main():
     connections.create_connection(alias='main',
                                   hosts=[config['elasticsearch_host']])
 
-    command = args.command
+    name = args.command
     arguments = args.arguments
 
     context = CommandLineContext(args, config)
     loop = asyncio.get_event_loop()
-    if loop.run_until_complete(Command.execute(context, command, arguments)):
-        loop.close()
-        return
+    command_loop = 1
+    while command_loop > 0:
+        print(name, arguments)
+        if loop.run_until_complete(Command.execute(context, name, arguments)):
+            print("Enter another command, or **exit** or Ctrl-C to stop.")
+            arguments = []
+            while not arguments:
+                arguments = input().split(' ')
+            name = arguments.pop(0)
+            if name == "exit":
+                break
+
+            command_loop += 1
+        else:
+            command_loop = 0
 
     loop.close()
+    if command_loop != 0:
+        return
 
     cards = Cards(config['cards_url'])
     images = Images(config['api_url'])
