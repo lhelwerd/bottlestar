@@ -1,10 +1,7 @@
 import argparse
 import asyncio
-from datetime import datetime
 import logging
 from pathlib import Path
-import re
-import dateutil.parser
 from elasticsearch_dsl.connections import connections
 from bsg.bbcode import BBCodeMarkdown
 from bsg.byc import ByYourCommand, Dialog
@@ -13,7 +10,7 @@ from bsg.config import Config
 from bsg.command import Command
 from bsg.context import CommandLineContext
 from bsg.image import Images
-from bsg.search import Card, Location
+from bsg.search import Card
 from bsg.thread import Thread
 
 def parse_args():
@@ -27,6 +24,8 @@ def parse_args():
                         default='unicode', help='format emoji')
     parser.add_argument('--limit', default=10, type=int,
                         help='Number of results to show from card search')
+    parser.add_argument('--game-id', dest='game_id', default=0, type=int,
+                        help='Identifier for the BYC game to play')
     parser.add_argument('command', help='command')
     parser.add_argument('arguments', nargs='*', help='arguments')
     args = parser.parse_args()
@@ -45,8 +44,6 @@ def main():
 
     command = args.command
     arguments = args.arguments
-    cards = Cards(config['cards_url'])
-    images = Images(config['api_url'])
 
     context = CommandLineContext(args, config)
     loop = asyncio.get_event_loop()
@@ -56,7 +53,9 @@ def main():
 
     loop.close()
 
-    if command == "byc":
+    cards = Cards(config['cards_url'])
+    images = Images(config['api_url'])
+    if command == "byc_interactive":
         game_state = ""
         if len(arguments) >= 1:
             game_state_path = Path(arguments[0])

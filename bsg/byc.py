@@ -97,7 +97,11 @@ class ByYourCommand:
 
     def stop(self):
         if self.driver is not None:
-            self.driver.quit()
+            try:
+                self.driver.quit()
+            except:
+                pass
+
             self.driver = None
 
     def load(self):

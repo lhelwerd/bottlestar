@@ -5,6 +5,7 @@ Command context.
 import logging
 import re
 import discord
+from .byc import Dialog
 from .card import Cards
 from .config import ServerConfig
 
@@ -73,6 +74,64 @@ class Context:
 
         raise NotImplementedError("Must be implemented by subclasses")
 
+    @property
+    def mentions(self):
+        return []
+
+    def get_user(self, username):
+        return None
+
+    def get_channel_mention(self, channel=None):
+        if channel is not None:
+            return channel
+
+        return ""
+
+    @property
+    def byc_enabled(self):
+        """
+        Return a boolean indicating if BYC commands are enabled in this context.
+        """
+
+        return True
+
+    @property
+    def user_byc_channel(self):
+        """
+        Return a string indicating the channel in which a user should post
+        private commands to for BYC, or `None` if no such channel can be found.
+        If this is the empty string, then the current channel is acceptable.
+        """
+
+        return None
+
+    async def update_byc_channels(self, game_id, seed):
+        pass
+
+    @property
+    def game_id(self):
+        return 0
+
+    @property
+    def roles(self):
+        return []
+
+    @property
+    def topic(self):
+        return None
+
+    async def set_topic(self, topic, reason=None):
+        pass
+
+    async def replace_pins(self, messages, channel=None):
+        pass
+
+    def get_color(self, color):
+        return ""
+
+    async def create_role(self, **kw):
+        return None
+
 class CommandLineContext(Context):
     """
     A command being handled on the command line.
@@ -81,11 +140,14 @@ class CommandLineContext(Context):
     def __init__(self, args, config):
         self.args = args
         self.config = config
+        self._topic = ""
 
     async def send(self, message, file=None, **kw):
         print(message)
         if file is not None:
             print(f"Associated file can be found in {file}")
+
+        return []
 
     @property
     def arguments(self):
@@ -100,6 +162,21 @@ class CommandLineContext(Context):
         at = "@"
         return f"{at}{self.args.user}"
 
+    @property
+    def user_byc_channel(self):
+        return ""
+
+    @property
+    def game_id(self):
+        return self.args.game_id
+
+    @property
+    def topic(self):
+        return self._topic
+
+    async def set_topic(self, topic, reason=None):
+        self._topic = topic
+
 class DiscordContext(Context):
     """
     A command being handled on Discord.
@@ -107,7 +184,8 @@ class DiscordContext(Context):
 
     MESSAGE_LENGTH = 2000
 
-    def __init__(self, message, config):
+    def __init__(self, client, message, config):
+        self.client = client
         self.message = message
         if self.message.guild is None:
             self.config = config
@@ -118,8 +196,13 @@ class DiscordContext(Context):
     def typing(self):
         return self.message.channel.typing
 
-    async def send(self, message, file=None, allowed_mentions=None, **kw):
-        channel = self.message.channel
+    async def send(self, message, file=None, allowed_mentions=None,
+                   channel=None, **kw):
+        if channel is None:
+            channel = self.message.channel
+        else:
+            channel = self.message.guild.get_channel(channel)
+
         tasks = []
         while len(message) > self.MESSAGE_LENGTH:
             pos = message.rfind('\n', 0, self.MESSAGE_LENGTH - 1)
@@ -212,3 +295,124 @@ class DiscordContext(Context):
     @property
     def mention(self):
         return self.message.author.mention
+
+    @property
+    def mentions(self):
+        return self.message.mentions
+
+    def get_user(self, username):
+        return self.message.guild.get_member_named(username)
+
+    def get_channel_mention(self, channel=None):
+        if channel is None:
+            return self.message.channel.mention
+
+        mentioned_channel = self.message.guild.get_channel(channel)
+        if mentioned_channel is not None:
+            return mentioned_channel.mention
+
+        return channel
+
+    @property
+    def byc_enabled(self):
+        guild = self.message.guild
+        if guild is None:
+            return False
+
+        channel = self.message.channel
+        user = self.client.user
+        permissions = guild.get_member(user.id).permissions_in(channel)
+        # Required permissions: Manage Roles, Manage Channels,
+        # Manage Nicknames, View Channels, Send Messages, Manage Messages, 
+        # Embed Links, Attach Files, Read Message History, Mention Everyone
+        return permissions.is_superset(discord.Permissions(402910224))
+
+    @property
+    def user_byc_channel(self):
+        private_channel = f"byc-{self.message.channel.name}-{self.message.author.name}"
+        for other in self.message.guild.channels:
+            if other.name == private_channel:
+                return other.mention
+
+        return None
+
+    async def update_byc_channels(self, game_id, usernames=None, delete=False):
+        guild = self.message.guild
+        if game_id == self.message.channel.id:
+            channel = self.message.channel
+        else:
+            channel = guild.get_channel(game_id)
+
+        private_channel_prefix = f"byc-{channel.name}-"
+        if delete:
+            await channel.edit(topic="", reason="Cleanup of BYC status")
+            reason = f"Cleanup of BYC private channels for #{channel.name}"
+            for other_channel in guild.channels:
+                if other_channel.name.startswith(private_channel_prefix):
+                    await other_channel.delete(reason=rason)
+
+            return
+
+        byc_category = None
+        for category in guild.categories:
+            if category.name == 'By Your Command':
+                byc_category = category
+                break
+
+        if byc_category is None:
+            byc_category = await guild.create_category('By Your Command')
+
+        if not usernames:
+            return
+
+        topic = f"byc:{game_id}:{Dialog.EMPTY}:"
+        for user in usernames:
+            private_channel = f"{private_channel_prefix}{format_username(user)}"
+            deny = discord.PermissionOverwrite(read_messages=False,
+                                               send_messages=False)
+            allow = discord.PermissionOverwrite(read_messages=True,
+                                                send_messages=True)
+            member = guild.get_member_named(user)
+            if member is not None:
+                overwrites = {
+                    guild.default_role: deny,
+                    member: allow,
+                    guild.me: allow
+                }
+                await guild.create_text_channel(private_channel,
+                                                overwrites=overwrites,
+                                                category=byc_category,
+                                                topic=topic)
+
+    @property
+    def game_id(self):
+        return self.message.channel.id
+
+    @property
+    def roles(self):
+        return self.message.guild.roles
+
+    @property
+    def topic(self):
+        return self.message.channel.topic
+
+    async def set_topic(self, topic, reason=None):
+        self.message.channel.edit(topic=topic, reason=reason)
+
+    async def replace_pins(self, messages, channel=None):
+        if channel is None:
+            channel = self.message.channel
+        else:
+            channel = self.message.guild.get_channel(channel)
+
+        pins = await channel.pins()
+        for pin in pins:
+            await pin.unpin()
+        for new_message in new_messages:
+            await new_message.pin()
+
+    def get_color(self, color):
+        return getattr(discord.Colour, color)()
+
+    async def create_role(self, **kw):
+        return await self.message.guild.create_role(**kw)
