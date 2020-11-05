@@ -20,7 +20,7 @@ def parse_args():
                         help='log level')
     parser.add_argument('--user', default='command line user',
                         help='user to log in as')
-    parser.add_argument('--display', choices=('unicode', 'discord'),
+    parser.add_argument('--display', choices=('unicode', 'discord', ''),
                         default='unicode', help='format emoji')
     parser.add_argument('--limit', default=10, type=int,
                         help='Number of results to show from card search')
@@ -67,7 +67,7 @@ def main():
     if command_loop != 0:
         return
 
-    # TODO Old commands from here on out, mostly preserved for debugging, 
+    # TODO: Old commands from here on out, mostly preserved for debugging, 
     # should be migrated and then the loop could say "invalid command" if it 
     # would break out in the 'else'
     cards = Cards(config['cards_url'])
@@ -106,6 +106,8 @@ def main():
             print(cards.lines_of_succession(seed))
             return
 
+        return
+
     if name == "bbcode":
         bbcode = BBCodeMarkdown(images)
         text = bbcode.process_bbcode(' '.join(arguments))
@@ -143,6 +145,7 @@ def main():
         print(cards.replace_cards(' '.join(arguments),
               display=args.display))
         return
+
     if name == "class":
         search = Card.search(using='main').source(['path', 'character_class']) \
             .filter("term", deck="char")

@@ -160,7 +160,7 @@ class CommandLineContext(Context):
 
     @property
     def emoji_display(self):
-        return "unicode"
+        return self.args.display
 
     @property
     def arguments(self):
