@@ -27,6 +27,10 @@ class HelpCommand(Command):
             if group is not None and group[0] != name:
                 continue
 
+            enabled = info.get("enabled", True)
+            if not enabled or (callable(enabled) and not enabled(self.context)):
+                continue
+
             description = info.get("description", "")
             if callable(description):
                 description = description(self.context)

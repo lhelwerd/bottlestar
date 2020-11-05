@@ -39,6 +39,10 @@ class Command:
             raise KeyError(name)
 
         info = cls.COMMANDS[name]
+        enabled = info.get("enabled", True)
+        if not enabled or (callable(enabled) and not enabled(context)):
+            raise KeyError(f"{name} is not enabled in this context")
+
         command = info["class"](name, context)
 
         if info.get("nargs"):

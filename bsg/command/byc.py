@@ -492,7 +492,7 @@ class BycCommand(Command):
         if image is not None and new_messages:
             await self.context.replace_pins(new_messages, channel=self.game_id)
 
-@Command.register("byc", slow=True,
+@Command.register("byc", slow=True, enabled=lambda context: context.byc_enabled,
                   description="Start a BYC game or a series of BYC actions")
 class StartCommand(BycCommand):
     async def check_game_state(self, game_state):
@@ -513,13 +513,14 @@ class StartCommand(BycCommand):
         choices.clear()
         return True
 
-@Command.register("ok", slow=True,
+@Command.register("ok", slow=True, enabled=lambda context: context.byc_enabled,
                   description="Confirm performing a BYC action")
 class OkCommand(BycCommand):
     async def check_command(self, choices, options, num_buttons, input, **kw):
         return await self.add_choice(choices, options, num_buttons, input, "ok")
 
 @Command.register("cancel", slow=True,
+                  enabled=lambda context: context.byc_enabled,
                   description="Reject performing a BYC action")
 class CancelCommand(BycCommand):
     async def check_command(self, choices, options, num_buttons, input, **kw):
@@ -533,6 +534,7 @@ class CancelCommand(BycCommand):
                                      "cancel")
 
 @Command.register("choose", "choice", nargs=True, slow=True,
+                  enabled=lambda context: context.byc_enabled,
                   description="Select a numeric value or input text")
 class ChooseCommand(BycCommand):
     async def check_command(self, choices, options, num_buttons, input,
@@ -541,6 +543,7 @@ class ChooseCommand(BycCommand):
                                      choice)
 
 @Command.register("commit", slow=True,
+                  enabled=lambda context: context.byc_enabled,
                   description="Show result of series of BYC actions in public")
 class CommitCommand(BycCommand):
     async def check_command(self, choices, options, num_buttons, input, **kw):
@@ -548,7 +551,8 @@ class CommitCommand(BycCommand):
                                      "cancel")
 
 @Command.register("state", slow=True,
-                  description="Display game state in public")
+                  enabled=lambda context: context.byc_enabled,
+                  description="Display BYC game state in public")
 class StateCommand(BycCommand):
     async def check_public_command(self, choices, **kw):
         return True
@@ -588,7 +592,9 @@ class StateCommand(BycCommand):
                  f"**{self.context.prefix}reset**")
         return reply, False
 
-@Command.register("hand", slow=True, description="Display hand in private")
+@Command.register("hand", slow=True,
+                  enabled=lambda context: context.byc_enabled,
+                  description="Display BYC game hand in private")
 class HandCommand(BycCommand):
     async def check_command(self, choices, options, num_buttons, input, **kw):
         if choices and "Save and Quit" not in options:
@@ -694,7 +700,8 @@ class BackupCommand(BycCommand):
                                 f"**{self.context.prefix}undo <number>**:{msg}")
 
 @Command.register("undo", "step", slow=True,
-                  description="Go back step(s) in the BYC actions/states (expensive)")
+                  enabled=lambda context: context.byc_enabled,
+                  description="Go back steps in BYC actions/states (expensive)")
 class UndoCommand(BackupCommand):
     async def check_public_command(self, choices, step="", **kw):
         await self.undo_backup(step)
@@ -720,6 +727,7 @@ class UndoCommand(BackupCommand):
         return f"{options}, **{self.context.prefix}undo**"
 
 @Command.register("redo", slow=True,
+                  enabled=lambda context: context.byc_enabled,
                   description="Perform a series of BYC actions/states again, "
                               "for bot restarts (expensive) or incorrect moves")
 class RedoCommand(BackupCommand):
@@ -733,6 +741,7 @@ class RedoCommand(BackupCommand):
         return True
 
 @Command.register("reset", slow=True,
+                  enabled=lambda context: context.byc_enabled,
                   description="Go to the start of the series of BYC actions")
 class ResetCommand(BycCommand):
     async def check_command(self, choices, options, num_buttons, input, step="",
@@ -743,6 +752,7 @@ class ResetCommand(BycCommand):
         return True
 
 @Command.register("cleanup", "channel", slow=True,
+                  enabled=lambda context: context.byc_enabled,
                   description="Delete data related to the current BYC game")
 class CleanupCommand(BycCommand):
     async def check_public_command(self, choices, channel="", **kw):
@@ -802,7 +812,8 @@ class CleanupCommand(BycCommand):
             Path(path).unlink()
 
 @Command.register("refresh", slow=True,
-                  description="Perform updates for the current BYC game (role positions)")
+                  enabled=lambda context: context.byc_enabled,
+                  description="Rearrange roles for the current BYC game")
 class RefreshCommand(BycCommand):
     async def check_public_command(self, choices, **kw):
         await self.sort_roles()
