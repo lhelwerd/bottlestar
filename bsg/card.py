@@ -48,6 +48,9 @@ class Cards:
         cls.loyalty = {}
         cls.activations = {}
 
+        cls._skill_colors = None
+        cls._deck_cards = None
+
         with open("data.yml") as data_file:
             for data in yaml.safe_load_all(data_file):
                 if data.get('meta'):
@@ -68,13 +71,10 @@ class Cards:
         self.url = url
         self.load()
 
-        self._skill_colors = None
-        self._deck_cards = None
-
     @property
     def skill_colors(self):
-        if self._skill_colors is None:
-            self._skill_colors = dict([
+        if self.__class__._skill_colors is None:
+            self.__class__._skill_colors = dict([
                 (skill_type, self._build_skill_regex(skill_type))
                 for skill_type in self.skills.keys()
             ])
@@ -83,8 +83,8 @@ class Cards:
 
     @property
     def deck_cards(self):
-        if self._deck_cards is None:
-            self._deck_cards = dict([
+        if self.__class__._deck_cards is None:
+            self.__class__._deck_cards = dict([
                 (deck, re.compile('(' + self._build_deck_regex(deck) + ')'))
                 for deck, data in self.decks.items() if data.get('denote', True)
             ])

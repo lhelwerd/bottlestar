@@ -67,9 +67,12 @@ def main():
     if command_loop != 0:
         return
 
+    # TODO Old commands from here on out, mostly preserved for debugging, 
+    # should be migrated and then the loop could say "invalid command" if it 
+    # would break out in the 'else'
     cards = Cards(config['cards_url'])
     images = Images(config['api_url'])
-    if command == "byc_interactive":
+    if name == "byc_maintenance":
         game_state = ""
         if len(arguments) >= 1:
             game_state_path = Path(arguments[0])
@@ -103,76 +106,13 @@ def main():
             print(cards.lines_of_succession(seed))
             return
 
-        choice = ""
-        run = True
-        dialog = None
-        choices = []
-        while choice != "exit":
-            force = False
-            if choice != "":
-                if choice == "undo":
-                    print("Undoing last choice -- redoing all choices before")
-                    choices = choices[:-1]
-                    force = True
-                elif choice == "reset":
-                    print("Going back to the state before the last play")
-                    choices = []
-                    force = True
-                elif choice == "redo":
-                    print("Redoing all choices")
-                    force = True
-                elif choice in dialog.options:
-                    choices.append(f"\b{dialog.options[choice] + 1}")
-                elif dialog.input:
-                    choices.append(choice)
-                elif choice.isnumeric() and 0 < int(choice) <= len(dialog.buttons):
-                    choices.append(f"\b{choice}")
-                else:
-                    print("Option not known")
-                    run = False
-            elif choices:
-                run = False
-
-            if run:
-                dialog = byc.run_page(choices, game_state, force=force)
-
-            if not isinstance(dialog, Dialog):
-                game_state = dialog
-                game_state_markdown = bbcode.process_bbcode(game_state)
-                print(cards.replace_cards(game_state_markdown, args.display))
-                with game_state_path.open('w') as game_state_file:
-                    game_state_file.write(game_state)
-
-                if bbcode.game_state != "":
-                    path = byc.save_game_state_screenshot(images,
-                                                          bbcode.game_state)
-                    print(f"Current game state found in screenshot at {path}")
-
-                choice = "exit"
-            else:
-                print(cards.replace_cards(dialog.msg, args.display))
-                print(f"{dialog}")
-                if dialog.input:
-                    print(', '.join(dialog.buttons))
-                else:
-                    print(' '.join(f"{idx+1}: {text}" for (idx, text) in enumerate(dialog.buttons)))
-                print(f"More options: {dialog.options}, undo, reset, redo, exit")
-                print(f"Choices made so far: {choices}")
-                if len(dialog.buttons) == 1 and not dialog.input and choice != "undo":
-                    print("Only one option is available, continuing.")
-                    choice = "1"
-                else:
-                    choice = input()
-                run = True
-
-        return
-    if command == "bbcode":
+    if name == "bbcode":
         bbcode = BBCodeMarkdown(images)
         text = bbcode.process_bbcode(' '.join(arguments))
         print(cards.replace_cards(text, display=args.display))
         return
 
-    if command == "state":
+    if name == "state":
         thread = Thread(config['api_url'])
         game_id = config['thread_id']
         post, seed = thread.retrieve(game_id)
@@ -199,11 +139,11 @@ def main():
 
         return
 
-    if command == "replace":
+    if name == "replace":
         print(cards.replace_cards(' '.join(arguments),
               display=args.display))
         return
-    if command == "class":
+    if name == "class":
         search = Card.search(using='main').source(['path', 'character_class']) \
             .filter("term", deck="char")
         if len(arguments) > 0:

@@ -36,6 +36,15 @@ class Context:
         return None
 
     @property
+    def emoji_display(self):
+        """
+        Return a string describing the preferred display style for emojis in
+        this context. Can be an empty string to disable display.
+        """
+
+        return ""
+
+    @property
     def prefix(self):
         """
         Return a string to place before commands when explaining how to run a
@@ -148,6 +157,10 @@ class CommandLineContext(Context):
             print(f"Associated file can be found in {file}")
 
         return []
+
+    @property
+    def emoji_display(self):
+        return "unicode"
 
     @property
     def arguments(self):
@@ -283,6 +296,10 @@ class DiscordContext(Context):
 
     def make_mentions(self, **kw):
         return discord.AllowedMentions(**kw)
+
+    @property
+    def emoji_display(self):
+        return "discord"
 
     @property
     def prefix(self):

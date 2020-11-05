@@ -3,6 +3,7 @@ from datetime import datetime
 from glob import glob
 from itertools import chain, zip_longest
 import logging
+from os.path import getsize
 from pathlib import Path
 import re
 import shutil
@@ -92,7 +93,7 @@ class BycCommand(Command):
 
     async def update_character_roles(self, roles, old_seed, seed):
         iterator = zip_longest(seed["usernames"], seed["players"],
-                               old_seed.get("players"))
+                               old_seed.get("players", []))
         for username, character, old_character in iterator:
             if character is None:
                 role = None
@@ -108,7 +109,7 @@ class BycCommand(Command):
                     continue
 
                 role = await self.create_role(character,
-                                              cards.character_classes,
+                                              self.cards.character_classes,
                                               class_name=class_name)
             else:
                 role = roles[character]
@@ -133,7 +134,7 @@ class BycCommand(Command):
                     updated = True
 
                 if role is None:
-                    role = await self.create_role(key, cards.titles)
+                    role = await self.create_role(key, self.cards.titles)
                 user = seed["usernames"][index]
                 member = self.context.get_user(user)
                 if member is not None and role is not None:
@@ -173,7 +174,8 @@ class BycCommand(Command):
         return updated
 
     async def update_channel(self, dialog, choices):
-        if not choices and self.context.game_id == self.game_id:
+        if not choices and self.context.game_id == self.game_id and \
+            self.context.user_byc_channel != "":
             topic = "By Your Command game"
         else:
             topic = f"byc:{self.game_id}:{dialog}:{':'.join(choices)}"
@@ -204,12 +206,14 @@ class BycCommand(Command):
             has_input = False
             choices = []
 
+        logging.info("%d %d %r %r %r", self.game_id, num_buttons, options, has_input, choices)
+
         self.game_state_path = Path(f"game/game-{self.game_id}.txt")
         game_state = "Starting a new BYC game...\n"
         self.initial_setup = False
         is_main_channel = self.context.game_id == self.game_id
-        if not self.game_state_path.exists():
-            await self.no_game_state(game_state)
+        user_channel = self.context.user_byc_channel
+        if not await self.check_game_state(game_state):
             if not self.initial_setup:
                 return
         elif is_main_channel:
@@ -218,13 +222,13 @@ class BycCommand(Command):
                 if not await self.check_public_command(choices, **kw):
                     return
             except NonPublicCommandError:
-                channel = self.context.user_byc_channel
-                if channel == "":
+                user_channel = self.context.user_byc_channel
+                if user_channel == "":
                     # Some contexts might not have different channels.
                     logging.info("Allowing BYC actions in public context.")
                 elif channel is not None:
                     reply = (f"{self.context.mention} Perform this BYC action "
-                             f"in your own, private channel: {channel}")
+                             f"in your own, private channel: {user_channel}")
                     await self.context.send(reply)
                     return
                 else:
@@ -278,7 +282,7 @@ class BycCommand(Command):
                     await self.context.send(reply)
                 else:
                     # Clear private channel choices when done
-                    if not is_main_channel:
+                    if not is_main_channel or user_channel == "":
                         await self.update_channel(Dialog.EMPTY, [])
 
                     # Update based on game state
@@ -287,17 +291,21 @@ class BycCommand(Command):
 
                     run = False
 
-    async def no_game_state(self, game_state):
+    async def check_game_state(self, game_state):
         """
-        Handle the situation where we have no local state for this game yet.
+        Check if a local state for this game exists yet.
         The `game_state_path` member variable refers to a nonexistent file, and
         thus we cannot retrieve the current game state. Most commands would
         not be able to perform anything in this case.
         """
 
-        await self.context.send("BYC is currently not running on this channel. "
+        if self.game_state_path.exists():
+            return True
+
+        await self.context.send("There is no active BYC game in this channel. "
                                 "You can start a new game using "
                                 f"**{self.context.prefix}byc**.")
+        return False
 
     async def check_public_command(self, choices, **kw):
         """
@@ -401,7 +409,8 @@ class BycCommand(Command):
         return options
 
     def get_dialog(self, dialog, choices):
-        reply = self.cards.replace_cards(dialog.msg, deck=False)
+        reply = self.cards.replace_cards(dialog.msg, deck=False,
+                                         display=self.context.emoji_display)
         run = True
         if "Save and Quit" in dialog.options:
             reply = reply \
@@ -486,11 +495,15 @@ class BycCommand(Command):
 @Command.register("byc", slow=True,
                   description="Start a BYC game or a series of BYC actions")
 class StartCommand(BycCommand):
-    async def no_game_state(self, game_state):
+    async def check_game_state(self, game_state):
+        if self.game_state_path.exists() and getsize(self.game_state_path) > 0:
+            return True
+
         self.game_state_path.touch()
         await self.context.send(f"{game_state}Only {self.context.mention} "
                                 "will be able to answer the following dialogs.")
         self.initial_setup = True
+        return False
 
     async def check_command(self, choices, options, num_buttons, input, **kw):
         if self.initial_setup:
