@@ -8,10 +8,48 @@ from bsg.byc import ByYourCommand, Dialog
 from bsg.card import Cards
 from bsg.config import Config
 from bsg.command import Command
+from bsg.command.byc import BycCommand
 from bsg.context import CommandLineContext
 from bsg.image import Images
 from bsg.search import Card
 from bsg.thread import Thread
+
+@Command.register("seed")
+class SeedCommand(BycCommand):
+    async def run(self, **kw):
+        game_state = ""
+        self.game_state_path = Path(f"game/game-{self.context.game_id}.txt")
+
+        try:
+            with self.game_state_path.open('r') as game_state_file:
+                game_state = game_state_file.read()
+        except IOError:
+            logging.exception("Could not read game state, starting new")
+
+        with self.get_byc() as byc:
+            await self.context.send(byc.get_game_seed(game_state))
+
+@Command.register("images")
+class ImagesCommand(BycCommand):
+    async def run(self, **kw):
+        with self.get_byc() as byc:
+            byc.check_images(self.images)
+
+@Command.register("byc_succession")
+class BycSuccessionCommand(BycCommand):
+    async def run(self, **kw):
+        game_state = ""
+        self.game_state_path = Path(f"game/game-{self.context.game_id}.txt")
+
+        try:
+            with self.game_state_path.open('r') as game_state_file:
+                game_state = game_state_file.read()
+        except IOError:
+            logging.exception("Could not read game state, starting new")
+
+        with self.get_byc() as byc:
+            seed = byc.get_game_seed(game_state)
+            await self.context.send(self.cards.lines_of_succession(seed))
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Command-line bot reply')
@@ -31,6 +69,63 @@ def parse_args():
     args = parser.parse_args()
     return args
 
+@Command.register("bbcode", "text", nargs=True)
+class BBCodeCommand(Command):
+    async def run(self, text="", **kw):
+        cards = Cards(self.context.config['cards_url'])
+        images = Images(self.context.config['api_url'])
+        bbcode = BBCodeMarkdown(images)
+        post = bbcode.process_bbcode(text)
+        message = cards.replace_cards(post, display=self.context.emoji_display)
+        await self.context.send(message)
+
+@Command.register("replace", "text", nargs=True)
+class ReplaceCommand(Command):
+    async def run(self, text="", **kw):
+        cards = Cards(self.context.config['cards_url'])
+        message = cards.replace_cards(text, display=self.context.emoji_display)
+        await self.context.send(message)
+
+@Command.register("state")
+class StateCommand(Command):
+    async def run(self, **kw):
+        thread = Thread(self.context.config['api_url'])
+        game_id = self.context.config['thread_id']
+        post, seed = thread.retrieve(game_id)
+        if post is None:
+            print('No latest post found!')
+            return
+
+        author = thread.get_author(ByYourCommand.get_quote_author(post)[0])
+        if author is None:
+            author = self.context.user
+        byc = ByYourCommand(game_id, author, self.context.config['script_url'])
+
+        choices = []
+        dialog = byc.run_page(choices, post)
+        if "You are not recognized as a player" in dialog.msg:
+            choices.extend(["\b1", "1"])
+        choices.extend(["2", "\b2", "\b1"])
+        post = byc.run_page(choices, post, num=len(choices),
+                            quits=True, quote=False)
+
+        cards = Cards(self.context.config['cards_url'])
+        bbcode = BBCodeMarkdown(images)
+        text = bbcode.process_bbcode(post)
+        message = cards.replace_cards(text, display=self.context.emoji_display)
+        await self.context.send(message)
+
+@Command.register("class", "path", nargs=True)
+class ClassCommand(Command):
+    async def run(self, query="", **kw):
+        search = Card.search(using='main').source(['path', 'character_class']) \
+            .filter("term", deck="char")
+        if len(arguments) > 0:
+            search = search.query("match", path=path)
+        for card in search.scan():
+            await self.context.send(f"{card.to_dict()!r}")
+            await self.context.send(f"{card.path} {card.character_class}")
+
 def main():
     args = parse_args()
     logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',
@@ -49,111 +144,21 @@ def main():
     loop = asyncio.get_event_loop()
     command_loop = 1
     while command_loop > 0:
-        print(name, arguments)
         if loop.run_until_complete(Command.execute(context, name, arguments)):
-            print("Enter another command, or **exit** or Ctrl-C to stop.")
-            arguments = []
-            while not arguments:
-                arguments = input().split(' ')
-            name = arguments.pop(0)
-            if name == "exit":
-                break
-
-            command_loop += 1
+            print("Enter another command, or **exit** to stop.")
         else:
+            print("Invalid command. Enter a valid command or **exit** to stop.")
+
+        arguments = []
+        while not arguments:
+            arguments = input().split(' ')
+        name = arguments.pop(0)
+        if name == "exit":
             command_loop = 0
+        else:
+            command_loop += 1
 
     loop.close()
-    if command_loop != 0:
-        return
-
-    # TODO: Old commands from here on out, mostly preserved for debugging, 
-    # should be migrated and then the loop could say "invalid command" if it 
-    # would break out in the 'else'
-    cards = Cards(config['cards_url'])
-    images = Images(config['api_url'])
-    if name == "byc_maintenance":
-        game_state = ""
-        if len(arguments) >= 1:
-            game_state_path = Path(arguments[0])
-        else:
-            game_state_path = Path("game/game-0.txt")
-
-        try:
-            with game_state_path.open('r') as game_state_file:
-                game_state = game_state_file.read()
-        except IOError:
-            logging.exception("Could not read game state, starting new")
-
-        if len(arguments) >= 2:
-            user = arguments[1]
-        else:
-            user = args.user
-
-        byc = ByYourCommand(0, user, config['script_url'])
-        bbcode = BBCodeMarkdown(images)
-
-        if user == "seed":
-            print(byc.get_game_seed(game_state))
-            return
-
-        if user == "images":
-            byc.check_images(images)
-            return
-
-        if user == "succession":
-            seed = byc.get_game_seed(game_state)
-            print(cards.lines_of_succession(seed))
-            return
-
-        return
-
-    if name == "bbcode":
-        bbcode = BBCodeMarkdown(images)
-        text = bbcode.process_bbcode(' '.join(arguments))
-        print(cards.replace_cards(text, display=args.display))
-        return
-
-    if name == "state":
-        thread = Thread(config['api_url'])
-        game_id = config['thread_id']
-        post, seed = thread.retrieve(game_id)
-        if post is None:
-            print('No latest post found!')
-            return
-
-        author = thread.get_author(ByYourCommand.get_quote_author(post)[0])
-        if author is None:
-            author = args.user
-        byc = ByYourCommand(game_id, author, config['script_url'])
-
-        choices = []
-        dialog = byc.run_page(choices, post)
-        if "You are not recognized as a player" in dialog.msg:
-            choices.extend(["\b1", "1"])
-        choices.extend(["2", "\b2", "\b1"])
-        post = byc.run_page(choices, post, num=len(choices),
-                            quits=True, quote=False)
-
-        bbcode = BBCodeMarkdown(images)
-        text = bbcode.process_bbcode(post)
-        print(cards.replace_cards(text, display=args.display))
-
-        return
-
-    if name == "replace":
-        print(cards.replace_cards(' '.join(arguments),
-              display=args.display))
-        return
-
-    if name == "class":
-        search = Card.search(using='main').source(['path', 'character_class']) \
-            .filter("term", deck="char")
-        if len(arguments) > 0:
-            search = search.query("match", path=' '.join(arguments))
-        for card in search.scan():
-            print(card.to_dict())
-            print(card.path, card.character_class)
 
 if __name__ == "__main__":
     main()
