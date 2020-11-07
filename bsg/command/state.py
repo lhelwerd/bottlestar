@@ -64,10 +64,9 @@ class ImageCommand(GameStateCommand):
 
         choices = []
         dialog = byc.run_page(choices, post)
-        print(dialog.msg)
         if "You are not recognized as a player" in dialog.msg:
             choices.extend(["\b1", "1"])
-        choices.extend(["2", "\b2", "\b1"])
+        choices.extend(["2", "\b2", "\b0"])
         post = byc.run_page(choices, post, num=len(choices),
                             quits=True, quote=False)
 

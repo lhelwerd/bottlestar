@@ -105,11 +105,12 @@ class StateCommand(Command):
         dialog = byc.run_page(choices, post)
         if "You are not recognized as a player" in dialog.msg:
             choices.extend(["\b1", "1"])
-        choices.extend(["2", "\b2", "\b1"])
+        choices.extend(["2", "\b2", "\b0"])
         post = byc.run_page(choices, post, num=len(choices),
                             quits=True, quote=False)
 
         cards = Cards(self.context.config['cards_url'])
+        images = Images(self.context.config['api_url'])
         bbcode = BBCodeMarkdown(images)
         text = bbcode.process_bbcode(post)
         message = cards.replace_cards(text, display=self.context.emoji_display)

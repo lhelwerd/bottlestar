@@ -50,6 +50,7 @@ class Dialog:
         self.msg = markdownify(msg, convert=self.MSG_TAGS).replace('****', '')
 
         self.buttons = []
+        self.button_elements = []
         try:
             self.input = dialog.find_element_by_css_selector("input[type=text]")
         except NoSuchElementException:
@@ -58,6 +59,7 @@ class Dialog:
 
         buttons = dialog.find_elements_by_tag_name("button")
         for index, button in enumerate(buttons):
+            self.button_elements.append(button)
             self.buttons.append(button.get_attribute("innerText"))
             for attribute in self.BUTTON_ATTRIBUTES:
                 self.options[button.get_attribute(attribute)] = index
@@ -193,8 +195,7 @@ class ByYourCommand:
                 button = dialog.element.find_element_by_class_name("ok")
             else:
                 index = choice.lstrip("\b")
-                selector = f"button:nth-child({index})"
-                button = dialog.element.find_element_by_css_selector(selector)
+                button = dialog.button_elements[int(index) - 1]
 
             logging.info("Pressed: %s", button.get_attribute("innerText"))
             button.click()
