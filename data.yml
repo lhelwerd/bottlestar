@@ -2081,7 +2081,8 @@ cards:
   - name: You Are a Sympathetic Cylon
     seed:
       sympatheticCylon: True
-    url: ''
+    image: 565340
+    bbox: [786, 360, 1456, 1416]
     index: 17
 ---
 expansion: exodus
