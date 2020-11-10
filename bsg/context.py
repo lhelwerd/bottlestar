@@ -211,7 +211,7 @@ class DiscordContext(Context):
 
     async def send(self, message, file=None, allowed_mentions=None,
                    channel=None, **kw):
-        if channel is None:
+        if channel is None or self.message.guild is None:
             channel = self.message.channel
         else:
             channel = self.message.guild.get_channel(channel)
@@ -318,10 +318,13 @@ class DiscordContext(Context):
         return self.message.mentions
 
     def get_user(self, username):
+        if self.message.guild is None:
+            return None
+
         return self.message.guild.get_member_named(username)
 
     def get_channel_mention(self, channel=None):
-        if channel is None:
+        if channel is None or self.message.guild is None:
             return self.message.channel.mention
 
         mentioned_channel = self.message.guild.get_channel(channel)
@@ -346,6 +349,9 @@ class DiscordContext(Context):
 
     @property
     def user_byc_channel(self):
+        if self.message.guild is None:
+            return None
+
         private_channel = f"byc-{self.message.channel.name}-{self.message.author.name}"
         for other in self.message.guild.channels:
             if other.name == private_channel:
@@ -355,7 +361,7 @@ class DiscordContext(Context):
 
     async def update_byc_channels(self, game_id, usernames=None, delete=False):
         guild = self.message.guild
-        if game_id == self.message.channel.id:
+        if guild is None or game_id == self.message.channel.id:
             channel = self.message.channel
         else:
             channel = guild.get_channel(game_id)
@@ -407,6 +413,9 @@ class DiscordContext(Context):
 
     @property
     def roles(self):
+        if self.message.guild is None:
+            return []
+
         return self.message.guild.roles
 
     @property
@@ -417,7 +426,7 @@ class DiscordContext(Context):
         self.message.channel.edit(topic=topic, reason=reason)
 
     async def replace_pins(self, messages, channel=None):
-        if channel is None:
+        if channel is None or self.message.guild is None:
             channel = self.message.channel
         else:
             channel = self.message.guild.get_channel(channel)
@@ -432,4 +441,7 @@ class DiscordContext(Context):
         return getattr(discord.Colour, color)()
 
     async def create_role(self, **kw):
+        if self.message.guild is None:
+            return None
+
         return await self.message.guild.create_role(**kw)
