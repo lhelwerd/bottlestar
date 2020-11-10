@@ -5,10 +5,15 @@ from requests.models import PreparedRequest
 import yaml
 
 _url_pattern = re.compile(r"^https?://")
+def validate_url(value):
+    request = PreparedRequest()
+    request.prepare_url(value, None)
+    return _url_pattern.match(request.url)
+
 # A validator must be defined for a key with this type to be validated.
 _validators = {
     "string": lambda value: True,
-    "url": lambda value: _url_pattern.match(PreparedRequest().prepare_url(value, None).url),
+    "url": lambda value: validate_url(value),
     "number": lambda value: str(int(value)) == value,
 }
 
@@ -69,6 +74,9 @@ class ServerConfig(MutableMapping):
 
     def __len__(self):
         return len(self.config.keys() | self.server_config.keys())
+
+    def validate(self, key, value):
+        return self.config.validate(key, value)
 
     def sync(self):
         self.config.sync()

@@ -1,5 +1,6 @@
 env/
 config.yml
+config.*.yml
 *.pyc
 *.js
 *.json

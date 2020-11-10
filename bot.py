@@ -21,11 +21,13 @@ if __name__ == "__main__":
 config = Config("config.yml")
 
 client = discord.Client()
+client.bsg_app_info = None
 connections.create_connection(alias='main',
                               hosts=[config['elasticsearch_host']])
 
 @client.event
 async def on_ready():
+    client.bsg_app_info = await client.application_info()
     logging.info('We have logged in as %s', client.user)
     for guild in client.guilds:
         logging.info('Server: %s #%d', guild.name, guild.id)

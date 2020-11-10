@@ -4,7 +4,6 @@ thread_id: number
 api_url: url
 elasticsearch_host: string
 script_url: url
-owner_id: number
 usernames:
     mapping:
         keys: string

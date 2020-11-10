@@ -97,6 +97,16 @@ class Context:
         return ""
 
     @property
+    def config_editable(self):
+        """
+        Return a boolean indicating if commands that change configuration are
+        enabled in this context. This can be denied if the configuration would
+        become global or perform permisssion checks for the user.
+        """
+
+        return False
+
+    @property
     def byc_enabled(self):
         """
         Return a boolean indicating if BYC commands are enabled in this context.
@@ -332,6 +342,20 @@ class DiscordContext(Context):
             return mentioned_channel.mention
 
         return channel
+
+    @property
+    def config_editable(self):
+        if getattr(self.client, 'bsg_app_info', None) is None:
+            return False
+
+        user = self.user
+        app_info = self.client.bsg_app_info
+        if app_info.owner == user:
+            return True
+        if app_info.team is not None:
+            return user in app_info.team.members
+
+        return False
 
     @property
     def byc_enabled(self):
