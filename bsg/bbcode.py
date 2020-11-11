@@ -83,7 +83,7 @@ class BBCodeMarkdown(BBCode):
     def _parse_imageid(self, tag_name, value, options, parent, context):
         image_id = super()._parse_imageid(tag_name, value, options, parent,
                                           context)
-        image = self.images.retrieve(image_id, download=False)
+        image = self.images.retrieve(image_id, tags=True, download=False)
         if image is not None and isinstance(image, tuple):
             self.image_text.append(image[1])
             return image[0]

@@ -4,6 +4,7 @@ from PIL import Image, ImageChops
 import requests
 from requests.exceptions import ConnectionError as ConnectError, HTTPError, Timeout
 import yaml
+from .card import Cards
 
 class Images:
     """
@@ -14,6 +15,10 @@ class Images:
     banners = {}
 
     @classmethod
+    def normalize_name(cls, name):
+        return name.replace("'", '').replace(' ', '').lower()
+
+    @classmethod
     def load(cls):
         if cls.images:
             return
@@ -22,7 +27,7 @@ class Images:
             for data in yaml.safe_load_all(images_file):
                 if data["type"].endswith("banners"):
                     cls.banners[data["type"]] = {
-                        name: image_id
+                        cls.normalize_name(name): image_id
                         for image_id, name in data["images"].items()
                     }
 
@@ -35,15 +40,36 @@ class Images:
         self.session = requests.Session()
         self.load()
 
-    def retrieve(self, image_id, download=True):
+    @property
+    def priorities(self):
+        if self.__class__._priorities is None:
+            self.__class__._priorities = {
+                title.lower(): data['priority']
+                for title, data in Cards.load().titles.items()
+            }
+            self.__class__._priorities.update({
+                loyalty.lower(): data['priority']
+                for loyalty, data in Cards.loyalty.items()
+            })
+
+        return self._priorities
+
+
+    def retrieve(self, image_id, tags=False, download=True):
         """
-        Retrieve an image by its ID. If an image is already locally available
-        then the path is returned. Otherwise, it is downloaded using the API
-        to retrieve the URL and extension for the image.
+        Retrieve an image by its ID. If an image is a known banner (either for
+        a character or event), then a tuple of an alternative Markdown text and
+        its shorthand text is returned. If an image is already locally available
+        then the path is returned. Otherwise, it is downloaded via the API to
+        retrieve the URL and extension for the image, and the path is returned.
+        Any failure (including if downloading is disabled) results in `None`.
         """
 
         if image_id in self.images:
             return self.images[image_id]
+
+        if tags:
+            return self.retrieve_tags(image_id)
 
         for image_path in glob(f"images/{image_id}.*"):
             return Path(image_path)
@@ -79,12 +105,56 @@ class Images:
 
         return image_path
 
+    def retrieve_tags(self, image_id):
+        """
+        Retrieve the textual replacement for an alternative character banner.
+        This uses the API to retrieve tags for the image, which are then
+        compared to known banners to find the most appropriate tuple of
+        Markdown text and shorthand text. Any failure results in `None`.
+        """
+
+        request = self.session.get(f"{self.api_url}/images/{image_id}/tags")
+        try:
+            request.raise_for_status()
+            result = request.json()
+            sorted_tags = sorted(result['tags'], key=lambda tag: tag['count'])
+            tags = [tag['rawtag'].lower() for tag in sorted_tags]
+        except (ConnectError, HTTPError, Timeout, ValueError, KeyError):
+            logging.exception("Could not look up tags for image ID %s",
+                              image_id)
+            return None
+
+        banner_type = ""
+        banner_priority = float('inf')
+        characters = []
+        for tag in tags:
+            if not tag.startswith('bsg_'):
+                continue
+
+            name = tag[len('bsg_'):]
+            if name == "banner" and banner_type == "":
+                banner_type = "banners"
+            elif self.priorities.get(name, banner_priority) < banner_priority:
+                banner_type = f"{name}_banners"
+                banner_priority = self.priorities[name]
+            elif '_' not in name:
+                characters.append(name)
+
+        if banner_type not in self.banners:
+            return None
+
+        for character in characters:
+            if character in self.banners[banner_type]:
+                return self.images[self.banners[banner_type][character]]
+
+        return None
+
     def banner(self, banner_type, name):
         """
         Retrieve a banner.
         """
 
-        return self.banners.get(banner_type, {}).get(name)
+        return self.banners.get(banner_type, {}).get(self.normalize_name(name))
 
     def crop(self, path, target_path=None, bbox=None):
         if target_path is None:
