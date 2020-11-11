@@ -127,7 +127,16 @@ class PingCommand(GameStateCommand):
             except IndexError:
                 author_role = ""
 
+        tokens = {
+            'Strategic Planning': 'spToken',
+            'Declare Emergency': 'deToken'
+        }
         for interrupt in self.bbcode.interrupts:
+            possibility = interrupt['possibilities'].rstrip('.')
+            if possibility in tokens and not seed.get(tokens[possibility]):
+                # Skip finished tokens
+                continue
+
             names = [
                 player['name'] for player in interrupt['players']
                 if player['action'] == ''
