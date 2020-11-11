@@ -13,6 +13,7 @@ class Images:
 
     images = {}
     banners = {}
+    _priorities = None
 
     @classmethod
     def normalize_name(cls, name):
