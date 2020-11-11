@@ -154,6 +154,15 @@ class PingCommand(GameStateCommand):
                 self.add_ping(f"{skill_check['topic']}: {names[0]}", pings,
                               role_mentions)
 
+        # Phase 0: Receive Skills
+        # Phase 1: Before Movement (any Movement effects occur in phase -1)
+        if seed["phase"] in {0, 1} and not (
+            seed["turn"] == 0 and seed["round"] == 1 and \
+            any(len(hand) == 0 for hand in seed["skillCardHands"])):
+            player = seed["players"][seed["turn"]]
+            self.add_ping(f"{player} is the Current Player.", pings,
+                          role_mentions)
+
         remaining_roles = [
             role for role in mentions.roles
             if role.name != author_role and role not in role_mentions
