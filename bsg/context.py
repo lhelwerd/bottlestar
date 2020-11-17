@@ -143,6 +143,14 @@ class Context:
         pass
 
     async def replace_pins(self, messages, channel=None):
+        """
+        Unpin all pinned messages made by the bot before and pin the list of
+        messages in the provided `channel` or in the original message's
+        channel if no `channel` is provided.
+
+        Does nothing if pinning is not supported in this context.
+        """
+
         pass
 
     def get_color(self, color):
@@ -457,7 +465,8 @@ class DiscordContext(Context):
 
         pins = await channel.pins()
         for pin in pins:
-            await pin.unpin()
+            if pin.author == self.client.user:
+                await pin.unpin()
         for new_message in new_messages:
             await new_message.pin()
 
