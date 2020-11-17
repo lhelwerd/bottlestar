@@ -2327,8 +2327,7 @@ cards:
 expansion: exodus
 deck: ally
 seed:
-  destination: Ionian Nebula
-  #preCrossroads: True
+  destination: [Ionian Nebula, Ionian Earth]
 cards:
   - name: Aaron Doral
   - name: Aaron Kelly
@@ -2387,7 +2386,7 @@ deck: crossroads
 expansion: exodus
 path: BSE Crossroads
 seed:
-  destination: Ionian Nebula
+  destination: [Ionian Nebula, Ionian Earth]
 cards:
   - name: Disturbing Vision
   - name: Miraculous Return
@@ -2400,7 +2399,7 @@ cards:
 expansion: daybreak
 deck: mission
 seed:
-  destination: Earth
+  destination: [Earth, Ionian Earth]
 cards:
   - name: Attack on the Colony
     path: Attack On The Colony
@@ -2684,7 +2683,7 @@ deck: objective
 cards:
   - name: Ionian Nebula
     seed:
-      destination: Ionian Nebula
+      destination: [Ionian Nebula, Ionian Earth]
     url: 'https://images-cdn.fantasyflightgames.com/ffg_content/Battlestar_Galactica/exodus/preview3/exodus-ionian-nebula-objective.png'
 ---
 expansion: daybreak
@@ -2693,7 +2692,7 @@ cards:
   - name: Earth
     url: 'https://images-cdn.fantasyflightgames.com/ffg_content/Battlestar_Galactica/daybreak/BSG04_Card_Objective-Earth.png'
     seed:
-      destination: Earth
+      destination: [Earth, Ionian Earth]
 ---
 expansion: base
 deck: title

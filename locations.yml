@@ -235,7 +235,7 @@ boards:
     - name: Demetrius
       path: demetrius
       seed:
-          destination: Earth
+          destination: [Earth, Ionian Earth]
       ext: png
       locations:
         - name: Bridge
@@ -254,7 +254,7 @@ boards:
     - name: Rebel Basestar
       path: rebel basestar
       seed:
-          destination: Earth
+          destination: [Earth, Ionian Earth]
       ext: png
       locations:
         - name: Hybrid Tank
@@ -318,7 +318,7 @@ boards:
       ext: png
       bbox: [14, 1058, 1678, 1862]
       seed:
-          destination: Earth
+          destination: [Earth, Ionian Earth]
       locations:
         - name: Hub Destroyed
           hazardous: True

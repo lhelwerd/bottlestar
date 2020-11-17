@@ -56,7 +56,9 @@ class SearchCommand(Command):
                 # Seed may not be locally available at this point
                 if seed is not None:
                     for key, value in hit.seed.to_dict().items():
-                        if seed.get(key, value) != value:
+                        seed_value = seed.get(key, value)
+                        if seed_value != value and not \
+                            (isinstance(value, list) and seed_value in value):
                             # Hide due to seed constraints
                             hidden.append(hit)
                             if show_all:
