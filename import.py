@@ -71,7 +71,7 @@ def load_cards(args):
             reckless = meta['decks'][deck].get('reckless')
             agenda = data.get('agenda')
             path = data.get('path', meta['decks'][deck].get('path', deck_name))
-            seed = data.get('seed', {})
+            expansion_seed = data.get('seed', {})
 
             # Insert with spaces for better Elastisearch tokenization
             replace = data.get('replace', meta['decks'][deck].get('replace', '_'))
@@ -111,6 +111,15 @@ def load_cards(args):
                 text = json.dumps(card.get('text', {}))
                 succession = card.get('succession', {})
                 default_succession = 99 if 'class' in card else None
+                if isinstance(expansion_seed, dict):
+                    seed = card.get('seed', expansion_seed)
+                elif 'seed' in card:
+                    seed = {"_expr": f"({expansion_seed}) and ({card['seed']})"}
+                else:
+                    seed = {"_expr": expansion_seed}
+                if 'alternate' in card:
+                    seed['_alternate'] = card['alternate']
+
                 doc = Card(name=card['name'],
                            prefix=path,
                            path=card_path,
@@ -121,7 +130,7 @@ def load_cards(args):
                            deck=deck,
                            expansion=expansion,
                            ext=card.get('ext', ext),
-                           seed=card.get('seed', seed),
+                           seed=seed,
                            index=card.get('index'),
                            count=count,
                            value=value,

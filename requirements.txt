@@ -9,3 +9,4 @@ selenium
 bbcode
 markdownify
 Pillow
+expression-parser

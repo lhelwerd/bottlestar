@@ -4,6 +4,7 @@ Search commands for card and location texts.
 
 import logging
 from pathlib import Path, PurePath
+from expression import Expression_Parser
 from .base import Command
 from ..card import Cards
 from ..image import Images
@@ -17,6 +18,7 @@ class SearchCommand(Command):
         super().__init__(name, context)
         self.cards = Cards(self.context.config['cards_url'])
         self.images = Images(self.context.config['api_url'])
+        self.parser = None
 
     def search(self, text, limit):
         raise NotImplementedError("Must be implemented by subclasses")
@@ -29,6 +31,27 @@ class SearchCommand(Command):
         filename = f"{hit.expansion}_{hit.path}.{hit.ext}"
         path = Path(f"images/{filename}")
         return filename, path, path
+
+    def check_seed(self, seed, fields):
+        if '_expr' in fields:
+            if self.parser is None:
+                self.parser = Expression_Parser(variables=seed)
+            try:
+                if not self.parser.parse(fields['_expr']):
+                    return False
+            except SyntaxError:
+                logging.exception('Invalid seed expression')
+
+            if fields.get('_alternate') in seed['players']:
+                return False
+        else:
+            for key, value in fields.items():
+                seed_value = seed.get(key, value)
+                if seed_value != value and not \
+                    (isinstance(value, list) and seed_value in value):
+                    return False
+
+        return True
 
     async def run(self, text="", limit=None, **kw):
         show_all = False
@@ -55,18 +78,15 @@ class SearchCommand(Command):
 
                 # Seed may not be locally available at this point
                 if seed is not None:
-                    for key, value in hit.seed.to_dict().items():
-                        seed_value = seed.get(key, value)
-                        if seed_value != value and not \
-                            (isinstance(value, list) and seed_value in value):
-                            # Hide due to seed constraints
-                            hidden.append(hit)
-                            if show_all:
-                                logging.info('Result would be hidden due to seed constraint')
-                                if self.cards.is_exact_match(hit, lower_text):
-                                    logging.info('Exact title match')
+                    if not self.check_seed(seed, hit.seed.to_dict()):
+                        # Hide due to seed constraints
+                        hidden.append(hit)
+                        if show_all:
+                            logging.info('Result would be hidden due to seed constraint')
+                            if self.cards.is_exact_match(hit, lower_text):
+                                logging.info('Exact title match')
 
-                            break
+                        break
 
             if hit not in hidden:
                 if not self.cards.is_exact_match(hit, lower_text):

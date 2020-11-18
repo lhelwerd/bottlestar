@@ -1302,6 +1302,7 @@ cards:
 ---
 expansion: base
 deck: char
+seed: 'True'
 cards:
   - name: William Adama
     path: Adama
@@ -1313,6 +1314,7 @@ cards:
   - name: 'Lee "Apollo" Adama'
     path: Apollo
     class: Pilot
+    alternate: Lee
     succession:
       president: 9
       admiral: 10
@@ -1320,6 +1322,8 @@ cards:
   - name: Gaius Baltar
     path: Baltar
     class: Political Leader
+    seed: 'numPlayers != 2'
+    alternate: Gaius
     succession:
       president: 2
       admiral: 27
@@ -1327,6 +1331,7 @@ cards:
   - name: 'Sharon "Boomer" Valerii'
     path: Boomer
     class: Pilot
+    seed: numPlayers >= 3 or numPlayers == 1
     succession:
       president: 25
       admiral: 15
@@ -1341,6 +1346,7 @@ cards:
   - name: 'Karl "Helo" Agathon'
     path: Helo
     class: Military Leader
+    alternate: Karl
     succession:
       president: 13
       admiral: 6
@@ -1369,6 +1375,7 @@ cards:
   - name: Tom Zarek
     path: Zarek
     class: Political Leader
+    alternate: Tom
     succession:
       president: 4
       admiral: 24
@@ -1376,10 +1383,16 @@ cards:
 ---
 expansion: pegasus
 deck: char
+seed: vAllCharacters or pegasus
 cards:
   - name: Helena Cain
     path: Cain
     class: Military Leader
+    # These seed conditions are insane and unclear if they are logically equal
+    # militaryChoices, availableCharacters
+    seed: not vNoCain and (numPlayers == 1 or pegasus or (exodus and vAllCharacters and vBrutality)) and (not vBrutality or daybreak)
+    #seed: (not vAllCharacters and not vNoCain and (not vBrutality or daybreak)) or (vAllCharacters and ((vBrutality and pegasus and daybreak) or (not vNoCain and not vBrutality and (pegasus or exodus))))
+
     succession:
       president: 20
       admiral: 1
@@ -1387,6 +1400,7 @@ cards:
   - name: 'Anastasia "Dee" Dualla'
     path: Dee
     class: Support
+    seed: pegasus or exodus
     succession:
       president: 21
       admiral: 11
@@ -1394,6 +1408,7 @@ cards:
   - name: Ellen Tigh
     path: Ellen
     class: Political Leader
+    seed: pegasus or daybreak
     succession:
       president: 8
       admiral: 25
@@ -1408,6 +1423,7 @@ cards:
 ---
 expansion: exodus
 deck: char
+seed: vAllCharacters or exodus
 cards:
   - name: Samuel T. Anders
     path: Anders
@@ -1422,6 +1438,7 @@ cards:
   - name: 'Callandra "Cally" Tyrol'
     path: Cally
     class: Support
+    seed: pegasus or exodus
     succession:
       president: 16
       admiral: 21
@@ -1429,6 +1446,7 @@ cards:
   - name: Felix Gaeta
     path: Gaeta
     class: Military Leader
+    seed: not vBrutality or daybreak or numPlayers == 1
     succession:
       president: 11
       admiral: 7
@@ -1443,12 +1461,38 @@ cards:
 ---
 expansion: pegasus
 deck: char
+seed: cylonLeader and (pegasus or vAllCharacters)
+cards:
+  - name: Cavil
+    class: Cylon Leader
+  - name: Leoben Conoy
+    path: Leoben
+    class: Cylon Leader
+  - name: '"Caprica" Six'
+    path: Six
+    class: Cylon Leader
+---
+expansion: daybreak
+deck: char
+seed: cylonLeader and (daybreak or vAllCharacters)
 cards:
   - name: 'Sharon "Athena" Agathon'
     path: Athena
     class: Cylon Leader
-  - name: Cavil
+  - name: "D'Anna Biers"
+    path: DAnna
     class: Cylon Leader
+  - name: Aaron Doral
+    path: Doral
+    class: Cylon Leader
+  - name: "Simon O'Neill"
+    path: Simon
+    class: Cylon Leader
+---
+expansion: daybreak
+deck: char
+seed: vAllCharacters or daybreak
+cards:
   - name: 'Sherman "Doc" Cottle'
     path: Cottle
     class: Support
@@ -1456,19 +1500,11 @@ cards:
       president: 18
       admiral: 22
       cag: 23
-  - name: "D'Anna Biers"
-    path: DAnna
-    class: Cylon Leader
-  - name: Aaron Doral
-    path: Doral
-    class: Cylon Leader
----
-expansion: daybreak
-deck: char
-cards:
   - name: Gaius Baltar
     path: Gaius
     class: Support
+    seed: daybreak
+    alternate: Gaius
     succession:
       president: 15
       admiral: 26
@@ -1490,6 +1526,7 @@ cards:
   - name: 'Karl "Helo" Agathon'
     path: Karl
     class: Pilot
+    alternate: Helo
     succession:
       president: 23
       admiral: 12
@@ -1497,13 +1534,12 @@ cards:
   - name: Lee Adama
     path: Lee
     class: Political Leader
+    seed: daybreak or vBrutality or numPlayers == 1
+    alternate: Apollo
     succession:
       president: 3
       admiral: 23
       cag: 9
-  - name: Leoben Conoy
-    path: Leoben
-    class: Cylon Leader
   - name: Romo Lampkin
     path: Romo
     class: Political Leader
@@ -1511,15 +1547,11 @@ cards:
       president: 5
       admiral: 28
       cag: 29
-  - name: "Simon O'Neill"
-    path: Simon
-    class: Cylon Leader
-  - name: '"Caprica" Six'
-    path: Six
-    class: Cylon Leader
   - name: Tom Zarek
     path: Tom
     class: Military Leader
+    seed: daybreak
+    alternate: Zarek
     succession:
       president: 10
       admiral: 9
@@ -1527,8 +1559,7 @@ cards:
 ---
 expansion: unofficial
 deck: char
-seed:
-  vAllCharacters: True
+seed: vAllCharacters
 cards:
   - name: Billy Keikeya
     path: Billy
@@ -1550,6 +1581,7 @@ cards:
     path: Shaw
     class: Military Leader
     image: 5306602
+    seed: pegasus and daybreak
     succession:
       president: 20.5
       admiral: 4
