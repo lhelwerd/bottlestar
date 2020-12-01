@@ -127,6 +127,18 @@ class ClassCommand(Command):
             await self.context.send(f"{card.to_dict()!r}")
             await self.context.send(f"{card.path} {card.character_class}")
 
+@Command.register("full_succession")
+class FullSuccessionCommand(Command):
+    async def run(self, **kw):
+        search = Card.search(using='main').source(['path']) \
+            .filter("term", deck="char")
+        chars = list(search.scan())
+        cards = Cards(self.context.config['cards_url'])
+        await self.context.send(cards.lines_of_succession({
+            "players": chars,
+            "CFB": True
+        }, unquote=False))
+
 def main():
     args = parse_args()
     logging.basicConfig(format='%(asctime)s:%(levelname)s:%(message)s',

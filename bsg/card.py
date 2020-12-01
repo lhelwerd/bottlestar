@@ -332,10 +332,19 @@ class Cards:
         return text, ''
 
     @staticmethod
-    def _format_succession(title, index, char, cylons, locations):
-        name, match = re.subn(fr'"?{re.escape(char.path)}"?',
-                              char.path, char.name, count=1)
-        if not match:
+    def _format_succession(title, index, char, cylons, locations, unquote):
+        name = char.name
+        if unquote:
+            # Replace the quoted path name with unquoted name if possible, so 
+            # that it can be used by card-replacing mentions later for example
+            name, match = re.subn(fr'"?{re.escape(char.path)}"?',
+                                  char.path, name, count=1)
+            if not match:
+                name = f"{char.name} ({char.path})"
+        elif char.seed.to_dict().get("_alternate"):
+            # Only show the path if there could be an alternate with similar 
+            # name in the list, which should never happen if we unquote it for 
+            # mentions
             name = f"{char.name} ({char.path})"
 
         if getattr(char, title.lower()) == 99:
@@ -349,7 +358,7 @@ class Cards:
 
         return line
 
-    def lines_of_succession(self, seed):
+    def lines_of_succession(self, seed, unquote=True):
         players = seed.get("players", [])
         search = Card.search(using='main') \
             .filter("term", deck="char") \
@@ -374,7 +383,9 @@ class Cards:
         for title in titles:
             line = sorted(chars, key=lambda char: getattr(char, title.lower()))
             names = "\n".join(
-                self._format_succession(title, index + 1, char, cylons, locations)
+                self._format_succession(title, index + 1, char, cylons,
+                    locations, unquote
+                )
                 for index, char in enumerate(line)
             )
             report.append(f"{title}:\n{names}")

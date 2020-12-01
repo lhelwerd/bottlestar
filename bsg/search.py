@@ -1,5 +1,5 @@
-from elasticsearch_dsl import Document, Boolean, Integer, Keyword, Object, \
-    normalizer, Q, Text
+from elasticsearch_dsl import Document, Boolean, Float, Integer, Keyword, \
+    Object, normalizer, Q, Text
 
 lowercase = normalizer('lower', filter=['lowercase'])
 
@@ -25,9 +25,9 @@ class Card(Document):
     cylon = Keyword()
     jump = Boolean()
     character_class = Keyword()
-    president = Integer()
-    admiral = Integer()
-    cag = Integer()
+    president = Float()
+    admiral = Float()
+    cag = Float()
     allegiance = Keyword()
     ability = Boolean()
     reckless = Boolean()
