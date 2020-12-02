@@ -13,6 +13,7 @@ from ..thread import Thread
 
 class SearchCommand(Command):
     DEFAULT_LIMIT = 3
+    SUGGESTION_PERCENT = .60
 
     def __init__(self, name, context):
         super().__init__(name, context)
@@ -60,14 +61,20 @@ class SearchCommand(Command):
         else:
             show_all = True
 
+        result = None
         hidden = []
+        suggestions = []
         lower_text = text.lower()
         response, count = self.search(text, limit)
+
+        if count == 0:
+            await self.context.send("No card found")
+            return
 
         seed = None
         for index, hit in enumerate(response):
             if show_all:
-                await self.show_search_result(hit, count, hidden)
+                await self.show_search_result(hit, count, hidden, [])
 
             # Check if the seed constraints may hide this result
             if hit.seed:
@@ -86,22 +93,26 @@ class SearchCommand(Command):
                             if self.cards.is_exact_match(hit, lower_text):
                                 logging.info('Exact title match')
 
-                        break
-
             if hit not in hidden:
-                if not self.cards.is_exact_match(hit, lower_text):
-                    for hid in hidden:
-                        if self.cards.is_exact_match(hid, lower_text):
-                            if show_all:
-                                logging.info('Previous hidden %s (%s) would be shown due to exact title match instead of this non-exact hit', hid.name, hid.expansion)
-                                break
+                if (result is None or result in hidden):
+                    if not self.cards.is_exact_match(hit, lower_text):
+                        for hid in hidden:
+                            if self.cards.is_exact_match(hid, lower_text):
+                                if show_all:
+                                    logging.info('Previous hidden %s (%s) would be shown due to exact title match instead of this non-exact hit', hid.name, hid.expansion)
+                                    break
 
-                            await self.show_search_result(hid, count, hidden)
-                            return
+                                result = hid
+                                continue
 
-                if not show_all:
-                    await self.show_search_result(hit, count, hidden)
-                    return
+                    result = hit
+                elif hit.meta.score == result.meta.score and \
+                    self.cards.is_exact_match(hit, lower_text) and \
+                    not self.cards.is_exact_match(result, lower_text):
+                    suggestions.append(result)
+                    result = hit
+                elif hit.meta.score / result.meta.score > self.SUGGESTION_PERCENT:
+                    suggestions.append(hit)
 
             if show_all and index < count - 1:
                 logging.info('-' * 15)
@@ -114,9 +125,12 @@ class SearchCommand(Command):
 
             return
 
-        await self.show_search_result(response[0], count, hidden)
+        if result is None:
+            result = response[0]
 
-    async def show_search_result(self, hit, count, hidden):
+        await self.show_search_result(result, count, hidden, suggestions)
+
+    async def show_search_result(self, hit, count, hidden, suggestions):
         # Retrieve URL or (cropped) image attachment
         url = self.cards.get_url(hit.to_dict())
         if hit.bbox or hit.image:
@@ -143,7 +157,20 @@ class SearchCommand(Command):
         else:
             image = None
 
-        await self.context.send(f'{self.cards.get_text(hit)}\n{url} (score: {hit.meta.score:.3f}, {count} hits, {len(hidden)} hidden)', file=image)
+        did_you_mean = ""
+        if suggestions:
+            titles = ', '.join(
+                self.format_suggestion(card) for card in suggestions
+            )
+            did_you_mean = f"\n*Perhaps you wanted: {titles}*"
+
+        await self.context.send(f'{self.cards.get_text(hit)}\n{url} (score: {hit.meta.score:.3f}, {count} hits, {len(hidden)} hidden){did_you_mean}', file=image)
+
+    def format_suggestion(self, card):
+        title = self.cards.replace_card_title(self.cards.get_card_title(card),
+                                              self.context.emoji_display)
+        name = title.split(" - ")[0]
+        return f"**{self.context.prefix}{card.deck} {name}**"
 
 @Command.register(("search", "card", ""), "text", "limit", nargs=True,
                   description="Search all decks")

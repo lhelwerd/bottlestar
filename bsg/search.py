@@ -4,7 +4,7 @@ from elasticsearch_dsl import Document, Boolean, Float, Integer, Keyword, \
 lowercase = normalizer('lower', filter=['lowercase'])
 
 class Card(Document):
-    SEARCH_FIELDS = ['path', 'name', 'text', 'deck', 'expansion', 'cylon', 'skills']
+    SEARCH_FIELDS = ['path^3', 'name^4', 'text^2', 'deck', 'expansion^2', 'cylon', 'skills']
 
     name = Text(analyzer='snowball', fields={'raw': Keyword()})
     path = Text(analyzer='snowball', fields={'raw': Keyword()})

@@ -478,7 +478,7 @@ cards:
     path: Riots2
     index: 48
     cylon: Basestars launch Raiders
-    jump: True
+    jump: False
   - name: Scouting for Fuel
     path: Scouting Fuel
     index: 49

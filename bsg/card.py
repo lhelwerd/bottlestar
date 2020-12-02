@@ -32,6 +32,10 @@ class Cards:
         ])}""")
     }
 
+    ASTERISK_REPLACEMENTS = {
+        "discord": "\\*"
+    }
+
     loaded = False
 
     @classmethod
@@ -392,11 +396,12 @@ class Cards:
 
         return "\n\n".join(report)
 
+    @classmethod
+    def replace_card_title(cls, title, display='discord'):
+        replacement = cls.ASTERISK_REPLACEMENTS.get(display, '*')
+        return title.replace('**', '').replace('*', replacement)
+
     def analyze(self, seed, display='discord'):
-        replacements = {
-            "discord": "\\*"
-        }
-        replacement = replacements.get(display, '*')
         report = []
         for deck, data in self.decks.items():
             if 'seed' not in data or 'analyze' not in data:
@@ -421,8 +426,7 @@ class Cards:
                         # Pegasus/Daybreak Treachery decks
                         continue
 
-                name = self.get_card_title(card).replace('**', '') \
-                    .replace('*', replacement)
+                name = self.replace_card_title(self.get_card_title(card))
                 if card.count is not None and card.value is not None:
                     # Skill deck
                     offset = card.index

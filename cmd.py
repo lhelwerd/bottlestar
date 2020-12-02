@@ -62,6 +62,8 @@ def parse_args():
                         default='unicode', help='format emoji')
     parser.add_argument('--limit', default=10, type=int,
                         help='Number of results to show from card search')
+    parser.add_argument('--no-limit', dest='limit', action='store_const',
+                        const=None, help='Show search result with suggestions')
     parser.add_argument('--game-id', dest='game_id', default=0, type=int,
                         help='Identifier for the BYC game to play')
     parser.add_argument('command', help='command')
@@ -164,7 +166,7 @@ def main():
 
         arguments = []
         while not arguments:
-            arguments = input().split(' ')
+            arguments = input('> ').split(' ')
         name = arguments.pop(0)
         if name == "exit":
             command_loop = 0
