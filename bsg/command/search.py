@@ -113,6 +113,9 @@ class SearchCommand(Command):
                     result = hit
                 elif hit.meta.score / result.meta.score > self.SUGGESTION_PERCENT:
                     suggestions.append(hit)
+                elif not show_all:
+                    # All others are too low of a score
+                    break
 
             if show_all and index < count - 1:
                 logging.info('-' * 15)
@@ -162,7 +165,7 @@ class SearchCommand(Command):
             titles = ', '.join(
                 self.format_suggestion(card) for card in suggestions
             )
-            did_you_mean = f"\n*Perhaps you wanted: {titles}*"
+            did_you_mean = f"\nPerhaps you wanted: {titles}"
 
         await self.context.send(f'{self.cards.get_text(hit)}\n{url} (score: {hit.meta.score:.3f}, {count} hits, {len(hidden)} hidden){did_you_mean}', file=image)
 
