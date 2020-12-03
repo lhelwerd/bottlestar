@@ -54,7 +54,7 @@ class Card(Document):
         return result, count
 
 class Location(Document):
-    SEARCH_FIELDS = ['name', 'text', 'expansion', 'skills']
+    SEARCH_FIELDS = ['name^2', 'text', 'expansion', 'skills']
 
     board_name = Text(analyzer='snowball', fields={'raw': Keyword()})
     path = Text(analyzer='snowball', fields={'raw': Keyword()})

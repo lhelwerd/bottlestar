@@ -170,10 +170,20 @@ class SearchCommand(Command):
         await self.context.send(f'{self.cards.get_text(hit)}\n{url} (score: {hit.meta.score:.3f}, {count} hits, {len(hidden)} hidden){did_you_mean}', file=image)
 
     def format_suggestion(self, card):
-        title = self.cards.replace_card_title(self.cards.get_card_title(card),
-                                              self.context.emoji_display)
-        name = title.split(" - ")[0]
-        return f"**{self.context.prefix}{card.deck} {name}**"
+        if isinstance(card, Card):
+            title = self.cards.get_card_title(card)
+            text = self.cards.replace_card_title(title,
+                                                 self.context.emoji_display)
+            name = text.split(" - ")[0]
+            deck = card.deck
+        else:
+            deck = "board"
+            if card.board_name == card.name:
+                name = card.name
+            else:
+                name = f"{card.name} ({card.board_name})"
+
+        return f"**{self.context.prefix}{deck} {name}**"
 
 @Command.register(("search", "card", ""), "text", "limit", nargs=True,
                   description="Search all decks")
