@@ -21,7 +21,7 @@ class BBCode:
             "skill_checks": [],
             "state_of_emergency": []
         }
-        self.image_text = []
+        self.image_data = []
         self.bold_text = []
 
     def _load_parser(self):
@@ -84,9 +84,9 @@ class BBCodeMarkdown(BBCode):
         image_id = super()._parse_imageid(tag_name, value, options, parent,
                                           context)
         image = self.images.retrieve(image_id, tags=True, download=False)
-        if image is not None and isinstance(image, tuple):
-            self.image_text.append(image[1])
-            return image[0]
+        if image is not None and isinstance(image, dict):
+            self.image_data.append(image)
+            return image["formatted"]
 
         logging.info('Found unknown image: %s', image_id)
         return ''
@@ -193,7 +193,7 @@ class BBCodeHTML(BBCode):
         path = self.images.retrieve(image_id)
         if isinstance(path, PurePath):
             return f'<div class="img"><img src="{path.resolve().as_uri()}"></div>'
-        if not isinstance(path, tuple):
+        if not isinstance(path, dict):
             return f'<div class="img">{image_id}</div>'
 
         return path[0]

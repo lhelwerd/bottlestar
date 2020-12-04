@@ -34,7 +34,11 @@ class Images:
 
                 text_format = data.get("format", "{}")
                 for image_id, text in data["images"].items():
-                    cls.images[image_id] = (text_format.format(text), text)
+                    cls.images[image_id] = {
+                        "formatted": text_format.format(text),
+                        "text": text,
+                        "titles": data.get("titles", [])
+                    }
 
     def __init__(self, api_url):
         self.api_url = api_url
@@ -59,10 +63,14 @@ class Images:
     def retrieve(self, image_id, tags=False, download=True):
         """
         Retrieve an image by its ID. If an image is a known banner (either for
-        a character or event), then a tuple of an alternative Markdown text and
-        its shorthand text is returned. If an image is already locally available
-        then the path is returned. Otherwise, it is downloaded via the API to
-        retrieve the URL and extension for the image, and the path is returned.
+        a character or event), then a dictionary with the following items is
+        returned:
+        - "formatted": An alternative Markdown text
+        - "text": Shorthand text
+        - "titles": List of titles associated with the banner.
+        If an image is already locally available then the path is returned.
+        Otherwise, it is downloaded via the API to retrieve the URL and
+        extension for the image, and the path is returned.
         Any failure (including if downloading is disabled) results in `None`.
         """
 
@@ -110,8 +118,9 @@ class Images:
         """
         Retrieve the textual replacement for an alternative character banner.
         This uses the API to retrieve tags for the image, which are then
-        compared to known banners to find the most appropriate tuple of
-        Markdown text and shorthand text. Any failure results in `None`.
+        compared to known banners to find the most appropriate dictionary of
+        formatted Markdown text, shorthand text and titles. Any failure results
+        in `None`.
         """
 
         request = self.session.get(f"{self.api_url}/images/{image_id}/tags")

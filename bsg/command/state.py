@@ -116,16 +116,29 @@ class PingCommand(GameStateCommand):
         pings.append(ping)
         role_mentions.update(mention.roles)
 
+    def get_banner_roles(self):
+        try:
+            banner = self.bbcode.image_data[0]
+            return [banner["text"]] + banner["titles"]
+        except IndexError:
+            return []
+
     def ping(self, seed, author, mentions):
         pings = []
         role_mentions = set([])
         try:
-            author_role = seed["players"][seed["usernames"].index(author)]
-        except (KeyError, IndexError, ValueError):
+            author_index = seed["usernames"].index(author)
             try:
-                author_role = self.bbcode.image_text[0]
-            except IndexError:
-                author_role = ""
+                author_roles = [seed["players"][author_index]]
+            except (KeyError, IndexError, ValueError):
+                author_roles = self.get_banner_roles()
+
+            for key, title in self.cards.titles.items():
+                titles = self.cards.get_titles(key, title)
+                if self.cards.has_titles(seed, titles, author_index):
+                    author_roles.append(key)
+        except (KeyError, IndexError):
+            author_roles = self.get_banner_roles()
 
         tokens = {
             'Strategic Planning': 'spToken',
@@ -165,7 +178,7 @@ class PingCommand(GameStateCommand):
 
         remaining_roles = [
             role for role in mentions.roles
-            if role.name != author_role and role not in role_mentions
+            if role.name not in author_roles and role not in role_mentions
         ]
         for bold in self.bbcode.bold_text:
             bold_roles = [role for role in remaining_roles if role.name in bold]

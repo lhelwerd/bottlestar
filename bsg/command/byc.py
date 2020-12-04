@@ -24,13 +24,6 @@ def format_username(user, replacement="-"):
     # Remove/replace spaces and other special characters (channel name-safe)
     return re.sub(r"\W+", replacement, user).strip(replacement)
 
-def get_titles(key, title):
-    keys = title.get("titles", [key])
-    return [name if name[0].islower() else name.lower() for name in keys]
-
-def has_titles(seed, titles, index):
-    return index != -1 and all(seed.get(name, -1) == index for name in titles)
-
 class BycCommand(Command):
     byc_games = {}
 
@@ -125,11 +118,11 @@ class BycCommand(Command):
     async def update_title_roles(self, roles, old_seed, seed, banner_priority):
         updated = False
         for key, title in self.cards.titles.items():
-            titles = get_titles(key, title)
+            titles = self.cards.get_titles(key, title)
             old_index = old_seed.get(titles[0], -1)
             index = seed.get(titles[0], -1)
             role = roles.get(key)
-            if has_titles(seed, titles, index):
+            if self.cards.has_titles(seed, titles, index):
                 if self.update_banner(seed, banner_priority, index, title):
                     updated = True
 
@@ -141,8 +134,8 @@ class BycCommand(Command):
                     await member.add_roles(role)
 
             if role is not None and \
-                has_titles(old_seed, titles, old_index) and \
-                not has_titles(seed, titles, old_index):
+                self.cards.has_titles(old_seed, titles, old_index) and \
+                not self.cards.has_titles(seed, titles, old_index):
                 if self.update_banner(seed, banner_priority, old_index,
                                       self.cards.loyalty["Human"]):
                     updated = True
@@ -789,7 +782,7 @@ class CleanupCommand(BycCommand):
         empty_game_seed["players"] = []
         for key, title in self.cards.titles.items():
             empty_game_seed.update({
-                field: -1 for field in get_titles(key, title)
+                field: -1 for field in self.cards.get_titles(key, title)
             })
 
         banner_priority = [float('inf')] * len(game_seed["usernames"])

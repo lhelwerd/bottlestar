@@ -450,3 +450,15 @@ class Cards:
             report.append(f"The top {count} cards of the {name} deck:\n{names}")
 
         return "\n\n".join(report)
+
+    @staticmethod
+    def get_titles(key, title):
+        keys = title.get("titles", [key])
+        return [name if name[0].islower() else name.lower() for name in keys]
+
+    @staticmethod
+    def has_titles(seed, titles, index):
+        if index == -1:
+            return False
+
+        return all(seed.get(name, -1) == index for name in titles)

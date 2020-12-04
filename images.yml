@@ -129,6 +129,7 @@ images:
     "1273566": "Crashdown"
 ---
 type: president_banners
+titles: [President]
 format: "Player: President {}\n"
 images:
     "1302932": "Adama"
@@ -166,6 +167,7 @@ images:
     "1324091": "Crashdown"
 ---
 type: admiral_banners
+titles: [Admiral]
 format: "Player: Admiral {}\n"
 images:
     "1263070": "Adama"
@@ -203,6 +205,7 @@ images:
     "1324094": "Crashdown"
 ---
 type: cag_banners
+titles: [CAG]
 format: "Player: CAG {}\n"
 images:
     "1263088": "Adama"
@@ -240,6 +243,7 @@ images:
     "1324096": "Crashdown"
 ---
 type: dictator_banners
+titles: [Dictator, Admiral, President]
 format: "Player: Dictator {}\n"
 images:
     "741584": "Adama"
