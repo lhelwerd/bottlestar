@@ -138,6 +138,7 @@ class PingCommand(GameStateCommand):
                 if self.cards.has_titles(seed, titles, author_index):
                     author_roles.append(key)
         except (KeyError, IndexError):
+            author_index = -1
             author_roles = self.get_banner_roles()
 
         tokens = {
@@ -180,10 +181,25 @@ class PingCommand(GameStateCommand):
             role for role in mentions.roles
             if role.name not in author_roles and role not in role_mentions
         ]
+        bold_names = []
         for bold in self.bbcode.bold_text:
             bold_roles = [role for role in remaining_roles if role.name in bold]
+            bold_names.extend(role.name for role in bold_roles)
             if bold_roles:
                 self.add_ping(bold, pings, role_mentions, roles=bold_roles)
+
+        if seed.get("crisisOptions"):
+            for player_index, options in enumerate(seed["crisisOptions"]):
+                if player_index != author_index:
+                    player = seed["players"][player_index]
+                    if player in bold_names:
+                        continue
+
+                    mandatories = seed["mandatory"][player_index]
+                    for option, mandatory in zip(options, mandatories):
+                        if mandatory:
+                            self.add_ping(f"{player}: {option}", pings,
+                                          role_mentions)
 
         response = "\n".join(pings)
         mentions = self.context.make_mentions(everyone=False, users=False,
