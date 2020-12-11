@@ -241,7 +241,7 @@ boards:
         - name: Bridge
           bbox: [114, 300, 284, 536]
           text:
-            - [Action, 'If there is no Mission Card on the "Active Mission" space, activate the top card of the Mission deck.']
+            - Action: 'If there is no Mission Card on the "Active Mission" space, activate the top card of the Mission deck.'
             - 'Do not draw a Crisis Card this turn.'
         - name: Tactical Plot
           bbox: [374, 300, 544, 536]
