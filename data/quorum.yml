@@ -1,0 +1,85 @@
+---
+expansion: base
+deck: quorum
+cards:
+  - name: Accept Prophecy
+    index: 0
+    count: 1
+  - name: Arrest Order
+    index: 1
+    count: 2
+  - name: Assign Arbitrator
+    index: 3
+    count: 1
+  - name: Assign Mission Specialist
+    path: Assign Miss Specialist
+    index: 4
+    count: 1
+  - name: Assign Vice President
+    path: Assign V Pres
+    index: 5
+    count: 1
+  - name: Authorization of Brutal Force
+    path: Authorize Brute Force
+    index: 6
+    count: 2
+  - name: Encourage Mutiny
+    index: 8
+    count: 1
+  - name: Food Rationing
+    index: 9
+    count: 2
+  - name: Inspirational Speech
+    path: Inspire Speech
+    index: 11
+    count: 4
+  - name: Presidential Pardon
+    path: Pres Pardon
+    index: 15
+    count: 1
+  - name: Release Cylon Mugshots
+    path: Release Mugshots
+    index: 16
+    count: 1
+---
+expansion: pegasus
+deck: quorum
+seed:
+  pegasus: True
+cards:
+  - name: Assign Chief of Staff
+    path: Assign Staff
+    index: 17
+  - name: Civilian Self Defense
+    path: Civ Self Defence
+    index: 18
+  - name: Consult the Oracle
+    path: Consult Oracle
+    index: 19
+  - name: Enact Production Quotas
+    path: Enact Prod Quotas
+    index: 20
+  - name: Eulogy
+    index: 21
+  - name: Execute Prisoner
+    index: 22
+  - name: Probation
+    index: 23
+  - name: Resources for Galactica
+    path: Resources Galactica
+    index: 24
+  - name: Unsavory Connections
+    index: 25
+---
+expansion: exodus
+deck: quorum
+seed:
+  exodus: True
+cards:
+  - name: Establish Dogsville
+    index: 26
+  - name: Presidential Order
+    path: Presidential order
+    index: 27
+  - name: Resignation
+    index: 28

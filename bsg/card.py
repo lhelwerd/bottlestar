@@ -55,19 +55,15 @@ class Cards:
         cls._skill_colors = None
         cls._deck_cards = None
 
-        with open("data.yml") as data_file:
-            for data in yaml.safe_load_all(data_file):
-                if data.get('meta'):
-                    cls.expansions = data['expansions']
-                    cls.decks = data['decks']
-                    cls.skills = data['skills']
-                    cls.character_classes = data['character_classes']
-                    cls.titles = data['titles']
-                    cls.loyalty = data['loyalty']
-                    cls.activations = data['activations']
-                    break
-                else:
-                    raise ValueError('Meta must be first component')
+        with open("data/_meta.yml") as data_file:
+            data = yaml.safe_load(data_file)
+            cls.expansions = data['expansions']
+            cls.decks = data['decks']
+            cls.skills = data['skills']
+            cls.character_classes = data['character_classes']
+            cls.titles = data['titles']
+            cls.loyalty = data['loyalty']
+            cls.activations = data['activations']
 
         return cls
 

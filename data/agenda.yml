@@ -1,0 +1,64 @@
+---
+expansion: pegasus
+deck: agenda
+seed:
+  cylonLeader: True
+  daybreak: False
+agenda: sympathetic
+cards:
+  - name: Convert the Infidels
+    url: ''
+    index: 41
+    allegiance: Human
+  - name: Join the Colonials
+    url: ''
+    index: 42
+    allegiance: Human
+  - name: Guide Them To Destiny
+    url: ''
+    index: 43
+    allegiance: Human
+  - name: Prove Their Worth
+    url: ''
+    index: 44
+    allegiance: Human
+  - name: The Illusion of Hope
+    url: ''
+    index: 45
+    allegiance: Cylon
+  - name: Salvage Their Equipment
+    url: ''
+    index: 46
+    allegiance: Cylon
+---
+expansion: pegasus
+deck: agenda
+seed:
+  cylonLeader: True
+  daybreak: False
+agenda: hostile
+cards:
+  - name: 'Show Their True Nature'
+    url: ''
+    index: 47
+    allegiance: Cylon
+  - name: Siege Warfare
+    url: ''
+    index: 48
+    allegiance: Cylon
+  - name: Reduce Them To Ruins
+    url: ''
+    index: 49
+    allegiance: Cylon
+  - name: Genocide
+    url: ''
+    index: 50
+    allegiance: Cylon
+  - name: Grant Mercy
+    url: ''
+    index: 51
+    allegiance: Human
+  - name: Mutual Annihilation
+    index: 52
+    url: ''
+    allegiance: Human

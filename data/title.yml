@@ -1,0 +1,57 @@
+---
+expansion: base
+deck: title
+cards:
+  - name: President
+    url: https://i.imgur.com/hLqhqPU.jpg
+    bbox: [612, 0, 1203, 935]
+  - name: Admiral
+    url: https://i.imgur.com/hLqhqPU.jpg
+    bbox: [0, 0, 612, 935]
+    seed:
+      CFB: False
+---
+expansion: pegasus
+deck: title
+cards:
+  - name: President
+    url: https://forum.quartertothree.com/uploads/default/original/3X/c/6/c68f0987d233f38e2c596c8a8e9c3671a3e7447c.jpeg
+    bbox: [234, 0, 468, 350]
+    seed:
+      destination: New Caprica
+  - name: Admiral
+    url: https://forum.quartertothree.com/uploads/default/original/3X/c/6/c68f0987d233f38e2c596c8a8e9c3671a3e7447c.jpeg
+    bbox: [0, 0, 234, 350]
+    seed:
+      destination: New Caprica
+  - name: Infiltration
+    url: https://i.imgur.com/lrsbo0V.jpg
+    bbox: [732, 454, 1104, 1006]
+    seed:
+      daybreak: False
+      cylonLeader: True
+    allegiance: Infiltrator
+---
+expansion: exodus
+deck: title
+cards:
+  - name: Admiral
+    image: 872990
+    seed:
+      CFB: True
+  - name: CAG
+    image: 847195
+    seed:
+      CFB: True
+---
+expansion: daybreak
+deck: title
+cards:
+  - name: Infiltration
+    url: https://forum.quartertothree.com/uploads/default/original/2X/4/432e2ec85d14235f80a5b8c961800b8060f2097c.png
+    ext: png
+    bbox: [580, 4, 860, 437]
+    seed:
+      daybreak: True
+      cylonLeader: True
+    allegiance: Infiltrator

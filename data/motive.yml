@@ -1,0 +1,61 @@
+---
+expansion: daybreak
+deck: motive
+path: BSD Motives
+seed:
+  cylonLeader: True
+  daybreak: True
+replace: ''
+cards:
+  - name: 'A False Sense of Security'
+    path: 'A False Sense Of Security'
+    index: 65
+    allegiance: Cylon
+  - name: A Justified Response
+    index: 60
+    allegiance: Cylon
+  - name: End the Chase
+    path: End The Chase
+    index: 53
+    allegiance: Human
+  - name: Fight with Honor
+    path: Fight With Honor
+    index: 63
+    allegiance: Cylon
+  - name: Harvest their Resources
+    path: Harvest Their Resources
+    index: 66
+    allegiance: Cylon
+  - name: Improve Efficiency
+    index: 56
+    allegiance: Human
+  - name: Keep Them Docile
+    index: 59
+    allegiance: Human
+  - name: Learn to Cherish
+    path: Learn To Cherish
+    index: 57
+    allegiance: Human
+  - name: Make an Ally
+    path: Make An Ally
+    index: 54
+    allegiance: Human
+  - name: No Unnecessary Force
+    index: 61
+    allegiance: Cylon
+  - name: Pressure their Leaders
+    path: Pressure Their Leaders
+    index: 58
+    allegiance: Human
+  - name: Remove the Threat
+    path: Remove The Threat
+    index: 55
+    allegiance: Human
+  - name: Savor their Demise
+    path: Savor Their Demise
+    index: 62
+    allegiance: Cylon
+  - name: Subjects for Study
+    path: Subjects For Study
+    index: 64
+    allegiance: Cylon

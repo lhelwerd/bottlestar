@@ -1,0 +1,57 @@
+---
+deck: mutiny
+expansion: daybreak
+seed:
+  daybreak: True
+cards:
+  - name: Armed Resistance
+    index: 0
+  - name: Assume Command
+    index: 1
+  - name: Bait and Switch
+    path: Bait And Switch
+    index: 2
+  - name: Betrayal of Trust
+    path: Betrayal Of Trust
+    index: 3
+  - name: Blackmail
+    index: 4
+  - name: Clipped Wings
+    index: 5
+  - name: Controversial Speech
+    index: 6
+  - name: Feed the People
+    path: Feed The People
+    index: 7
+  - name: Impeachment
+    index: 8
+  - name: Make a Deal
+    path: Make A Deal
+    index: 9
+  - name: Necessary Risk
+    index: 10
+  - name: Panic
+    index: 11
+  - name: Peaceful Resistance
+    index: 12
+  - name: Ruined Reputation
+    index: 13
+  - name: Scavenging for Parts
+    path: Scavenging For Parts
+    index: 14
+  - name: Selfish Act
+    index: 15
+  - name: Send a Message
+    path: Send A Message
+    index: 16
+  - name: Set the Agenda
+    path: Set The Agenda
+    index: 17
+  - name: The Strong Survive
+    index: 18
+  - name: Unauthorized Usage
+    index: 19
+  - name: Violent Protest
+    index: 20
+  - name: Weapons Armed
+    index: 21

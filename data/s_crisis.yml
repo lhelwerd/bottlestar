@@ -1,0 +1,75 @@
+---
+expansion: base
+deck: s_crisis
+cards:
+  - name: Bomb on Colonial 1
+    path: Bomb Colonial 1
+    index: 160
+    value: 15
+    skills: [Tactics, Piloting, Engineering]
+  - name: Cylon Intruders
+    path: Cylon Intrude
+    index: 161
+    value: 18
+    skills: [Leadership, Tactics]
+  - name: Fleet Mobilization
+    path: Fleet Mobile
+    index: 162
+    value: 24
+    skills: [Leadership, Tactics, Piloting, Engineering]
+  - name: Inbound Nukes
+    index: 163
+    value: 15
+    skills: [Leadership, Tactics]
+  - name: Massive Assault
+    index: 164
+    seed:
+      CFB: False
+---
+expansion: pegasus
+deck: s_crisis
+seed:
+  pegasus: True
+cards:
+  - name: '"Demand Peace" Manifesto'
+    path: Demand Peace
+    index: 165
+  - name: Footage Transmitted
+    path: Footage
+    index: 166
+    value: 17
+    skills: [Politics, Leadership, Tactics]
+  - name: Lured into a Trap
+    path: Lured Trap
+    index: 167
+    seed:
+      pegasus: True
+      CFB: False
+  - name: Psychological Warfare
+    path: Psy Warfare
+    index: 168
+  - name: The Farm
+    index: 169
+    value: 15
+    skills: [Tactics, Engineering]
+---
+expansion: exodus
+deck: s_crisis
+seed:
+  exodus: True
+cards:
+  - name: Fighting Blind
+    url: ''
+    index: 170
+    seed:
+      exodus: True
+      CFB: True
+  - name: Fire All Missiles
+    index: 171
+    value: 22
+    skills: [Tactics, Piloting]
+  - name: Human Prisoner
+    path: Human Prisoners
+    index: 172
+    value: 18
+    skills: [Leadership, Tactics]

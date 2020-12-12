@@ -1,0 +1,165 @@
+---
+expansion: pegasus
+deck: nc_crisis
+path: ''
+seed:
+  destination: New Caprica
+cards:
+  - name: A Cylon Ally
+    index: 173
+    cylon: [Raiders, Occupation Forces]
+    jump: True
+  - name: Arrests at Night
+    index: 174
+    value: 10
+    skills: [Leadership, Tactics]
+    cylon: Basestars launch Raiders
+    jump: True
+  - name: Attack on the Power Plant
+    index: 175
+    cylon: Basestars launch Raiders
+    jump: True
+  - name: Betrayed from Within
+    index: 176
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: Raiders
+    jump: True
+  - name: Brutal Treatment
+    index: 177
+    value: 9
+    skills: [Politics, Tactics]
+    cylon: [Basestars fire, Occupation Forces]
+    jump: True
+  - name: Centurion Ambush
+    index: 178
+    value: 7
+    skills: [Tactics, Piloting]
+    cylon: Raiders
+    jump: True
+  - name: Contact Informant
+    index: 179
+    value: 9
+    skills: [Politics, Tactics]
+    cylon: [Raiders, Occupation Forces]
+    jump: True
+  - name: Contact Raptor
+    index: 180
+    value: 7
+    skills: [Politics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Decode Cylon Maps
+    index: 181
+    value: 8
+    skills: [Tactics, Engineering]
+    cylon: [Heavy Raiders, Occupation Forces]
+  - name: Demanded Surrender
+    index: 182
+    cylon: [Basestars fire, Occupation Forces]
+  - name: Dissent Among Cylons
+    index: 183
+    value: 12
+    skills: [Politics, Leadership]
+    cylon: Basestars launch Raiders
+    jump: True
+  - name: Establish Sanitation
+    index: 184
+    cylon: Raiders
+    jump: True
+  - name: Execution List
+    index: 185
+    cylon: [Heavy Raiders, Occupation Forces]
+    jump: True
+  - name: Held for Questioning
+    index: 186
+    value: 10
+    skills: [Politics, Leadership, Tactics]
+    cylon: [Heavy Raiders, Occupation Forces]
+    jump: True
+  - name: Hiding Underground
+    index: 187
+    value: 9
+    skills: [Leadership, Tactics]
+    cylon: Raiders, Occupation Forces
+    jump: True
+  - name: Intra-Atmos Entry
+    path: Intra Atmos Entry
+    index: 188
+    value: 15
+    skills: [Leadership, Tactics, Piloting, Engineering]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Keeping Hera Hidden
+    index: 189
+    cylon: [Raiders, Occupation Forces]
+    jump: True
+  - name: Labor Union Strike
+    index: 190
+    value: 13
+    skills: [Politics, Tactics]
+    cylon: [Raiders, Occupation Forces]
+    jump: True
+  - name: Marine Reinforcements
+    index: 191
+    cylon: Raiders
+  - name: Meet Liason Officer
+    index: 192
+    value: 10
+    skills: [Politics, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: NCP Graduation
+    index: 193
+    cylon: Heavy Raiders
+    jump: True
+  - name: NCP Recruitment
+    index: 194
+    value: 8
+    skills: [Politics, Leadership]
+    cylon: Raiders
+  - name: Organize the Pilots
+    index: 195
+    value: 9
+    skills: [Politics, Piloting]
+    cylon: Basestars fire
+  - name: Playing with Emotions
+    index: 196
+    value: 7
+    skills: [Politics, Tactics]
+    cylon: Basestars launch Raiders
+    jump: True
+  - name: Prepare for a Fight
+    index: 197
+    value: 8
+    skills: [Leadership, Tactics, Engineering]
+    cylon: [Raiders, Occupation Forces]
+    jump: True
+  - name: Prepare the Civilians
+    index: 198
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: Raiders
+    jump: True
+  - name: Recover Launch Keys
+    index: 199
+    value: 10
+    skills: [Leadership, Tactics, Engineering]
+    cylon: Basestars fire
+  - name: Rescue Detainees
+    index: 200
+    value: 9
+    skills: [Leadership, Tactics]
+    cylon: [Heavy Raiders, Occupation Forces]
+    jump: True
+  - name: Resistance Bombings
+    index: 201
+    value: 12
+    skills: [Leadership, Tactics, Engineering]
+    cylon: [Basestars fire, Occupation Forces]
+  - name: Second Thoughts
+    index: 202
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: [Basestars fire, Occupation Forces]
+    jump: True

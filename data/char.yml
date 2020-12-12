@@ -1,0 +1,295 @@
+---
+expansion: base
+deck: char
+seed: 'True'
+cards:
+  - name: William Adama
+    path: Adama
+    class: Military Leader
+    succession:
+      president: 12
+      admiral: 2
+      cag: 13
+  - name: 'Lee "Apollo" Adama'
+    path: Apollo
+    class: Pilot
+    alternate: Lee
+    succession:
+      president: 9
+      admiral: 10
+      cag: 1
+  - name: Gaius Baltar
+    path: Baltar
+    class: Political Leader
+    seed: 'numPlayers != 2'
+    alternate: Gaius
+    succession:
+      president: 2
+      admiral: 27
+      cag: 27
+  - name: 'Sharon "Boomer" Valerii'
+    path: Boomer
+    class: Pilot
+    seed: numPlayers >= 3 or numPlayers == 1
+    succession:
+      president: 25
+      admiral: 15
+      cag: 5
+  - name: '"Chief" Galen Tyrol'
+    path: Chief
+    class: Support
+    succession:
+      president: 14
+      admiral: 20
+      cag: 21
+  - name: 'Karl "Helo" Agathon'
+    path: Helo
+    class: Military Leader
+    alternate: Karl
+    succession:
+      president: 13
+      admiral: 6
+      cag: 10
+  - name: Laura Roslin
+    path: Roslin
+    class: Political Leader
+    succession:
+      president: 1
+      admiral: 30
+      cag: 31
+  - name: 'Kara "Starbuck" Thrace'
+    path: Starbuck
+    class: Pilot
+    succession:
+      president: 31
+      admiral: 13
+      cag: 2
+  - name: Saul Tigh
+    path: Tigh
+    class: Military Leader
+    succession:
+      president: 27
+      admiral: 3
+      cag: 15
+  - name: Tom Zarek
+    path: Zarek
+    class: Political Leader
+    alternate: Tom
+    succession:
+      president: 4
+      admiral: 24
+      cag: 24
+---
+expansion: pegasus
+deck: char
+seed: vAllCharacters or pegasus
+cards:
+  - name: Helena Cain
+    path: Cain
+    class: Military Leader
+    # These seed conditions are insane and unclear if they are logically equal
+    # militaryChoices, availableCharacters
+    seed: not vNoCain and (numPlayers == 1 or pegasus or (exodus and vAllCharacters and vBrutality)) and (not vBrutality or daybreak)
+    #seed: (not vAllCharacters and not vNoCain and (not vBrutality or daybreak)) or (vAllCharacters and ((vBrutality and pegasus and daybreak) or (not vNoCain and not vBrutality and (pegasus or exodus))))
+
+    succession:
+      president: 20
+      admiral: 1
+      cag: 14
+  - name: 'Anastasia "Dee" Dualla'
+    path: Dee
+    class: Support
+    seed: pegasus or exodus
+    succession:
+      president: 21
+      admiral: 11
+      cag: 18
+  - name: Ellen Tigh
+    path: Ellen
+    class: Political Leader
+    seed: pegasus or daybreak
+    succession:
+      president: 8
+      admiral: 25
+      cag: 25
+  - name: 'Louanne "Kat" Katraine'
+    path: Kat
+    class: Pilot
+    succession:
+      president: 32
+      admiral: 14
+      cag: 3
+---
+expansion: exodus
+deck: char
+seed: vAllCharacters or exodus
+cards:
+  - name: Samuel T. Anders
+    path: Anders
+    image: 847210
+    ext: jpg
+    bbox: [18, 0, 572, 400]
+    class: Pilot
+    succession:
+      president: 30
+      admiral: 18
+      cag: 8
+  - name: 'Callandra "Cally" Tyrol'
+    path: Cally
+    class: Support
+    seed: pegasus or exodus
+    succession:
+      president: 16
+      admiral: 21
+      cag: 22
+  - name: Felix Gaeta
+    path: Gaeta
+    class: Military Leader
+    seed: not vBrutality or daybreak or numPlayers == 1
+    succession:
+      president: 11
+      admiral: 7
+      cag: 17
+  - name: Tory Foster
+    path: Tory
+    class: Political Leader
+    succession:
+      president: 6
+      admiral: 29
+      cag: 28
+---
+expansion: pegasus
+deck: char
+seed: cylonLeader and (pegasus or vAllCharacters)
+cards:
+  - name: Cavil
+    class: Cylon Leader
+  - name: Leoben Conoy
+    path: Leoben
+    class: Cylon Leader
+  - name: '"Caprica" Six'
+    path: Six
+    class: Cylon Leader
+---
+expansion: daybreak
+deck: char
+seed: cylonLeader and (daybreak or vAllCharacters)
+cards:
+  - name: 'Sharon "Athena" Agathon'
+    path: Athena
+    class: Cylon Leader
+  - name: "D'Anna Biers"
+    path: DAnna
+    class: Cylon Leader
+  - name: Aaron Doral
+    path: Doral
+    class: Cylon Leader
+  - name: "Simon O'Neill"
+    path: Simon
+    class: Cylon Leader
+---
+expansion: daybreak
+deck: char
+seed: vAllCharacters or daybreak
+cards:
+  - name: 'Sherman "Doc" Cottle'
+    path: Cottle
+    class: Support
+    succession:
+      president: 18
+      admiral: 22
+      cag: 23
+  - name: Gaius Baltar
+    path: Gaius
+    class: Support
+    seed: daybreak
+    alternate: Gaius
+    succession:
+      president: 15
+      admiral: 26
+      cag: 26
+  - name: Louis Hoshi
+    path: Hoshi
+    class: Military Leader
+    succession:
+      president: 22
+      admiral: 8
+      cag: 19
+  - name: 'Brendan "Hot Dog" Costanza'
+    path: HotDog
+    class: Pilot
+    succession:
+      president: 29
+      admiral: 16
+      cag: 6
+  - name: 'Karl "Helo" Agathon'
+    path: Karl
+    class: Pilot
+    alternate: Helo
+    succession:
+      president: 23
+      admiral: 12
+      cag: 4
+  - name: Lee Adama
+    path: Lee
+    class: Political Leader
+    seed: daybreak or vBrutality or numPlayers == 1
+    alternate: Apollo
+    succession:
+      president: 3
+      admiral: 23
+      cag: 9
+  - name: Romo Lampkin
+    path: Romo
+    class: Political Leader
+    succession:
+      president: 5
+      admiral: 28
+      cag: 29
+  - name: Tom Zarek
+    path: Tom
+    class: Military Leader
+    seed: daybreak
+    alternate: Zarek
+    succession:
+      president: 10
+      admiral: 9
+      cag: 20
+---
+expansion: unofficial
+deck: char
+seed: vAllCharacters
+cards:
+  - name: Billy Keikeya
+    path: Billy
+    class: Political Leader
+    image: 5306577
+    succession:
+      president: 6.5
+      admiral: 30.5
+      cag: 32
+  - name: 'Margaret "Racetrack" Edmondson'
+    path: Racetrack
+    class: Pilot
+    image: 5306575
+    succession:
+      president: 30.75
+      admiral: 14.5
+      cag: 4.5
+  - name: Kendra Shaw
+    path: Shaw
+    class: Military Leader
+    image: 5306602
+    seed: pegasus and daybreak
+    succession:
+      president: 20.5
+      admiral: 4
+      cag: 16
+  - name: 'Diana "Hardball" Seelix'
+    path: Seelix
+    image: 5441856
+    class: Support
+    succession:
+      president: 17
+      admiral: 19
+      cag: 8.5

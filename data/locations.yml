@@ -1,0 +1,215 @@
+# x0,y0,x1,y1
+# Align on even numbers
+# Normal locations:
+# x1-x0 = 214
+# y1-y0 = 294
+# Skill check locations:
+# x1-x0 = 244
+# y1-y0 = 294
+# Hazardous locations:
+# x1-x0 = 240
+# y1-y0 = 324
+# Hazardous skill check locations:
+# x1-x0 = 272
+# y1-y0 = 324
+# Colonial One locations:
+# x1-x0 = 208
+# y1-y0 = 294
+# Colonial One skill check locations:
+# x1-x0 = 240
+# y1-y0 = 294
+# Cylon locations:
+# x1-x0 = 186
+# y1-y0 = 294
+expansion: base
+boards:
+  - name: Galactica
+    path: BSG board
+    ext: jpg
+    bbox: [700, 1340, 2820, 2260]
+    locations:
+      - name: FTL Control
+        bbox: [890, 1608, 1104, 1902]
+      - name: Weapons Control
+        bbox: [1190, 1440, 1404, 1734]
+      - name: Communications
+        bbox: [1488, 1440, 1702, 1734]
+      - name: Research Lab
+        bbox: [1786, 1440, 2000, 1734]
+      - name: Command
+        bbox: [1190, 1778, 1404, 2072]
+      - name: "Admiral's Quarters"
+        bbox: [1472, 1778, 1716, 2072]
+        value: 7
+        skills: [Leadership, Tactics]
+      - name: Hangar Deck
+        bbox: [1784, 1782, 1998, 2076]
+      - name: Armory
+        bbox: [2082, 1610, 2296, 1904]
+      - name: Sickbay
+        bbox: [2368, 1428, 2608, 1752]
+        hazardous: True
+      - name: Brig
+        bbox: [2352, 1768, 2626, 2090]
+        hazardous: True
+        value: 7
+        skills: [Politics, Tactics]
+  - name: Colonial One
+    path: BSG board
+    ext: jpg
+    bbox: [400, 408, 1738, 816]
+    seed:
+      daybreak: false
+    locations:
+      - name: Press Room
+        bbox: [686, 466, 894, 760]
+      - name: "President's Office"
+        bbox: [956, 466, 1164, 760]
+      - name: Administration
+        bbox: [1210, 466, 1450, 760]
+        value: 5
+        skills: [Politics, Leadership]
+  - name: Cylon Locations
+    path: BSG board
+    ext: jpg
+    bbox: [1768, 440, 2572, 816]
+    seed:
+      daybreak: false
+    cylon: True
+    locations:
+      - name: Caprica
+        bbox: [1790, 504, 1976, 798]
+      - name: Cylon Fleet
+        bbox: [1982, 504, 2168, 798]
+      - name: Human Fleet
+        bbox: [2174, 504, 2360, 798]
+      - name: Resurrection Ship
+        bbox: [2366, 504, 2552, 798]
+---
+# x0,y0,x1,y1
+# Align on even numbers
+# Pegasus locations:
+# x1-x0 = 154
+# y1-y0 = 214
+# Pegasus skill check locations:
+# x1-x0 = 176
+# y1-y0 = 214
+expansion: pegasus
+boards:
+  - name: Pegasus
+    path: pegasus
+    ext: png
+    seed:
+      pegasus: true
+    locations:
+      - name: Pegasus CIC
+        bbox: [32, 272, 186, 486]
+      - name: Airlock
+        bbox: [280, 308, 456, 522]
+        value: 12
+        skills: [Politics, Tactics, Treachery]
+      - name: Main Batteries
+        bbox: [538, 308, 702, 522]
+      - name: Engine Room
+        bbox: [814, 276, 968, 490]
+  - name: New Caprica
+    path: new caprica
+    ext: png
+    seed:
+      destination: New Caprica
+    locations:
+      - name: Medical Center
+        bbox: [36, 28, 178, 218]
+        hazardous: True
+      - name: Resistance HQ
+        bbox: [188, 32, 342, 210]
+        value: 7
+        skills: [Leadership, Tactics, Treachery]
+      - name: Detention
+        bbox: [28, 226, 186, 416]
+        hazardous: True
+        value: 9
+        skills: [Politics, Tactics]
+      - name: Occupation Authority
+        bbox: [202, 234, 336, 458]
+        occupation: 1
+      - name: "Breeder's Canyon"
+        bbox: [350, 234, 484, 458]
+        occupation: 2
+      - name: Shipyard
+        bbox: [498, 234, 780, 458]
+        occupation: 3
+---
+expansion: exodus
+boards:
+  - name: Cylon Fleet
+    path: basestar bridge
+    ext: png
+    seed:
+      CFB: true
+    locations:
+      - name: Basestar Bridge
+---
+expansion: daybreak
+seed:
+  daybreak: true
+boards:
+  - name: Demetrius
+    path: demetrius
+    seed:
+      destination: [Earth, Ionian Earth]
+    ext: png
+    locations:
+      - name: Bridge
+        bbox: [114, 300, 284, 536]
+      - name: Tactical Plot
+        bbox: [374, 300, 544, 536]
+      - name: "Captain's Cabin"
+        bbox: [626, 304, 796, 538]
+  - name: Rebel Basestar
+    path: rebel basestar
+    seed:
+      destination: [Earth, Ionian Earth]
+    ext: png
+    locations:
+      - name: Hybrid Tank
+        bbox: [174, 298, 344, 534]
+      - name: Datastream
+        bbox: [514, 334, 684, 570]
+      - name: Raider Bay
+        bbox: [856, 298, 1024, 534]
+  - name: Colonial One
+    path: colonial one daybreak
+    ext: png
+    locations:
+      - name: Quorum Chamber
+        bbox: [94, 48, 248, 264]
+      - name: Press Room
+        bbox: [304, 48, 458, 264]
+      - name: "President's Office"
+        bbox: [514, 48, 668, 264]
+      - name: Administration
+        bbox: [726, 48, 880, 264]
+  - name: Cylon Locations
+    path: cylon overlay daybreak
+    ext: png
+    locations:
+      - name: Caprica
+        bbox: [28, 60, 214, 370]
+      - name: Cylon Fleet
+        bbox: [220, 60, 406, 370]
+      - name: Human Fleet
+        bbox: [412, 60, 598, 370]
+      - name: Resurrection Ship
+        hazardous: True
+        bbox: [598, 50, 800, 374]
+  - name: Cylon Locations (Hub Destroyed)
+    image: 2274810
+    ext: png
+    bbox: [14, 1058, 1678, 1862]
+    seed:
+      destination: [Earth, Ionian Earth]
+    locations:
+      - name: Hub Destroyed
+        hazardous: True
+        bbox: [1230, 1172, 1636, 1822]

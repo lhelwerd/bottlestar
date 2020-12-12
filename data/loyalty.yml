@@ -1,0 +1,164 @@
+---
+expansion: base
+deck: loyalty
+path: BSG Loyalty
+cards:
+  - name: You Are Not a Cylon
+    index: 0
+    count: 11
+    url: https://www.ultraboardgames.com/battlestar-galactica/gfx/determining-cylon.jpg
+    bbox: [202, 0, 406, 320]
+  - name: Can Send a Character to the Brig
+    index: 12
+    path: Brig
+    allegiance: Cylon
+  - name: Can Damage Galactica
+    path: Damage Gal
+    index: 14
+    allegiance: Cylon
+  - name: Can Reduce Morale by 1
+    path: Morale
+    index: 13
+    allegiance: Cylon
+  - name: Can Send a Character to Sickbay
+    path: Sickbay
+    index: 11
+    allegiance: Cylon
+  - name: You Are a Sympathizer
+    path: Sympathizer
+    index: 15
+---
+expansion: pegasus
+deck: loyalty
+path: BSP Loyalty
+seed:
+  pegasus: True
+cards:
+  - name: You Are Not a Cylon
+    index: 16
+    url: https://www.ultraboardgames.com/battlestar-galactica/gfx/determining-cylon.jpg
+    bbox: [202, 0, 406, 320]
+  - name: Can Make Players Draw Treachery Cards
+    path: Cylon
+    index: 18
+    allegiance: Cylon
+  - name: You Are a Sympathetic Cylon
+    seed:
+      sympatheticCylon: True
+    image: 565340
+    bbox: [786, 360, 1456, 1416]
+    index: 17
+---
+expansion: exodus
+deck: loyalty
+path: BSE Loyalty
+seed:
+  exodus: true
+cards:
+  - name: You Are Not a Cylon
+    index: 19
+    count: 5
+    url: https://www.ultraboardgames.com/battlestar-galactica/gfx/determining-cylon.jpg
+    bbox: [202, 0, 406, 320]
+  - name: Can Place a Centurion Token on the Boarding Party Track
+    path: Cylon 1
+    index: 37
+    allegiance: Cylon
+  - name: Can Decrease the Jump Preparation Track by 2
+    path: Cylon 2
+    index: 38
+    allegiance: Cylon
+  - name: 'The Final Five: Whoever Examines this Card is Executed'
+    path: FinalFive1
+    seed:
+      finalFives: True
+    index: 32
+    allegiance: Human
+  - name: 'The Final Five: If this Card is Examined, Cylon Ships are Activated'
+    path: FinalFive2
+    seed:
+      finalFives: True
+    index: 33
+    allegiance: Human
+  - name: 'The Final Five: If this Card is Examined, Galactica is Damaged Twice'
+    path: FinalFive3
+    seed:
+      finalFives: True
+    index: 34
+    allegiance: Human
+  - name: 'The Final Five: If this Card is Examined, you are Executed'
+    path: FinalFive4
+    seed:
+      finalFives: True
+    index: 35
+    allegiance: Human
+  - name: 'The Final Five: Whoever Examines this Card is Sent to the "Brig"'
+    path: FinalFive5
+    seed:
+      finalFives: True
+    index: 36
+    allegiance: Human
+  - name: 'Personal Goal: Acquire Power: 2 or more Title Cards at the Same Time'
+    path: PG Aquire Power
+    seed:
+      personalGoals: True
+    index: 28
+    allegiance: Human
+  - name: 'Personal Goal: Devastation: Admiral has no Remaining Nuke Tokens'
+    path: PG Devastation
+    seed:
+      personalGoals: True
+    index: 26
+    allegiance: Human
+  - name: 'Personal Goal: Political Intrigue: The President is in the "Brig"'
+    path: PG Pol Intrigue
+    seed:
+      personalGoals: True
+    index: 29
+    allegiance: Human
+  - name: 'Personal Goal: Sacrifice: 6 Vipers Damaged or Destroyed'
+    path: PG Sacrifice
+    seed:
+      personalGoals: True
+    index: 25
+    allegiance: Human
+  - name: 'Personal Goal: Self-Destruction: In the "Brig" or "Sickbay"'
+    path: PG Self Destruct
+    seed:
+      personalGoals: True
+    index: 31
+    allegiance: Human
+  - name: 'Personal Goal: Selfish: Discard Skill Cards Equal to 20 Strength'
+    path: PG Selfish
+    seed:
+      personalGoals: True
+    index: 30
+    allegiance: Human
+  - name: 'Personal Goal: Stand and Fight: 10 or More Raiders'
+    path: PG Stand Fight
+    seed:
+      personalGoals: True
+    index: 24
+    allegiance: Human
+  - name: 'Personal Goal: Use Caution: The Fleet has Made a 1-Distance Jump'
+    path: PG Use Caution
+    seed:
+      personalGoals: True
+    index: 27
+    allegiance: Human
+---
+expansion: daybreak
+deck: loyalty
+path: BSD Loyalty
+seed:
+  daybreak: True
+cards:
+  - name: You Are Not a Cylon
+    index: 39
+    url: https://www.ultraboardgames.com/battlestar-galactica/gfx/determining-cylon.jpg
+    bbox: [202, 0, 406, 320]
+  - name: You Are The Mutineer
+    seed:
+      mutineer: True
+    index: 40
+    url: https://images-cdn.fantasyflightgames.com/ffg_content/Battlestar_Galactica/daybreak/BSG04_Card_Loyalty-YouAreTheMutineer.png

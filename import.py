@@ -1,6 +1,7 @@
 import argparse
-import logging
+from glob import glob
 import json
+import logging
 from elasticsearch_dsl.connections import connections
 import yaml
 from bsg.search import Card, Location
@@ -45,115 +46,119 @@ def main():
 
 def load_cards(args):
     meta = {}
-    with open("data.yml", "r") as data_file:
-        for data in yaml.safe_load_all(data_file):
-            if data.get('meta'):
-                meta = data
-                continue
-            elif not meta:
-                raise ValueError('Meta must be first document')
+    with open("data/_meta.yml", "r") as meta_file:
+        meta = yaml.safe_load(meta_file)
 
-            expansion = data['expansion']
-            expansion_name = meta['expansions'].get(expansion, {}).get('name', expansion)
-
-            if args.expansion is not None and expansion != args.expansion:
-                continue
-
-            deck = data['deck']
-            deck_name = meta['decks'][deck]['name']
-
-            if args.deck is not None and deck != args.deck:
-                continue
-
-            # Deck properties
-            jump = meta['decks'][deck].get('jump')
-            ability = meta['decks'][deck].get('ability')
-            reckless = meta['decks'][deck].get('reckless')
-            agenda = data.get('agenda')
-            path = data.get('path', meta['decks'][deck].get('path', deck_name))
-            expansion_seed = data.get('seed', {})
-
-            # Insert with spaces for better Elastisearch tokenization
-            replace = data.get('replace', meta['decks'][deck].get('replace', '_'))
-            ext = data.get('ext', meta['decks'][deck].get('ext'))
-
-            for card in data['cards']:
-                if args.cards and card['name'] not in args.cards:
+    for filename in glob("data/*.yml"):
+        with open(filename, "r") as data_file:
+            for data in yaml.safe_load_all(data_file):
+                if data.get('meta') or 'cards' not in data:
                     continue
 
-                if args.cards or args.deck or args.expansion:
-                    try:
-                        old = Card.search(using='main') \
-                            .filter("term", deck=deck) \
-                            .filter("term", expansion=expansion) \
-                            .query("match", name=card['name']).execute().hits[0]
-                        old.delete(using='main')
-                    except IndexError:
-                        logging.warning("No hits for %s, watch for duplicates",
-                                        card['name'])
-                        pass
+                load_card_section(args, data, meta)
 
-                count = card.get('count')
-                if isinstance(count, int):
-                    count = [count]
+def load_card_section(args, data, meta):
+    expansion = data['expansion']
+    expansion_name = meta['expansions'].get(expansion, {}).get('name', expansion)
 
-                card_path = card.get('path', card['name'])
-                value = card.get('value')
-                if value is not None:
-                    if isinstance(value, int):
-                        value = [value]
-                    else:
-                        card_path = f"{card_path} {card['value'][0]}"
+    if args.expansion is not None and expansion != args.expansion:
+        return
 
-                skills = card.get('skills',
-                                  [card['skill']] if 'skill' in card else [])
-                cylon = card.get('cylon')
-                text = json.dumps(card.get('text', {}))
-                succession = card.get('succession', {})
-                default_succession = 99 if 'class' in card else None
-                if isinstance(expansion_seed, dict):
-                    seed = card.get('seed', expansion_seed)
-                elif 'seed' in card:
-                    seed = {"_expr": f"({expansion_seed}) and ({card['seed']})"}
-                else:
-                    seed = {"_expr": expansion_seed}
-                if 'alternate' in card:
-                    seed['_alternate'] = card['alternate']
+    deck = data['deck']
+    deck_name = meta['decks'][deck]['name']
 
-                doc = Card(name=card['name'],
-                           prefix=path,
-                           path=card_path,
-                           replace=card.get('replace', replace),
-                           url=card.get('url'),
-                           image=card.get('image'),
-                           bbox=card.get('bbox'),
-                           deck=deck,
-                           expansion=expansion,
-                           ext=card.get('ext', ext),
-                           seed=seed,
-                           index=card.get('index'),
-                           count=count,
-                           value=value,
-                           destination=card.get('destination'),
-                           text=text,
-                           skills=skills,
-                           cylon=[cylon] if isinstance(cylon, str) else cylon,
-                           jump=card.get('jump', jump),
-                           character_class=card.get('class'),
-                           president=succession.get('president', default_succession),
-                           admiral=succession.get('admiral', default_succession),
-                           cag=succession.get('cag', default_succession),
-                           allegiance=card.get('allegiance'),
-                           ability=card.get('ability', ability),
-                           reckless=card.get('reckless', reckless),
-                           agenda=agenda)
-                logging.debug('%r', doc.to_dict())
-                doc.save(using='main')
-                logging.info('Saved %s (%s card from %s)', card['name'],
-                             deck_name, expansion_name)
+    if args.deck is not None and deck != args.deck:
+        return
+
+    # Deck properties
+    jump = meta['decks'][deck].get('jump')
+    ability = meta['decks'][deck].get('ability')
+    reckless = meta['decks'][deck].get('reckless')
+    agenda = data.get('agenda')
+    path = data.get('path', meta['decks'][deck].get('path', deck_name))
+    expansion_seed = data.get('seed', {})
+
+    # Insert with spaces for better Elastisearch tokenization
+    replace = data.get('replace', meta['decks'][deck].get('replace', '_'))
+    ext = data.get('ext', meta['decks'][deck].get('ext'))
+
+    for card in data['cards']:
+        if args.cards and card['name'] not in args.cards:
+            continue
+
+        if args.cards or args.deck or args.expansion:
+            try:
+                old = Card.search(using='main') \
+                    .filter("term", deck=deck) \
+                    .filter("term", expansion=expansion) \
+                    .query("match", name=card['name']).execute().hits[0]
+                old.delete(using='main')
+            except IndexError:
+                logging.warning("No hits for %s, watch for duplicates",
+                                card['name'])
+                pass
+
+        count = card.get('count')
+        if isinstance(count, int):
+            count = [count]
+
+        card_path = card.get('path', card['name'])
+        value = card.get('value')
+        if value is not None:
+            if isinstance(value, int):
+                value = [value]
+            else:
+                card_path = f"{card_path} {card['value'][0]}"
+
+        skills = card.get('skills',
+                          [card['skill']] if 'skill' in card else [])
+        cylon = card.get('cylon')
+        text = json.dumps(card.get('text', {}))
+        succession = card.get('succession', {})
+        default_succession = 99 if 'class' in card else None
+        if isinstance(expansion_seed, dict):
+            seed = card.get('seed', expansion_seed)
+        elif 'seed' in card:
+            seed = {"_expr": f"({expansion_seed}) and ({card['seed']})"}
+        else:
+            seed = {"_expr": expansion_seed}
+        if 'alternate' in card:
+            seed['_alternate'] = card['alternate']
+
+        doc = Card(name=card['name'],
+                   prefix=path,
+                   path=card_path,
+                   replace=card.get('replace', replace),
+                   url=card.get('url'),
+                   image=card.get('image'),
+                   bbox=card.get('bbox'),
+                   deck=deck,
+                   expansion=expansion,
+                   ext=card.get('ext', ext),
+                   seed=seed,
+                   index=card.get('index'),
+                   count=count,
+                   value=value,
+                   destination=card.get('destination'),
+                   text=text,
+                   skills=skills,
+                   cylon=[cylon] if isinstance(cylon, str) else cylon,
+                   jump=card.get('jump', jump),
+                   character_class=card.get('class'),
+                   president=succession.get('president', default_succession),
+                   admiral=succession.get('admiral', default_succession),
+                   cag=succession.get('cag', default_succession),
+                   allegiance=card.get('allegiance'),
+                   ability=card.get('ability', ability),
+                   reckless=card.get('reckless', reckless),
+                   agenda=agenda)
+        logging.debug('%r', doc.to_dict())
+        doc.save(using='main')
+        logging.info('Saved %s (%s card from %s)', card['name'],
+                     deck_name, expansion_name)
 
 def load_locations():
-    with open("locations.yml", "r") as locations_file:
+    with open("data/locations.yml", "r") as locations_file:
         for data in yaml.safe_load_all(locations_file):
             expansion = data['expansion']
             expansion_seed = data.get('seed', {})

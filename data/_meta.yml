@@ -1,0 +1,234 @@
+meta: True
+expansions:
+  base:
+    name: Battlestar Galactica
+    prefix: BSG
+  pegasus:
+    name: Pegasus
+    prefix: BSP
+  exodus:
+    name: Exodus
+    prefix: BSE
+  daybreak:
+    name: Daybreak
+    prefix: BSD
+  unofficial:
+    name: BoardGameGeek
+    prefix: BGG
+decks:
+  crisis:
+    name: Crisis
+    ext: png
+    jump: False
+    seed: crisisDeck
+    analyze: 10
+  s_crisis:
+    name: Super Crisis
+    path: S_Crisis
+    ext: png
+    seed: superCrisisDeck
+    analyze: 2
+  dest:
+    name: Destination
+    path: Dest
+    ext: png
+    seed: destinationDeck
+    analyze: 5
+  destination:
+    alias: dest
+    denote: False
+  char:
+    name: Chars
+    ext: png
+    denote: False
+    separator: " -"
+  character:
+    alias: char
+    denote: False
+  loyalty:
+    name: Loyalty
+    ext: png
+    #seed: loyaltyDeck
+  quorum:
+    name: Quorum
+    ext: png
+    seed: quorumDeck
+    analyze: 4
+  skill:
+    name: Skill
+    ext: png
+    reckless: False
+    ability: False
+    denote: False
+    seed: destiny # skillCardDecks
+    analysis_title: Destiny
+    analyze: 12
+  motive:
+    name: Motive
+    path: Motives
+    ext: jpg
+    #seed: motiveDeck
+  agenda:
+    name: Agenda
+  ally:
+    name: Ally
+    ext: png
+    denote: False
+    separator: " -"
+  crossroads:
+    name: Crossroads
+    ext: png
+    separator: " -"
+  mission:
+    name: Mission
+    path: Missions
+    ext: jpg
+    replace: ''
+    seed: missionDeck
+    analyze: 5
+  mutiny:
+    name: Mutiny
+    ext: jpg
+    replace: ''
+    seed: mutinyDeck
+    analyze: 5
+  nc_crisis:
+    name: New Caprica Crisis
+    path: NC_Crisis
+    ext: gif
+    jump: False
+    seed: crisisDeck
+    analyze: 10
+  board:
+    name: Boards
+    path: Boards
+    ext: ''
+    prefix: ''
+    denote: False
+    expansion: True
+  location:
+    alias: board
+    denote: False
+  objective:
+    name: Objective
+    ext: png
+    denote: False
+  title:
+    name: Title
+    ext: jpg
+    denote: False # Handled through titles meta
+    expansion: True
+skills:
+  Leadership:
+    short: G
+    path:
+      default: Led
+      daybreak: Lea
+    discord: ":green_apple:"
+    unicode: "\U0001F34F"
+  Tactics:
+    short: P
+    path: Tac
+    discord: ":octopus:"
+    unicode: "\U0001F419"
+  Politics:
+    short: Y
+    path: Pol
+    discord: ":full_moon:"
+    unicode: "\U0001F315"
+  Piloting:
+    short: R
+    path: Pil
+    discord: ":airplane_small:"
+    unicode: "\U0001F6E9️"
+  Engineering:
+    short: B
+    path: Eng
+    discord: ":large_blue_diamond:"
+    unicode: "\U0001F537"
+  Treachery:
+    short: O
+    path: Tre
+    discord: ":poop:"
+    unicode: "\U0001F4A9"
+character_classes:
+  Military Leader:
+    priority: 8
+    color: green
+  Political Leader:
+    priority: 9
+    color: yellow
+  Support:
+    priority: 10
+    color: blue
+  Pilot:
+    priority: 11
+    color: red
+  Cylon Leader:
+    priority: 12
+    color: light_grey
+    condition: cylonLeader
+titles:
+  President:
+    priority: 3
+    color: orange
+    discord: ":prince:"
+    unicode: "\U0001F934"
+    images: president_banners
+  Admiral:
+    priority: 4
+    color: dark_green
+    discord: ":dragon_face:"
+    unicode: "\U0001F432"
+    images: admiral_banners
+  Dictator:
+    priority: 2
+    color: purple
+    titles: [President, Admiral]
+    discord: ":smiling_imp:"
+    unicode: "\U0001F608"
+    images: dictator_banners
+  CAG:
+    priority: 5
+    color: dark_red
+    discord: ":guardsman:"
+    unicode: "\U0001F482"
+    images: cag_banners
+    condition: CFB
+  God:
+    priority: 1
+    color: purple
+    titles: [President, Admiral, CAG]
+    discord: ":unicorn:"
+    unicode: "\U0001F984"
+  Mutineer:
+    priority: 6
+    color: dark_grey
+    titles: [theMutineer]
+    discord: ":cowboy:"
+    unicode: "\U0001F920"
+    condition: mutineer
+loyalty:
+  Cylon:
+    priority: 7
+    color: red
+    discord: ":robot:"
+    unicode: "\U0001F916"
+    images: cylon_banners
+  Human:
+    priority: 13
+    color: blue
+    discord: ":innocent:"
+    unicode: "\U0001F607"
+    images: banners
+  Infiltrator:
+    priority: 14
+    color: magenta
+    discord: ":spy:"
+    unicode: "\U0001F575"
+activations:
+  Basestars fire: B
+  Basestars launch Raiders: L
+  Raiders: R
+  Heavy Raiders: H
+  Occupation Forces: O

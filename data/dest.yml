@@ -1,0 +1,112 @@
+---
+expansion: base
+deck: dest
+cards:
+  - name: Asteroid Field
+    index: 0
+    count: 2
+    destination: 3
+  - name: Barren Planet
+    path: Baren Planet
+    index: 2
+    count: 4
+    destination: 2
+  - name: Cylon Ambush
+    index: 6
+    count: 1
+    destination: 3
+  - name: Cylon Refinery
+    index: 7
+    count: 1
+    destination: 2
+  - name: Deep Space
+    index: 8
+    count: 3
+    destination: 2
+  - name: Desolate Moon
+    index: 11
+    count: 1
+    destination: 3
+  - name: Icy Moon
+    index: 12
+    count: 2
+    destination: 1
+  - name: Ragnar Anchorage
+    index: 14
+    count: 1
+    destination: 1
+  - name: Remote Planet
+    index: 15
+    count: 3
+    destination: 2
+  - name: Tylium Planet
+    index: 18
+    count: 4
+    destination: 1
+---
+expansion: pegasus
+deck: dest
+seed:
+  pegasus: True
+cards:
+  - name: Binary Star
+    index: 23
+    count: 1
+    destination: 2
+  - name: A Civilian Convoy
+    path: Civ Convoy
+    index: 22
+    count: 1
+    destination: 3
+  - name: Gas Cloud
+    index: 24
+    count: 1
+    destination: 1
+  - name: Mining Asteroid
+    index: 25
+    count: 1
+    seed:
+      pegasus: True
+      CFB: False
+    destination: 2
+  - name: Misjump
+    index: 26
+    count: 1
+    destination: 0
+---
+expansion: exodus
+deck: dest
+seed:
+  exodus: True
+cards:
+  - name: Algae Planet
+    index: 27
+    count: 1
+    destination: 1
+  - name: Cylon Raiders
+    index: 28
+    count: 1
+    destination: 3
+  - name: Derelict Basestar
+    path: Derelict BS
+    index: 29
+    count: 1
+    destination: 2
+  - name: Dying Star
+    index: 30
+    count: 1
+    destination: 2
+  - name: Gas Giant
+    index: 31
+    count: 1
+    destination: 1
+  - name: Lion's Head Nebula
+    path: Lions Head
+    index: 32
+    count: 1
+    destination: 3
+  - name: Radioactive Cloud
+    path: Rad Cloud
+    index: 33
+    count: 1
+    destination: 2

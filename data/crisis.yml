@@ -1,0 +1,879 @@
+---
+expansion: base
+deck: crisis
+cards:
+  - name: A Traitor Accused
+    index: 0
+    value: 8
+    skills: [Politics, Leadership]
+    cylon: Raiders
+    jump: True
+  - name: Admiral Grilled
+    index: 1
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: Raiders
+    jump: True
+  - name: Ambush
+    index: 2
+    seed:
+      CFB: False
+  - name: Analyze Enemy Fighter
+    path: Analyze Fighter
+    index: 3
+    value: 7
+    skills: [Tactics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Besieged
+    index: 4
+    seed:
+      CFB: False
+  - name: Boarding Parties
+    index: 5
+    seed:
+      CFB: False
+  - name: Bomb Threat
+    index: 6
+    value: 13
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Build Cylon Detector
+    index: 7
+    cylon: Heavy Raiders
+  - name: Colonial Day
+    index: 8
+    value: 10
+    skills: [Politics, Tactics]
+    cylon: Basestars fire
+    jump: True
+  - name: Crash Landing
+    index: 9
+    value: 6
+    skills: [Tactics, Piloting]
+    cylon: Heavy Raiders
+  - name: Crippled Raider
+    index: 10
+    value: 10
+    skills: [Tactics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Cylon Accusation
+    index: 11
+    value: 10
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+  - name: Cylon Screenings
+    index: 12
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: Raiders
+  - name: Cylon Swarm
+    index: 13
+    seed:
+      CFB: False
+  - name: Cylon Virus
+    value: 15
+    skills: [Tactics, Engineering]
+    cylon: Basestars launch Raiders
+  - name: Declare Martial Law
+    path: Declare Marshal Law
+    index: 16
+    cylon: Basestars fire
+  - name: Detector Sabotage
+    index: 17
+    value: 8
+    skills: [Leadership, Tactics]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Elections Loom
+    index: 18
+    value: 8
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Food Shortage
+    index: 19
+    count: 4
+    cylon: Raiders
+    jump: True
+  - name: Forced Water Mining
+    path: Forced Water
+    index: 23
+    value: 17
+    skills: [Politics, Leadership, Tactics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Fulfiller of Prophecy
+    path: Fulfiller Prophecy
+    index: 24
+    value: 6
+    skills: [Politics, Leadership]
+    cylon: Basestars fire
+  - name: Guilt by Collusion
+    path: Guilty Collusion
+    index: 25
+    value: 9
+    skills: [Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Hangar Accident
+    index: 26
+    value: 10
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Heavy Assault
+    index: 27
+    seed:
+      CFB: False
+  - name: Informing the Public
+    path: Informing Public
+    index: 28
+    value: 7
+    skills: [Politics, Leadership]
+    cylon: Raiders
+    jump: True
+  - name: Jammed Assault
+    index: 29
+    seed:
+      CFB: False
+  - name: Jump Computer Failure
+    path: Jump Comp Fail
+    index: 30
+    value: 7
+    skills: [Tactics, Engineering]
+    cylon: Basestars launch Raiders
+  - name: Keep Tabs on Visitor
+    path: Keep Tabs
+    index: 31
+    value: 12
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Legendary Discovery
+    path: Leg Discovery
+    index: 32
+    value: 14
+    skills: [Tactics, Piloting]
+    cylon: Basestars launch Raiders
+    distance: 1
+  - name: Loss of a Friend
+    path: Loss Friend
+    index: 33
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Low Supplies
+    index: 34
+    value: 7
+    skills: [Politics, Leadership]
+    cylon: Raiders
+  - name: Mandatory Testing
+    index: 35
+    value: 13
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Missing G4 Explosives
+    path: Missing G4
+    index: 36
+    value: 7
+    skills: [Leadership, Tactics]
+    cylon: Raiders
+  - name: Network Computers
+    index: 37
+    value: 11
+    skills: [Politics, Tactics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Prison Labor
+    index: 38
+    value: 10
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+  - name: Prisoner Revolt
+    index: 39
+    value: 11
+    skills: [Politics, Leadership, Tactics]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Raiding Party
+    index: 40
+    seed:
+      CFB: False
+  - name: Requested Resignation
+    path: Request Resignation
+    index: 41
+    cylon: Basestars fire
+  - name: Rescue Caprica Survivors
+    path: Rescue Cap Survivors
+    index: 42
+    cylon: Raiders
+    jump: True
+  - name: Rescue the Fleet
+    path: Rescue Fleet
+    index: 45
+    cylon: Raiders
+    jump: True
+  - name: Rescue Mission (R/*)
+    path: Rescue Mission
+    index: 44
+    cylon: Raiders
+    jump: True
+  - name: Rescue Mission (B/*)
+    path: Rescue Mission2
+    index: 43
+    cylon: Basestars fire
+    jump: True
+  - name: Resistance
+    index: 46
+    value: 12
+    skills: [Politics, Leadership, Tactics]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Riots (B/*)
+    path: Riots
+    index: 47
+    cylon: Basestars fire
+    jump: True
+  - name: Riots (L/-)
+    path: Riots2
+    index: 48
+    cylon: Basestars launch Raiders
+    jump: False
+  - name: Scouting for Fuel
+    path: Scouting Fuel
+    index: 49
+    value: 12
+    skills: [Tactics, Piloting]
+    cylon: Raiders
+    jump: True
+  - name: Scouting for Water
+    path: Scouting Water
+    index: 50
+    value: 9
+    skills: [Tactics, Piloting]
+    cylon: Raiders
+    jump: True
+  - name: Security Breach
+    index: 51
+    value: 6
+    skills: [Leadership, Tactics]
+    cylon: Basestars launch Raiders
+  - name: Send Survey Team
+    path: Send Survey
+    index: 52
+    value: 15
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Sleep Deprivation
+    index: 53
+    cylon: Basestars fire
+    jump: True
+  - name: Surrounded
+    index: 54
+    seed:
+      CFB: False
+  - name: Tactical Strike
+    index: 55
+    seed:
+      CFB: False
+  - name: Terrorist Bomber
+    index: 56
+    value: 9
+    skills: [Leadership, Tactics]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Terrorist Investigations
+    path: Terrorist Inv
+    index: 57
+    value: 12
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: The Olympic Carrier
+    path: The Olympic
+    index: 58
+    value: 11
+    skills: [Politics, Leadership, Piloting]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Thirty-Three
+    path: Thirty Three
+    index: 59
+    seed:
+      CFB: False
+  - name: Cylon Tracking Device
+    path: Tracking Device
+    index: 14
+    value: 10
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Raiders
+  - name: Unexpected Reunion
+    index: 60
+    value: 8
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+  - name: Unidentified Ship
+    index: 61
+    value: 10
+    skills: [Tactics, Piloting]
+    cylon: Basestars launch Raiders
+  - name: Water Sabotaged
+    index: 62
+    value: 13
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Water Shortage (B/*)
+    path: Water Short
+    index: 64
+    count: 3
+    cylon: Basestars fire
+    jump: True
+  - name: Water Shortage (R/*)
+    path: Water Short2
+    index: 67
+    cylon: Raiders
+    jump: True
+  - name: Water Shortage (B/-)
+    path: Water Short3
+    index: 63
+    cylon: Basestars fire
+  - name: Weapon Malfunction
+    path: Weapon Malf
+    index: 68
+    value: 11
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Basestars launch Raiders
+  - name: Witch Hunt
+    index: 69
+    value: 10
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+---
+expansion: pegasus
+deck: crisis
+seed:
+  pegasus: True
+cards:
+  - name: A Verdict of Guilty
+    path: A Verdict Guilty
+    index: 70
+    cylon: Basestars fire
+    jump: True
+  - name: An Offer of Peace
+    path: An Offer Peace
+    index: 71
+    value: 12
+    skills: [Politics, Leadership]
+    cylon: Basestars launch Raiders
+  - name: Assassination Plot
+    path: Assassin Plot
+    index: 72
+    cylon: Basestars fire
+    jump: True
+  - name: Civilian Ship Nuked
+    path: Civ Ship Nuked
+    index: 73
+    cylon: Raiders
+    jump: True
+  - name: Code Blue
+    index: 74
+    value: 13
+    skills: [Politics, Leadership, Tactics]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Defending a Prisoner
+    path: Defending Prisoner
+    index: 75
+    value: 11
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Dogfight
+    index: 76
+    seed:
+      pegasus: True
+      CFB: False
+  - name: Food Hoarding in the Fleet
+    path: Food Hoarding
+    index: 77
+    cylon: Raiders
+    jump: True
+  - name: Medical Breakthrough
+    index: 78
+    value: 12
+    skills: [Politics, Leadership, Engineering]
+    cylon: Heavy Raiders
+  - name: Pressure the Supply Ships
+    path: Pressure Supply
+    index: 79
+    cylon: Raiders
+    jump: True
+  - name: Reunite the Fleet
+    path: Reunite Fleet
+    index: 80
+    value: 10
+    skills: [Politics, Leadership]
+    cylon: Raiders
+  - name: Review Galactica's Log
+    path: Review Logs
+    index: 81
+    value: 14
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Sabotage Investigated
+    index: 82
+    value: 9
+    skills: [Tactics, Engineering]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Scar
+    index: 83
+    seed:
+      pegasus: True
+      CFB: False
+  - name: Standoff with Pegasus
+    path: Standoff Pegasus
+    index: 84
+    value: 22
+    skills: [Politics, Leadership, Tactics, Piloting]
+    cylon: Basestars launch Raiders
+  - name: Suspicious Election Results
+    path: Suspicious Election
+    index: 85
+    cylon: Raiders
+  - name: The Black Market
+    index: 86
+    value: 13
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: The Guardians
+    index: 87
+    seed:
+      pegasus: True
+      CFB: False
+  - name: Training Snafu
+    index: 88
+    value: 8
+    skills: [Leadership, Piloting]
+    cylon: Basestars fire
+    jump: True
+  - name: Unsettling Stories
+    index: 89
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: Raiders
+    jump: True
+---
+deck: crisis
+expansion: exodus
+seed:
+  exodus: True
+cards:
+  - name: Airlock Leak
+    index: 90
+    value: 6
+    skills: [Tactics, Engineering]
+    cylon: Heavy Raiders
+  - name: Ambushed by the Press
+    path: Ambushed Press
+    index: 91
+    cylon: Raiders
+    jump: True
+  - name: Centurion Assault
+    path: Cent Assault
+    index: 93
+    value: 9
+    skills: [Tactics, Piloting]
+    cylon: Basestars launch Raiders
+  - name: Consult the Prisoner
+    path: Consult Prisoner
+    index: 94
+    value: 13
+    skills: [Politics, Tactics, Engineering]
+    cylon: Basestars fire
+    jump: True
+  - name: Controversial Manuscript
+    index: 95
+    cylon: Raiders
+    jump: True
+  - name: Cylon Genocide
+    index: 96
+    value: 21
+    skills: [Politics, Leadership, Tactics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Détente
+    path: Detente
+    index: 97
+    seed:
+      exodus: True
+      CFB: True
+    cylon: Basestars launch Raiders
+  - name: Divisive Behavior
+    index: 98
+    value: 10
+    skills: [Politics, Leadership, Tactical]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Familiar Face
+    index: 99
+    value: 12
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Guilty Conscience
+    index: 100
+    value: 7
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Haunted by the Past
+    path: Haunted Past
+    index: 101
+    value: 12
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Appoint Head of Security
+    path: Head Security
+    index: 92
+    cylon: Basestars launch Raiders
+  - name: Hera Rescued
+    index: 102
+    value: 10
+    skills: [Politics, Leadership]
+    cylon: Raiders
+    jump: True
+  - name: Hidden Explosives
+    index: 103
+    cylon: Raiders
+    jump: True
+  - name: Hidden Identity
+    index: 104
+    value: 12
+    skills: [Politics, Leadership, Tactics]
+    cylon: Basestars launch Raiders
+  - name: In the Ring
+    path: In The Ring
+    index: 105
+    value: 12
+    skills: [Politics, Leadership, Tactics]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Interrogation
+    index: 106
+    cylon: Basestars fire
+  - name: Joe's Bar
+    path: Joes Bar
+    index: 107
+    value: 12
+    skills: [Politics, Leadership, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Labor Dispute
+    index: 108
+    cylon: Basestars fire
+  - name: Medal of Distinction
+    path: Medal Distinction
+    index: 109
+    cylon: Basestars fire
+    jump: True
+  - name: Mysterious Guide
+    index: 110
+    value: 11
+    skills: [Politics, Leadership]
+    cylon: Raiders
+  - name: Mysterious Message
+    index: 111
+    value: 9
+    skills: [Politics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Power Failure
+    index: 112
+    value: 14
+    skills: [Leadership, Tactics, Engineering]
+    cylon: Heavy Raiders
+  - name: Raiders Inbound
+    index: 113
+    seed:
+      exodus: True
+      CFB: True
+    cylon: Heavy Raiders
+  - name: Raptor Malfunction
+    index: 114
+    value: 12
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Return to Duty
+    path: Return Duty
+    index: 115
+    seed:
+      exodus: True
+      CFB: True
+    cylon: Raiders
+  - name: Review Camera Footage
+    path: Review Footage
+    index: 116
+    seed:
+      exodus: True
+      CFB: True
+    cylon: Basestars fire
+  - name: Set a Trap
+    path: Set A Trap
+    index: 117
+    value: 10
+    skills: [Leadership, Tactics]
+    cylon: Raiders
+  - name: Strange Beacon
+    index: 118
+    value: 13
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Raiders
+  - name: Temple of the Five
+    path: Temple Five
+    index: 119
+    value: 9
+    skills: [Tactics, Engineering]
+    cylon: Basestars launch Raiders
+  - name: The Circle
+    index: 120
+    cylon: Raiders
+    jump: True
+  - name: The Passage
+    index: 121
+    value: 14
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Threat of Super Nova
+    path: Threat S Nova
+    index: 122
+    value: 10
+    skills: [Leadership, Piloting, Engineering]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Tracked by Radiation
+    path: Tracked Radiation
+    index: 123
+    seed:
+      exodus: True
+      CFB: True
+    cylon: Basestars fire
+  - name: Training a Rookie
+    path: Training Rookie
+    index: 124
+    seed:
+      exodus: True
+      CFB: True
+    cylon: Basestars launch Raiders
+  - name: Truth and Reconciliation
+    path: Truth Reconcile
+    index: 125
+    cylon: Basestars fire
+    jump: True
+  - name: Unexplained Deaths
+    index: 126
+    value: 8
+    skills: [Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Unfair Bias
+    index: 127
+    value: 12
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Unwelcome Faces
+    index: 128
+    cylon: Raiders
+    jump: True
+  - name: Widespread Starvation
+    path: Widespread Starve
+    index: 129
+    cylon: Raiders
+    jump: True
+---
+expansion: daybreak
+deck: crisis
+ext: jpg
+replace: ''
+seed:
+  daybreak: True
+cards:
+  - name: Abandon Galactica
+    index: 131
+    cylon: Basestars fire
+    jump: True
+  - name: A Desperate Pact
+    index: 130
+    value: 15
+    skills: [Politics, Leadership, Piloting]
+    cylon: Raiders
+  - name: An Ambitious Operation
+    index: 132
+    cylon: Raiders
+    jump: True
+  - name: Blindsided
+    index: 133
+    seed:
+      daybreak: True
+      CFB: False
+  - name: Consult the Hybrid
+    path: Consult The Hybrid
+    index: 134
+    value: 10
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Dangerous Plots
+    index: 135
+    cylon: Basestars fire
+    jump: True
+  - name: Dishonest Tactics
+    index: 136
+    cylon: Raiders
+    jump: True
+  - name: Domestic Dispute
+    index: 137
+    value: 9
+    skills: [Politics, Tactics]
+    cylon: Raiders
+  - name: Earth in Ruins
+    path: Earth In Ruins
+    index: 138
+    value: 9
+    skills: [Politics, Leadership, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Enemy of my Enemy
+    path: Enemy Of My Enemy
+    index: 139
+    value: 13
+    skills: [Politics, Leadership, Piloting]
+    cylon: Raiders
+    jump: True
+  - name: Event Horizon
+    index: 140
+    seed:
+      daybreak: True
+      CFB: False
+  - name: Galactica Falling Apart
+    index: 141
+    value: 8
+    skills: [Leadership, Piloting, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Give in to Despair
+    path: Give In To Despair
+    index: 142
+    value: 14
+    skills: [Politics, Leadership]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Hornet's Nest
+    path: Hornets Nest
+    index: 143
+    seed:
+      daybreak: True
+      CFB: False
+  - name: Hybrid in Panic
+    path: Hybrid In Panic
+    index: 144
+    value: 12
+    skills: [Tactics, Engineering]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Incitement to Mutiny
+    path: Incitement To Mutiny
+    index: 145
+    value: 13
+    skills: [Politics, Leadership, Tactics]
+    cylon: Heavy Raiders
+    jump: True
+  - name: Insubordinate Crew
+    index: 146
+    value: 12
+    skills: [Leadership, Tactics]
+    cylon: Raiders
+  - name: Lockdown
+    index: 147
+    seed:
+      daybreak: True
+      CFB: False
+  - name: One Last Cocktail
+    index: 148
+    value: 7
+    skills: [Tactics, Engineering]
+    cylon: Basestars fire
+    jump: True
+  - name: Question Procedure
+    index: 149
+    cylon: Basestars fire
+    jump: True
+  - name: Quorum in Uproar
+    path: Quorum In Uproar
+    index: 150
+    value: 8
+    skills: [Politics, Tactics]
+    cylon: Basestars launch Raiders
+  - name: Rallying Support
+    index: 151
+    value: 8
+    skills: [Politics, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Reactor Critical
+    index: 152
+    value: 7
+    skills: [Tactics, Piloting, Engineering]
+    cylon: Basestars launch Raiders
+  - name: Rebuild Trust
+    index: 153
+    value: 9
+    skills: [Politics, Leadership]
+    cylon: Raiders
+  - name: Religious Turmoil
+    replace: '_'
+    index: 154
+    value: 7
+    skills: [Politics, Tactics]
+    cylon: Raiders
+    jump: True
+  - name: Reprisal
+    index: 155
+    seed:
+      daybreak: True
+      CFB: False
+  - name: Requisition for Demetrius
+    path: Requisition For Demetrius
+    index: 156
+    cylon: Basestars fire
+  - name: Secret Meetings
+    index: 157
+    value: 9
+    skills: [Politics, Tactics, Engineering]
+    cylon: Raiders
+    jump: True
+  - name: Starvation in Dogsville
+    path: Starvation In Dogsville
+    index: 158
+    cylon: Raiders
+    jump: True
+  - name: Trial by Fire
+    path: Trial By Fire
+    index: 159
+    seed:
+      daybreak: True
+      CFB: False

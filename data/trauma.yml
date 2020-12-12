@@ -1,0 +1,72 @@
+---
+expansion: exodus
+deck: ally
+seed:
+  destination: [Ionian Nebula, Ionian Earth]
+cards:
+  - name: Aaron Doral
+  - name: Aaron Kelly
+  - name: 'Alex "Crashdown" Quartararo'
+    path: Alex Crashdown Quartararo
+    setup: Armory
+  - name: 'Anastasia "Dee" Dualla'
+    path: Anastasia Dualla
+  - name: Billy Keikeya
+  - name: 'Brendan "Hot Dog" Costanza'
+    path: Brendan Hot Dog Costanza
+  - name: Brother Cavil
+  - name: 'Callandra "Cally" Tyrol'
+    path: Callandra Cally Tyrol
+  - name: Caprica Six
+  - name: '"Chief" Galen Tyrol'
+  - name: "D'Anna Biers"
+    path: DAnna Biers
+  - name: 'Diana "Hardball" Seelix'
+    path: Diana Seelix
+  - name: Dr. Sherman Cottle
+    path: Doc Cottle
+  - name: Ellen Tigh
+  - name: Felix Gaeta
+  - name: Gaius Baltar
+  - name: Helena Cain
+  - name: 'Kara "Starbuck" Thrace'
+    path: Kara Thrace
+  - name: 'Karl "Helo" Agathon'
+    path: Karl Helo Agathon
+  - name: Kendra Shaw
+  - name: Laura Roslin
+  - name: 'Lee "Apollo" Adama'
+    path: Lee Apollo Adama
+  - name: Leoben Conoy
+  - name: 'Louanne "Kat" Katraine'
+    path: Louanne Katraine
+  - name: Louis Hoshi
+  - name: 'Margaret "Racetrack" Edmondson'
+    path: Margaret Edmondson
+  - name: Priestess Elosha
+  - name: Romo Lampkin
+  - name: Samuel T. Anders
+    path: Samuel T Anders
+  - name: Saul Tigh
+  - name: 'Sharon "Boomer" Valerii'
+    path: Sharon Boomer Valerii
+  - name: "Simon O'Neill"
+    path: Simon Oneill
+  - name: Tom Zarek
+  - name: Tory Foster
+    path: Tori Foster
+  - name: William Adama
+---
+deck: crossroads
+expansion: exodus
+path: BSE Crossroads
+seed:
+  destination: [Ionian Nebula, Ionian Earth]
+cards:
+  - name: Disturbing Vision
+  - name: Miraculous Return
+  - name: Perjury
+  - name: Scanned
+  - name: Strange Music
+  - name: Testimony
+  - name: The Opera House
