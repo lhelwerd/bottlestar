@@ -8,6 +8,7 @@ from .search import Card
 class Cards:
     TEXT_PARSERS = {
         'flavor': lambda text: f"\n*{text}*",
+        'note': lambda text: f"\n**{text}**",
         'choice': lambda text: f"\n**{text} Chooses:** ",
         'top': lambda text: text,
         'bottom': lambda text: f"\n**OR:** {text}",
@@ -182,9 +183,9 @@ class Cards:
             ])
         else:
             if isinstance(text, list):
-                if deck in ("board", "title"):
+                if any(isinstance(part, dict) for part in text):
                     text = self._parse_list(text, key, deck)
-                elif len(text) == 2 and deck != "location":
+                elif len(text) == 2:
                     text = f"**{text[0]}:** {text[1]}"
                 else:
                     text = "\n".join(text)
