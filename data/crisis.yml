@@ -520,9 +520,10 @@ cards:
       CFB: True
     cylon: Basestars launch Raiders
   - name: Divisive Behavior
+    path: Divisive Behaviour
     index: 98
     value: 10
-    skills: [Politics, Leadership, Tactical]
+    skills: [Politics, Leadership, Tactics]
     cylon: Heavy Raiders
     jump: True
   - name: Familiar Face
