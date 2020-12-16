@@ -130,14 +130,14 @@ class PingCommand(GameStateCommand):
             author_index = seed["usernames"].index(author)
             try:
                 author_roles = [seed["players"][author_index]]
-            except (KeyError, IndexError, ValueError):
+            except (KeyError, IndexError):
                 author_roles = self.get_banner_roles()
 
             for key, title in self.cards.titles.items():
                 titles = self.cards.get_titles(key, title)
                 if self.cards.has_titles(seed, titles, author_index):
                     author_roles.append(key)
-        except (KeyError, IndexError):
+        except ValueError:
             author_index = -1
             author_roles = self.get_banner_roles()
 
