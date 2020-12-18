@@ -127,7 +127,8 @@ class PingCommand(GameStateCommand):
         pings = []
         role_mentions = set([])
         try:
-            author_index = seed["usernames"].index(author)
+            usernames = [username.lower() for username in seed["usernames"]]
+            author_index = usernames.index(author.lower())
             try:
                 author_roles = [seed["players"][author_index]]
             except (KeyError, IndexError):
