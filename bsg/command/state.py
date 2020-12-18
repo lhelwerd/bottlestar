@@ -152,6 +152,11 @@ class PingCommand(GameStateCommand):
                 # Skip finished tokens
                 continue
 
+            if seed.get('currentSkillCheck') is not None and \
+                (any(cards for cards in seed.get('skillCheckCards', [])) or \
+                    seed.get('contributingPlayer', 0) > 0):
+                continue
+
             names = [
                 player['name'] for player in interrupt['players']
                 if player['action'] == ''
