@@ -60,6 +60,8 @@ def parse_args():
                         help='user to log in as')
     parser.add_argument('--display', choices=('unicode', 'discord', ''),
                         default='unicode', help='format emoji')
+    parser.add_argument('--interactive', action='store_true', default=False,
+                        help='Display interactive command line prompt')
     parser.add_argument('--limit', default=10, type=int,
                         help='Number of results to show from card search')
     parser.add_argument('--no-limit', dest='limit', action='store_const',
@@ -159,7 +161,11 @@ def main():
     loop = asyncio.get_event_loop()
     command_loop = 1
     while command_loop > 0:
-        if loop.run_until_complete(Command.execute(context, name, arguments)):
+        ok = loop.run_until_complete(Command.execute(context, name, arguments))
+        if not args.interactive:
+            break
+
+        if ok:
             print("Enter another command, or **exit** to stop.")
         else:
             print("Invalid command. Enter a valid command or **exit** to stop.")
