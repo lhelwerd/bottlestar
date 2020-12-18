@@ -14,20 +14,24 @@ from bsg.image import Images
 from bsg.search import Card
 from bsg.thread import Thread
 
-@Command.register("seed")
+@Command.register("seed", "path", "key")
 class SeedCommand(BycCommand):
-    async def run(self, **kw):
+    async def run(self, path=None, key=None, **kw):
         game_state = ""
-        self.game_state_path = Path(f"game/game-{self.context.game_id}.txt")
+        if path is not None:
+            self.game_state_path = Path(path)
+        else:
+            self.game_state_path = Path(f"game/game-{self.context.game_id}.txt")
 
         try:
             with self.game_state_path.open('r') as game_state_file:
                 game_state = game_state_file.read()
         except IOError:
-            logging.exception("Could not read game state, starting new")
+            logging.exception("Could not read game state!")
 
         with self.get_byc() as byc:
-            await self.context.send(byc.get_game_seed(game_state))
+            seed = byc.get_game_seed(game_state)
+            await self.context.send(seed if key is None else seed.get(key))
 
 @Command.register("images")
 class ImagesCommand(BycCommand):
