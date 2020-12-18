@@ -23,7 +23,7 @@ class SearchCommand(Command):
 
     def search(self, text, limit):
         raise NotImplementedError("Must be implemented by subclasses")
-        
+
     def get_paths(self, hit):
         """
         Retrieve filename, path and target image path (for cropping operations)
@@ -191,10 +191,11 @@ class CardCommand(SearchCommand):
     def search(self, text, limit):
         return Card.search_freetext(text, limit=limit)
 
-@Command.register(tuple(
-                      deck for deck, info in Cards.load().decks.items()
-                      if deck not in ("board", "location") and not info.get("expansion")
-                  ), "text", "limit", nargs=True)
+DECKS = {deck: info for deck, info in Cards.load().decks.items()
+         if deck not in ("board", "location")}
+@Command.register(tuple(deck for deck, info in DECKS.items()
+                        if not info.get("expansion")),
+                  "text", "limit", nargs=True)
 class DeckCommand(SearchCommand):
     def search(self, text, limit):
         if "alias" in self.cards.decks[self.name]:
@@ -204,11 +205,12 @@ class DeckCommand(SearchCommand):
 
         return Card.search_freetext(text, deck=deck, limit=limit)
 
-@Command.register(tuple(
-                      deck for deck, info in Cards.load().decks.items()
-                      if deck not in ("board", "location") and info.get("expansion")
-                  ), "text", "expansion", "limit", nargs=("expansion",),
-                  metavar="deck", description="Search a specific deck")
+DECK_NAMES = ', '.join(sorted(DECKS.keys()))
+@Command.register(tuple(deck for deck, info in DECKS.items()
+                        if info.get("expansion")),
+                  "text", "expansion", "limit", nargs=("expansion",),
+                  metavar="deck",
+                  description=f"Search a specific deck ({DECK_NAMES})")
 class DeckExpansionCommand(SearchCommand):
     def search(self, text, limit):
         text, expansion = self.cards.find_expansion(text)
