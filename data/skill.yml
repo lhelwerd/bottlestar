@@ -158,7 +158,6 @@ cards:
     count: [4]
     skill: Treachery
     ability: True
-    reckless: True
   - name: "God's Plan"
     seed:
       pegasus: True

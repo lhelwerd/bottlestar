@@ -91,6 +91,7 @@ cards:
     cylon: Heavy Raiders
     jump: True
   - name: Keeping Hera Hidden
+    path: Keep Hera Hidden
     index: 189
     cylon: [Raiders, Occupation Forces]
     jump: True
