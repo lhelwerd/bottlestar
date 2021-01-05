@@ -64,7 +64,7 @@ class BBCodeMarkdown(BBCode):
     """
 
     _token_patterns = {
-        "topic": re.compile(r"^\*\*(?:Interrupts for )?\**(?P<topic>[^\*]+)\*\*$"),
+        "topic": re.compile(r"^\*\*(?:Interrupts for )?\**(?P<topic>(?:[^\*]|\*(?!\*))+)\*\*$"),
         "possibilities": re.compile(r"^(?:Looking for |and/or (?:ANY|ONE) of the following: )?(?P<possibilities>(?:[^,.]*[,.]\s*(?:or )?)+)$"),
         "player": re.compile(r"^(?P<bold>\**)?(?P<name>[^(]+)(?P=bold) \((?P<count>\d+)\) -\s*(?P<action>.*)$")
     }
