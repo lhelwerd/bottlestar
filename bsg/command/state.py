@@ -147,8 +147,10 @@ class PingCommand(GameStateCommand):
             'Declare Emergency': 'deToken'
         }
         for interrupt in self.bbcode.interrupts:
-            possibility = interrupt['possibilities'].rstrip('.')
-            if possibility in tokens and not seed.get(tokens[possibility]):
+            card = interrupt['possibilities'].rstrip('.')
+            topic = interrupt['topic']
+            if (card in tokens and not seed.get(tokens[card])) or \
+                (topic in tokens and not seed.get(tokens[topic])):
                 # Skip finished tokens
                 continue
 
@@ -162,8 +164,8 @@ class PingCommand(GameStateCommand):
                 if player['action'] == ''
             ]
             if names:
-                text = f"Interrupts for {interrupt['topic']}: {' '.join(names)}"
-                self.add_ping(text, pings, role_mentions)
+                self.add_ping(f"Interrupts for {topic}: {' '.join(names)}",
+                              pings, role_mentions)
 
         for skill_check in self.bbcode.skill_checks:
             names = [
