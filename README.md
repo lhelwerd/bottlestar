@@ -3,7 +3,9 @@
 - A bot
 - Written in Python
 - Focused on the Battlestar Galactica (BSG) board game and its expansions
-- Contains data on cards and board locations
+- Contains data on cards and board locations; because of copyright issues, 
+  current version does not provide the card text or images; these would require 
+  a different set of input data files and/or configuration for external images
 - Interfaces (and makes it possible to play) with the By Your Command (BYC) 
   script designed to play BSG on the BoardGameGeek (BGG) forums
 - Features search, game state display, and interactive game setups where the 
@@ -19,6 +21,8 @@
   [Chromium](https://www.chromium.org/getting-involved/download-chromium)
 - [Chromedriver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
   corresponding to the Chrome/Chromium version
+- The code has not been updated for recent updates to the Discord API or BGG, 
+  so it may not work and is currently unmaintained
 
 ## Setup
 
@@ -63,3 +67,11 @@ usernames: # Object where keys are BGG usernames and values discord user IDs
   prefix by running `python cmd.py <command> --log INFO`, either through the 
   byc command or separately. Additional arguments may be provided, and use 
   `python cmd.py --help` for optional arguments.
+
+# License
+
+Bottlestar is available under the MIT License. See the [license](LICENSE) file 
+for more information.
+
+The Montserrat fonts (which are used for game state display) are available 
+under the SIL Open Font License.

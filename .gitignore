@@ -6,3 +6,4 @@ config.*.yml
 *.json
 *.html
 *.txt
+!requirements.txt
